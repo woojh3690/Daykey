@@ -22,7 +22,11 @@ import java.util.ArrayList;
 import static woo.Daykey.MainActivity.getMainContext;
 import static woo.Daykey.MainActivity.getWhatKindOfNetwork;
 
-public class FmNews extends Fragment{
+/**
+ *가정통신문
+ */
+
+class FmHome extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private Context newsContext;
     private ListView listView;
@@ -36,9 +40,9 @@ public class FmNews extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.flagment_news, container, false);
-        swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh_wrapper_news);
-        listView = (ListView)view.findViewById(R.id.newsListView);
+        View view = inflater.inflate(R.layout.flagment_home, container, false);
+        swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh_wrapper_home);
+        listView = (ListView)view.findViewById(R.id.home_listView);
 
         context = getMainContext();
         newsContext = view.getContext();
@@ -58,12 +62,11 @@ public class FmNews extends Fragment{
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Log.i("주소", ""+position);
                 String url = null;
                 String[] columns = {"url"};
                 String where = " _id = ?";
                 String[] at = { String.valueOf(position + 1) };
-                try (Cursor cursor = db.query("newsTable", columns, where, at, null, null, null)) {
+                try (Cursor cursor = db.query("homeTable", columns, where, at, null, null, null)) {
                     while (cursor.moveToNext()) {
                         url = cursor.getString(0);
                     }
@@ -71,7 +74,7 @@ public class FmNews extends Fragment{
                     ex.printStackTrace();
                 }
 
-                Uri uri = Uri.parse("http://www.daykey.hs.kr/daykey/0701/board/14117/" + url);
+                Uri uri = Uri.parse("http://www.daykey.hs.kr/daykey/0601/board/14114/" + url);
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
             }
@@ -108,8 +111,8 @@ public class FmNews extends Fragment{
 
         void newsSave() {
             if (getWhatKindOfNetwork(context)) {
-                final String sql = "drop table " + "newsTable";
-                final String create3 = "create table " + "newsTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
+                final String sql = "drop table " + "homeTable";
+                final String create3 = "create table " + "homeTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
 
                 try {
                     db.execSQL(sql);
@@ -117,7 +120,7 @@ public class FmNews extends Fragment{
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                Thread thread = new NewsParsing(context, "http://www.daykey.hs.kr/daykey/0701/board/14117", false);
+                Thread thread = new NewsParsing(context, "http://www.daykey.hs.kr/daykey/0601/board/14114", true);
                 thread.start();
 
                 try {
@@ -135,7 +138,7 @@ public class FmNews extends Fragment{
             String[] columns = {"title", "teacherName", "visitors", "date"};
             String where = " _id = ?";
             String[] at = { String.valueOf(position) };
-            try (Cursor cursor = db.query("newsTable", columns, where, at, null, null, null)) {
+            try (Cursor cursor = db.query("homeTable", columns, where, at, null, null, null)) {
                 while (cursor.moveToNext()) {
                     title = cursor.getString(0);
                     teacherName = cursor.getString(1);

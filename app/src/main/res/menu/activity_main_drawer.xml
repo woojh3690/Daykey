@@ -20,8 +20,12 @@
             android:title="@string/timetable_str" />
         <item
             android:id="@+id/news"
-            android:icon="@drawable/ic_folded_newspaper"
+            android:icon="@drawable/ic_megaphone"
             android:title="@string/news_str" />
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/ic_folded_newspaper"
+            android:title="@string/home" />
     </group>
 
     <item android:title="@string/others_str">

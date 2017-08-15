@@ -52,7 +52,7 @@
 
     <PreferenceCategory android:title="정보">
         <EditTextPreference
-            android:enabled="true"
+            android:enabled="false"
             android:key="version"
             android:title="버전" />
     </PreferenceCategory>

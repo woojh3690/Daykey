@@ -243,6 +243,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
             toolbar.setTitle("공지사항");
+        } else if (id == R.id.home) {
+            FragmentManager fm = getFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.frm1, new FmHome());
+
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.commit();
+            toolbar.setTitle("가정통신문");
         } else if (id == R.id.setting) {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
@@ -303,7 +311,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         View header = navigationView.getHeaderView(0);
 
-        if ( (set.getInt("grade") != 0) && (set.getInt("class") != 0)) {
+        if ( (set.getInt("grade") != 0) && (set.getInt("class") != 0)) { //메뉴머리 텍스트 설정
             name = (TextView)header.findViewById(R.id.tv_name);
             grade = (TextView)header.findViewById(R.id.tv_grade);
             name.setText(set.getString("name"));
@@ -316,7 +324,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void newsSave() {
-        //Log.i("newsSave", "실행됨");
         if (getWhatKindOfNetwork(getMainContext())) {
             db = SqlHelper.getReadableDatabase();
 
@@ -329,9 +336,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 e.printStackTrace();
             }
 
-            Thread thread = new NewsParsing(mainContext);
+            Thread thread = new NewsParsing(mainContext, "http://www.daykey.hs.kr/daykey/0701/board/14117", false);
             thread.start();
+
+            homeSave();
         }
+    }
+
+    public void homeSave() {
+        String sql = "drop table " + "homeTable";
+        String create3 = "create table " + "homeTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
+        try {
+            db.execSQL(sql);
+            db.execSQL(create3);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Thread thread = new NewsParsing(mainContext, "http://www.daykey.hs.kr/daykey/0601/board/14114", true);
+        thread.start();
     }
 
     public void dietSave() {
@@ -371,4 +394,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
     }
+
 }

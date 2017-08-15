@@ -4,25 +4,29 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.Html;
+import android.util.Log;
 
 class NewsParsing extends Thread{
     private String htmlStr;
     private final String str6 = ">";
     private String[] url = new String[10];
+    private String strUrl;
+    private boolean home;
 
     private SQLiteDatabase db;
     private SqlHelper SqlHelper;
 
-
-    NewsParsing(Context mainContext) {
-        SqlHelper = new SqlHelper(mainContext);
-        db = SqlHelper.getReadableDatabase();
+    NewsParsing(Context mainContext, String url, boolean home) {
+        this.strUrl = url;
+        this.home = home;
+        this.SqlHelper = new SqlHelper(mainContext);
+        this.db = SqlHelper.getReadableDatabase();
     }
 
     @Override
     public void run() {
         super.run();
-        GetHtmlText getHtmlText = new GetHtmlText("http://www.daykey.hs.kr/daykey/0701/board/14117");
+        GetHtmlText getHtmlText = new GetHtmlText(strUrl);
         this.htmlStr = getHtmlText.getHtmlString();
         findUrl();
         find();
@@ -106,6 +110,7 @@ class NewsParsing extends Thread{
 
     //테이블에 공지사항 데이터 쓰기
     private void insertNewsData(String title, String teacherName, String NumOfVisitors, String date, String url) {
+        Log.i("finish 호출됨", title+ teacherName+ NumOfVisitors+ date+ url);
         try {
             db = SqlHelper.getWritableDatabase();
             ContentValues values = new ContentValues();
@@ -114,7 +119,12 @@ class NewsParsing extends Thread{
             values.put("visitors", NumOfVisitors);
             values.put("date", date);
             values.put("url", url);
-            db.insert("newsTable", null, values);
+
+            if (home) {
+                db.insert("homeTable", null, values);
+            } else {
+                db.insert("newsTable", null, values);
+            }
 
             SqlHelper.close();
         } catch (Exception ex) {
@@ -127,12 +137,17 @@ class NewsParsing extends Thread{
         for (int i = 0; finish != 10; i++) {
             final String str1 = "'";
             final String str2 = "1";
+            String str3 = "7";
+
+            if (home) {
+                str3 = "4";
+            }
             if (str1.equals(changeType(i))) {
                 if (str2.equals(changeType(i + 1))) {
                     if ("4".equals(changeType(i + 2))) {
                         if (str2.equals(changeType(i + 3))) {
                             if (str2.equals(changeType(i + 4))) {
-                                if ("7".equals(changeType(i + 5))) {
+                                if (str3.equals(changeType(i + 5))) {
                                     if (str1.equals(changeType(i + 6))) {
                                         url[finish] = htmlStr.substring(i + 9, i + 16);
                                         finish++;
