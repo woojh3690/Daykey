@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/main"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="@string/main_str" />
+        <item
+            android:id="@+id/diet"
+            android:icon="@drawable/ic_restaurant_cutlery_symbol_of_a_cross"
+            android:title="@string/diet_str" />
+        <item
+            android:id="@+id/calendar"
+            android:icon="@drawable/ic_date_range_black_24dp"
+            android:title="@string/calendar_str" />
+        <item
+            android:id="@+id/TimeTable"
+            android:icon="@drawable/ic_access_time_black_24dp"
+            android:title="@string/timetable_str" />
+        <item
+            android:id="@+id/news"
+            android:icon="@drawable/ic_folded_newspaper"
+            android:title="@string/news_str" />
+    </group>
+
+    <item android:title="@string/others_str">
+        <menu>
+            <item
+                android:id="@+id/setting"
+                android:icon="@drawable/ic_settings_black_24dp"
+                android:title="@string/setting_str" />
+            <item
+                android:id="@+id/about"
+                android:icon="@drawable/ic_information"
+                android:title="@string/about_str" />
+        </menu>
+    </item>
+
+</menu>

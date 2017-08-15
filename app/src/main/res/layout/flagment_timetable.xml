@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="7"
+    android:background="#e6cb00">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="5">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="월"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="화"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="수"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="목"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="금"
+            android:background="#FFFFFF"/>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:weightSum="5"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/timetable_tv_1"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_8"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_15"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_22"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_29"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:weightSum="5"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/timetable_tv_2"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_9"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_16"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_23"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_30"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:weightSum="5"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/timetable_tv_3"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            android:gravity="center"
+            android:textSize="24dp" />
+
+        <TextView
+            android:id="@+id/timetable_tv_10"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_17"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_24"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_31"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:weightSum="5"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/timetable_tv_4"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_11"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_18"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_25"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_32"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:weightSum="5"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/timetable_tv_5"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_12"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_19"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_26"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_33"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:weightSum="5"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/timetable_tv_6"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_13"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_20"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_27"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_34"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:weightSum="5"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/timetable_tv_7"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_14"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_21"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_28"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/timetable_tv_35"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:background="#FFFFFF"/>
+    </TableRow>
+
+</LinearLayout>

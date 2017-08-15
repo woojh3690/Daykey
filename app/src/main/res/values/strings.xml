@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Daykey</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="main_str">메인화면</string>
+    <string name="diet_str">급식</string>
+    <string name="calendar_str">학사일정</string>
+    <string name="timetable_str">시간표</string>
+    <string name="news_str">공지사항</string>
+    <string name="others_str">기타</string>
+    <string name="setting_str">설정</string>
+    <string name="about_str">about</string>
+</resources>

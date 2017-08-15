@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="알림">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="switch_alarm"
+            android:title="공지사항, 급식 알림 받기" />
+
+        <Preference
+            android:key="time_set"
+            android:title="알림시간 설정"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="달력">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="calendar_syc"
+            android:summary="구글캘린더에 학사일정을 추가합니다"
+            android:title="달력동기화" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="프로필">
+
+        <EditTextPreference
+            android:defaultValue="이름"
+            android:inputType="textPersonName"
+            android:key="name"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="이름" />
+        <EditTextPreference
+            android:defaultValue="0"
+            android:key="grade"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="학년"
+            android:inputType="number"/>
+        <EditTextPreference
+            android:defaultValue="0"
+            android:key="class"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="반"
+            android:inputType="number"/>
+        <EditTextPreference
+            android:key="email"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="이메일"
+            android:inputType="textEmailAddress"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="정보">
+        <EditTextPreference
+            android:enabled="true"
+            android:key="version"
+            android:title="버전" />
+    </PreferenceCategory>
+</PreferenceScreen>
