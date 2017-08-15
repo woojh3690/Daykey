@@ -124,7 +124,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             PendingIntent sender = PendingIntent.getBroadcast(mainContext, 0, intent, PendingIntent.FLAG_NO_CREATE);
 
             if (sender == null) {
-                //Toast.makeText(mainContext, "알람 설정 안됨", Toast.LENGTH_LONG).show();
                 AlarmBroadcast alarmBroadcast = new AlarmBroadcast(mainContext);
                 alarmBroadcast.Alarm(1);
             }
