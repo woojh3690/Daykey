@@ -43,11 +43,11 @@ class AlarmBroadcast {
                     set.getInt("min"));
 
             am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);//알람 예약
-            Toast.makeText(context, "알림이 저장되었습니다. " + calendar.get(Calendar.YEAR) + "년 " +
+            /*Toast.makeText(context, "알림이 저장되었습니다. " + calendar.get(Calendar.YEAR) + "년 " +
                     (calendar.get(Calendar.MONTH) + 1) + "월 " +
                     calendar.get(Calendar.DAY_OF_MONTH) + "일 " +
                     set.getInt("hour") + "시 " +
-                    set.getInt("min") + "분", Toast.LENGTH_LONG).show();
+                    set.getInt("min") + "분", Toast.LENGTH_LONG).show();*/
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -14,7 +14,7 @@ import java.util.Calendar;
 
 public class FmSchedule extends Fragment {
     CalendarAdapter calendarAdapter;
-    TextView monthText;
+    TextView monthText, calendarTextView;
     Activity activity;
     Calendar calendar = Calendar.getInstance();
     View view;
@@ -28,6 +28,7 @@ public class FmSchedule extends Fragment {
         view = inflater.inflate(R.layout.flagment_schedule, container, false);
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         monthText = (TextView) view.findViewById(R.id.monthText);
+        calendarTextView = (TextView)view.findViewById(R.id.calendarTextView);
         monthText.setText(calendar.get(Calendar.YEAR) + "년 " + (calendar.get(Calendar.MONTH) + 1) + "월");
         activity = getActivity();
 
@@ -44,7 +45,6 @@ public class FmSchedule extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                // TODO Auto-generated method stub
                 mSelectedPageIndex = position;
             }
 
@@ -106,14 +106,14 @@ public class FmSchedule extends Fragment {
 
     public void addFmCalendar() {
         fragList[1] = new FmCalendar(calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH));//현재달
+                calendar.get(Calendar.MONTH), calendarTextView);//현재달
 
         calendar.add(Calendar.MONTH, -1);
         fragList[0] = new FmCalendar(calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH));//이전달
+                calendar.get(Calendar.MONTH), calendarTextView);//이전달
 
         calendar.add(Calendar.MONTH, 2);
         fragList[2] = new FmCalendar(calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH));//다음달
+                calendar.get(Calendar.MONTH), calendarTextView);//다음달
     }
 }

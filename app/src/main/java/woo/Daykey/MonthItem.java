@@ -35,4 +35,8 @@ class MonthItem {
 
         return schedule;
     }
+
+    String getDayText() {
+        return dayText;
+    }
 }

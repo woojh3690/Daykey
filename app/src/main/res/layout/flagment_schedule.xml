@@ -15,8 +15,8 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:gravity="center_horizontal"
-            android:text="MonthView"
-            android:textSize="30dp"
+            android:text="@string/monthview"
+            android:textSize="30sp"
             android:textStyle="bold" />
 
     </RelativeLayout>
@@ -30,49 +30,49 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="일"
+            android:text="@string/sun"
             android:layout_weight="1"
             android:gravity="center"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="월"
+            android:text="@string/mon"
             android:layout_weight="1"
             android:gravity="center"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="화"
+            android:text="@string/tue"
             android:layout_weight="1"
             android:gravity="center"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="수"
+            android:text="@string/wed"
             android:layout_weight="1"
             android:gravity="center"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="목"
+            android:text="@string/thu"
             android:layout_weight="1"
             android:gravity="center"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="금"
+            android:text="@string/fri"
             android:layout_weight="1"
             android:gravity="center"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="토"
+            android:text="@string/sat"
             android:layout_weight="1"
             android:gravity="center"/>
     </LinearLayout>
@@ -87,15 +87,15 @@
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="9">
+            android:layout_weight="7">
         </android.support.v4.view.ViewPager>
 
         <TextView
             android:id="@+id/calendarTextView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:textSize="25dp" />
+            android:layout_weight="3"
+            android:textSize="24sp" />
 
     </LinearLayout>
 

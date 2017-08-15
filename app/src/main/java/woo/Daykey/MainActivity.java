@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             newsSave();//공지사항 가져오기
             dietSave();
         } else {
-            Toast.makeText(this, "급식 데이터가 없습니다. 인터넷에서 데이터를 가져옵니다", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "급식 데이터가 없습니다. 인터넷에서 데이터를 가져옵니다", Toast.LENGTH_SHORT).show();
             if (getWhatKindOfNetwork(this)) {
                 loadWebView();
                 getSchedule();//일정가져오기
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             PendingIntent sender = PendingIntent.getBroadcast(mainContext, 0, intent, PendingIntent.FLAG_NO_CREATE);
 
             if (sender == null) {
-                Toast.makeText(mainContext, "알람 설정 안됨", Toast.LENGTH_LONG).show();
+                //Toast.makeText(mainContext, "알람 설정 안됨", Toast.LENGTH_LONG).show();
                 AlarmBroadcast alarmBroadcast = new AlarmBroadcast(mainContext);
                 alarmBroadcast.Alarm(1);
             }
