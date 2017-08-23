@@ -6,19 +6,19 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.Html;
 import android.util.Log;
 
-class NewsParsing extends Thread{
+class BoardParsing extends Thread{
     private String htmlStr;
     private final String str6 = ">";
     private String[] url = new String[10];
     private String strUrl;
-    private boolean home;
+    private int num;
 
     private SQLiteDatabase db;
     private SqlHelper SqlHelper;
 
-    NewsParsing(Context mainContext, String url, boolean home) {
+    BoardParsing(Context mainContext, String url, int num) {
         this.strUrl = url;
-        this.home = home;
+        this.num = num;
         this.SqlHelper = new SqlHelper(mainContext);
         this.db = SqlHelper.getReadableDatabase();
     }
@@ -120,10 +120,12 @@ class NewsParsing extends Thread{
             values.put("date", date);
             values.put("url", url);
 
-            if (home) {
-                db.insert("homeTable", null, values);
-            } else {
+            if (num == 1) {
                 db.insert("newsTable", null, values);
+            } else if (num == 2) {
+                db.insert("homeTable", null, values);
+            } else if (num == 3) {
+                db.insert("sciTable", null, values);
             }
 
             SqlHelper.close();
@@ -135,22 +137,27 @@ class NewsParsing extends Thread{
     private void findUrl() {
         int finish = 0;
         for (int i = 0; finish != 10; i++) {
-            final String str1 = "'";
-            final String str2 = "1";
-            String str3 = "7";
+            final String str1 = "'" ;
+            String[] str2 = {};
 
-            if (home) {
-                str3 = "4";
+            if (num == 1) {
+                str2 = new String[]{"1", "4", "1", "1", "7"};
+            } else if (num == 2) {
+                str2 = new String[]{"1", "4", "1", "1", "4"};
+            } else if (num == 3) {
+                str2 = new String[]{"2", "0", "1", "7", "0"};
             }
+
             if (str1.equals(changeType(i))) {
-                if (str2.equals(changeType(i + 1))) {
-                    if ("4".equals(changeType(i + 2))) {
-                        if (str2.equals(changeType(i + 3))) {
-                            if (str2.equals(changeType(i + 4))) {
-                                if (str3.equals(changeType(i + 5))) {
+                if (str2[0].equals(changeType(i + 1))) {
+                    if (str2[1].equals(changeType(i + 2))) {
+                        if (str2[2].equals(changeType(i + 3))) {
+                            if (str2[3].equals(changeType(i + 4))) {
+                                if (str2[4].equals(changeType(i + 5))) {
                                     if (str1.equals(changeType(i + 6))) {
                                         url[finish] = htmlStr.substring(i + 9, i + 16);
                                         finish++;
+                                        Log.i("확인", num + " ");
                                     }
                                 }
                             }

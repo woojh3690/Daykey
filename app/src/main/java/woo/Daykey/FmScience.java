@@ -117,7 +117,7 @@ class FmScience extends Fragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                Thread thread = new NewsParsing(context, "http://www.daykey.hs.kr/daykey/19516/board/20170", 3);
+                Thread thread = new BoardParsing(context, "http://www.daykey.hs.kr/daykey/19516/board/20170", 3);
                 thread.start();
 
                 try {
