@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -59,17 +60,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mainContext = getApplicationContext();
+        SqlHelper = new SqlHelper(mainContext);
+        set = new SettingPreferences(mainContext);
+
+        setHandler();
+
+        newsSave();//공지사항 가져오기
+        defaultAlarm();//처음 앱을 시작했다면 알람 설정
+//        int permissionCheck = ContextCompat.checkSelfPermission(mainContext, Manifest.permission.WRITE_CALENDAR);
+//        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+//            DataCheck();
+//        } else {
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_CALENDAR)) {
+//                Toast.makeText(mainContext, "구글캘린더 동기화를 위해 캘린더권한이 필요합니다.", Toast.LENGTH_LONG).show();
+//                ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_CALENDAR}, 1);
+//            } else {
+//                ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_CALENDAR}, 1);
+//            }
+//        }
+
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mainContext = getApplicationContext();
-        set = new SettingPreferences(mainContext);
-
         mWebView = (WebView) findViewById(R.id.webview);
-        SqlHelper = new SqlHelper(mainContext);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        setHandler();
+        permission();
         fuc();//건들지 말것
         viewMain();
 
@@ -78,23 +96,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStart() {
         super.onStart();
-        PermissionListener permissionListener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-                DataCheck();
-            }
 
-            @Override
-            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                Toast.makeText(mainContext, "권한 거부\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        };
-
-        new TedPermission(mainContext)
-                .setPermissionListener(permissionListener)
-                .setPermissions(Manifest.permission.WRITE_CALENDAR)
-                .check();
     }
 
     //데이터베이스 확인, 없으면 네트워크 연결확인
@@ -251,6 +253,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
             toolbar.setTitle("가정통신문");
+        } else if (id == R.id.science) {
+            FragmentManager fm = getFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.frm1, new FmScience());
+
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.commit();
+            toolbar.setTitle("과학중점 공지사항");
         } else if (id == R.id.setting) {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
@@ -336,10 +346,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 e.printStackTrace();
             }
 
-            Thread thread = new NewsParsing(mainContext, "http://www.daykey.hs.kr/daykey/0701/board/14117", false);
+            Thread thread = new BoardParsing(mainContext, "http://www.daykey.hs.kr/daykey/0701/board/14117", 1);
             thread.start();
 
             homeSave();
+            sciSave();
         }
     }
 
@@ -353,7 +364,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             e.printStackTrace();
         }
 
-        Thread thread = new NewsParsing(mainContext, "http://www.daykey.hs.kr/daykey/0601/board/14114", true);
+        Thread thread = new BoardParsing(mainContext, "http://www.daykey.hs.kr/daykey/0601/board/14114", 2);
+        thread.start();
+    }
+
+    public void sciSave() {
+        String sql = "drop table " + "sciTable";
+        String create3 = "create table " + "sciTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
+        try {
+            db.execSQL(sql);
+            db.execSQL(create3);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Thread thread = new BoardParsing(mainContext, "http://www.daykey.hs.kr/daykey/19516/board/20170", 3);
         thread.start();
     }
 
@@ -388,11 +413,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 super.handleMessage(msg);
                 if (msg.what == 1) {
                     dialog.dismiss();
-                    newsSave();//공지사항 가져오기
-                    defaultAlarm();//처음 앱을 시작했다면 알람 설정
                 }
             }
         };
+    }
+
+    public void permission() {
+        PermissionListener permissionListener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                DataCheck();
+            }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                Toast.makeText(mainContext, "권한 거부", Toast.LENGTH_LONG).show();
+                finish();
+            }
+        };
+
+        new TedPermission(mainContext)
+                .setPermissionListener(permissionListener)
+                .setPermissions(Manifest.permission.WRITE_CALENDAR)
+                .check();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    DataCheck();
+                } else {
+                    Toast.makeText(mainContext, "권한을 허락해 주세요.", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }
+        }
     }
 
 }

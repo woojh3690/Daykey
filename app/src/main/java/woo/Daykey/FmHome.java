@@ -120,7 +120,7 @@ class FmHome extends Fragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                Thread thread = new NewsParsing(context, "http://www.daykey.hs.kr/daykey/0601/board/14114", true);
+                Thread thread = new BoardParsing(context, "http://www.daykey.hs.kr/daykey/0601/board/14114", 2);
                 thread.start();
 
                 try {

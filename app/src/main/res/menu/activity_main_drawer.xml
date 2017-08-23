@@ -26,6 +26,11 @@
             android:id="@+id/home"
             android:icon="@drawable/ic_folded_newspaper"
             android:title="@string/home" />
+
+        <item
+            android:id="@+id/science"
+            android:icon="@drawable/ic_flask"
+            android:title="과학중점 공지사항" />
     </group>
 
     <item android:title="@string/others_str">

@@ -17,12 +17,14 @@ class SqlHelper extends SQLiteOpenHelper {
             String create2 = "create table " + "calendarTable " + "(date text, schedule text);";
             String create3 = "create table " + "newsTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
             String create4 = "create table " + "homeTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
-            String create5 = "create table " + "timetable " + "(grade integer, week text, class integer, first text, second text, third text, fourth text, fifth text, sixth text, seventh text)";
+            String create5 = "create table " + "sciTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
+            String create6 = "create table " + "timetable " + "(grade integer, week text, class integer, first text, second text, third text, fourth text, fifth text, sixth text, seventh text)";
             db.execSQL(create1);
             db.execSQL(create2);
             db.execSQL(create3);
             db.execSQL(create4);
             db.execSQL(create5);
+            db.execSQL(create6);
 
             insertTimeTable(db); //시간표
         } catch(Exception ex) {
@@ -35,6 +37,7 @@ class SqlHelper extends SQLiteOpenHelper {
 
     }
 
+    //기본 보충시간표
     private void insertTimeTable(SQLiteDatabase db) {
         db.execSQL("insert into timetable values('1','월','1','수이','체정','음김','영봉','과이','자율, 동아리','자율, 동아리');");
         db.execSQL("insert into timetable values('1','월','2','과유','체정','史한','음김','논홍','자율, 동아리','자율, 동아리');");

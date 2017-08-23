@@ -80,7 +80,7 @@ public class AlarmBroadcastReceive extends BroadcastReceiver {
                 e.printStackTrace();
             }
 
-            Thread thread = new NewsParsing(context, "http://www.daykey.hs.kr/daykey/0701/board/14117", false);
+            Thread thread = new BoardParsing(context, "http://www.daykey.hs.kr/daykey/0701/board/14117", 1);
             thread.start();
 
             try {

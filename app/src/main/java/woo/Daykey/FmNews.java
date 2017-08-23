@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import static woo.Daykey.MainActivity.getMainContext;
 import static woo.Daykey.MainActivity.getWhatKindOfNetwork;
 
-public class FmNews extends Fragment{
+public class FmNews extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private Context newsContext;
     private ListView listView;
@@ -71,7 +71,7 @@ public class FmNews extends Fragment{
                     ex.printStackTrace();
                 }
 
-                Uri uri = Uri.parse("http://www.daykey.hs.kr/daykey/0701/board/14117/" + url);
+                Uri uri = Uri.parse("http://www.daykey.hs.kr/daykey/0701/board/14117" + url);
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
             }
@@ -117,7 +117,7 @@ public class FmNews extends Fragment{
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                Thread thread = new NewsParsing(context, "http://www.daykey.hs.kr/daykey/0701/board/14117", false);
+                Thread thread = new BoardParsing(context, "http://www.daykey.hs.kr/daykey/0701/board/14117", 1);
                 thread.start();
 
                 try {
