@@ -7,7 +7,6 @@ import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -65,20 +64,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         set = new SettingPreferences(mainContext);
 
         setHandler();
-
         newsSave();//공지사항 가져오기
         defaultAlarm();//처음 앱을 시작했다면 알람 설정
-//        int permissionCheck = ContextCompat.checkSelfPermission(mainContext, Manifest.permission.WRITE_CALENDAR);
-//        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-//            DataCheck();
-//        } else {
-//            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_CALENDAR)) {
-//                Toast.makeText(mainContext, "구글캘린더 동기화를 위해 캘린더권한이 필요합니다.", Toast.LENGTH_LONG).show();
-//                ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_CALENDAR}, 1);
-//            } else {
-//                ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_CALENDAR}, 1);
-//            }
-//        }
 
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
@@ -87,16 +74,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mWebView = (WebView) findViewById(R.id.webview);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        permission();
+        getPermission();
         fuc();//건들지 말것
         viewMain();
-
-    }//onCreate 끝!
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
     }
 
     //데이터베이스 확인, 없으면 네트워크 연결확인
@@ -400,6 +380,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             loadWebView();
         }
     }
+
     public void getSchedule() {
         //Log.i("getSchedule", "실행됨");
         Thread thread = new CalendarDataParsing();
@@ -418,7 +399,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         };
     }
 
-    public void permission() {
+    public void getPermission() {
         PermissionListener permissionListener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
@@ -437,19 +418,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .setPermissions(Manifest.permission.WRITE_CALENDAR)
                 .check();
     }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    DataCheck();
-                } else {
-                    Toast.makeText(mainContext, "권한을 허락해 주세요.", Toast.LENGTH_LONG).show();
-                    finish();
-                }
-            }
-        }
-    }
-
 }

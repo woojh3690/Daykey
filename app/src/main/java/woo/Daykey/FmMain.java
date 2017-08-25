@@ -15,7 +15,7 @@ import java.util.Date;
 import static woo.Daykey.MainActivity.SqlHelper;
 import static woo.Daykey.MainActivity.db;
 
-public class FmMain extends Fragment {
+class FmMain extends Fragment {
 
     TextView dietViewMain1;
     TextView dietViewMain2;

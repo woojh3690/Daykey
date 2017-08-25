@@ -13,7 +13,7 @@ import android.widget.TextView;
 import static woo.Daykey.MainActivity.db;
 import static woo.Daykey.MainActivity.getMainContext;
 
-public class FmTimeTable extends Fragment {
+class FmTimeTable extends Fragment {
     private Context mainContext = getMainContext();
     private TextView[] textViews = new TextView[35];
     private int grade = -1;

@@ -14,7 +14,7 @@ import java.util.Map;
 
 import static woo.Daykey.MainActivity.db;
 
-public class FmChidedDiet extends Fragment{
+class FmChidedDiet extends Fragment{
     private int[] idArray = {R.id.dietText1, R.id.dietText2, R.id.dietText3, R.id.dietText4, R.id.dietText5, R.id.dietText6, R.id.dietText7, R.id.dietText8, R.id.dietText9, R.id.dietText10};
     private TextView[] tvArray = new TextView[10];
     private int start;

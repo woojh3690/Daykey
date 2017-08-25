@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class MonthItemView extends RelativeLayout {
+class MonthItemView extends RelativeLayout {
     TextView textView;
 
     public MonthItemView(Context context) {

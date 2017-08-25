@@ -157,7 +157,7 @@ class BoardParsing extends Thread{
                                     if (str1.equals(changeType(i + 6))) {
                                         url[finish] = htmlStr.substring(i + 9, i + 16);
                                         finish++;
-                                        Log.i("확인", num + " ");
+                                        //Log.i("확인", num + " ");
                                     }
                                 }
                             }

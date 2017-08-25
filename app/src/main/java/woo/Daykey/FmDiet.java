@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 
-public class FmDiet extends Fragment {
+class FmDiet extends Fragment {
     int[] weekList = {R.id.mon, R.id.tue, R.id.wed, R.id.thu, R.id.fri};
     TextView[] weekTvList = new TextView[5];
     ViewPager viewPager;

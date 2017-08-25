@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 
-public class FmSchedule extends Fragment {
+class FmSchedule extends Fragment {
     CalendarAdapter calendarAdapter;
     TextView monthText, calendarTextView;
     Activity activity;
@@ -29,10 +29,12 @@ public class FmSchedule extends Fragment {
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         monthText = (TextView) view.findViewById(R.id.monthText);
         calendarTextView = (TextView)view.findViewById(R.id.calendarTextView);
+
         monthText.setText(calendar.get(Calendar.YEAR) + "년 " + (calendar.get(Calendar.MONTH) + 1) + "월");
         activity = getActivity();
 
         addFmCalendar();
+
         calendarAdapter = new CalendarAdapter(getChildFragmentManager(), fragList);
         calendarAdapter.notifyDataSetChanged();
         viewPager.setAdapter(calendarAdapter);
