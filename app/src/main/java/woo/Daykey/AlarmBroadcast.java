@@ -12,7 +12,7 @@ import java.util.Calendar;
  * 알람 등록
  */
 
-class AlarmBroadcast {
+public class AlarmBroadcast {
     private Context context;
     private int nextDay = 1;
 

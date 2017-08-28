@@ -92,16 +92,19 @@ class DietParsing{
         boolean result2 = tempBody.startsWith("저작권지침및신고");
         boolean result3 = tempBody.startsWith("공공데이터");
         boolean result4 = tempBody.startsWith("이메일무단수집거부");
+        boolean result5 = tempBody.startsWith("영상정보처리기기 설치·운영 계획");
 
         //쓸데 없는 정보 걸러네기
         if (result1) {
             Log.i(TAG, "result1 true");
-        } else if(result2) {
+        } else if (result2) {
             Log.i(TAG, "result2 true");
-        } else if(result3) {
+        } else if (result3) {
             Log.i(TAG, "result3 true");
-        } else if(result4) {
+        } else if (result4) {
             Log.i(TAG, "result4 true");
+        } else if (result5) {
+            Log.i(TAG, "result5 true");
         } else {
             trim(tempBody);
         }
@@ -150,6 +153,7 @@ class DietParsing{
             tempMenu = tempMenu.substring(1);
         }
 
+        Log.i("오류", date + "  " + tempMenu);
         insertDietData(Integer.parseInt(date),  tempMenu); //<br>을 enter 로 치환한다음 insertCalendarData 함수 호출
     }
 

@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.Html;
-import android.util.Log;
 
 class BoardParsing extends Thread{
     private String htmlStr;
@@ -34,18 +33,20 @@ class BoardParsing extends Thread{
 
     //none;'> 위치 찾기
     private void find() {
-        int finish = 0;
-        for (int i = 0; finish != 10; i++) {
-            final String str1 = "n";
-            if (str1.equals(changeType(i))) {
-                if ("o".equals(changeType(i + 1))) {
-                    if (str1.equals(changeType(i + 2))) {
-                        if ("e".equals(changeType(i + 3))) {
-                            if (";".equals(changeType(i + 4))) {
-                                if ("'".equals(changeType(i + 5))) {
-                                    if (str6.equals(changeType(i + 6))) {
-                                        getDate(i+7, finish);
-                                        finish++;
+        try {
+            int finish = 0;
+            for (int i = 0; finish != 10; i++) {
+                final String str1 = "n";
+                if (str1.equals(changeType(i))) {
+                    if ("o".equals(changeType(i + 1))) {
+                        if (str1.equals(changeType(i + 2))) {
+                            if ("e".equals(changeType(i + 3))) {
+                                if (";".equals(changeType(i + 4))) {
+                                    if ("'".equals(changeType(i + 5))) {
+                                        if (str6.equals(changeType(i + 6))) {
+                                            getDate(i+7, finish);
+                                            finish++;
+                                        }
                                     }
                                 }
                             }
@@ -53,6 +54,8 @@ class BoardParsing extends Thread{
                     }
                 }
             }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
     }
 
@@ -110,7 +113,7 @@ class BoardParsing extends Thread{
 
     //테이블에 공지사항 데이터 쓰기
     private void insertNewsData(String title, String teacherName, String NumOfVisitors, String date, String url) {
-        Log.i("finish 호출됨", title+ teacherName+ NumOfVisitors+ date+ url);
+        //Log.i("finish 호출됨", title+ teacherName+ NumOfVisitors+ date+ url);
         try {
             db = SqlHelper.getWritableDatabase();
             ContentValues values = new ContentValues();

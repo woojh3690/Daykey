@@ -20,7 +20,7 @@ import static woo.Daykey.MainActivity.getWhatKindOfNetwork;
  * intent를 받아서 알람 보여주는 class
  */
 
-class AlarmBroadcastReceive extends BroadcastReceiver {
+public class AlarmBroadcastReceive extends BroadcastReceiver {
     String launch = "점심이 없다 OTL";
     String dinner = "저녁이 없다 OTL";
     String info = "데이터가 없습니다.";
