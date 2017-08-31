@@ -83,8 +83,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void DataCheck() {
         //Log.i("DataCheck", "실행됨");
         if (checkDietTable()) {
-            defaultAlarm();//처음 앱을 시작했다면 알람 설정
-            newsSave();//공지사항 가져오기
             dietSave();
         } else {
             //Toast.makeText(this, "급식 데이터가 없습니다. 인터넷에서 데이터를 가져옵니다", Toast.LENGTH_SHORT).show();

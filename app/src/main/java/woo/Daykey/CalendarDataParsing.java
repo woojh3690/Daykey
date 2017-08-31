@@ -101,38 +101,6 @@ class CalendarDataParsing extends Thread{
 
     private void getUrlToHTML(String strUrl) {
         final String letter = ":", sstr = "s", estr = "e", Dstr = "D", astr = "a", tstr = "t";
-
-        /*
-        try{
-            Log.i("getUrlToHTML", "실행됨");
-            URL url = new URL(strUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection(); // URL 을 연결한 객체 생성.
-            conn.setRequestMethod("GET"); // get 방식 통신
-            conn.setDoOutput(true);       // 쓰기모드 지정
-            conn.setDoInput(true);        // 읽기모드 지정
-            conn.setUseCaches(false);     // 캐싱데이터를 받을지 안받을지
-            conn.setDefaultUseCaches(false); // 캐싱데이터 디폴트 값 설정
-
-            InputStream is = conn.getInputStream();        //input 스트림 개방
-
-            StringBuilder builder = new StringBuilder();   //문자열을 담기 위한 객체
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is,"UTF-8"));  //문자열 셋 세팅
-            String line;
-
-            while ((line = reader.readLine()) != null) {
-                builder.append(line).append("\n");
-            }
-
-            htmlString =  builder.toString();
-
-
-
-        } catch (MalformedURLException | ProtocolException exception) {
-            exception.printStackTrace();
-        } catch (IOException io){
-            io.printStackTrace();
-        }*/
-
         GetHtmlText getHtmlText = new GetHtmlText(strUrl);
         htmlString = getHtmlText.getHtmlString();
         //:viewData 위치 찾기

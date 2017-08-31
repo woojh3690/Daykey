@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.Html;
 
 class BoardParsing extends Thread{
-    private String htmlStr;
+    private String htmlStr = "noData";
     private final String str6 = ">";
     private String[] url = new String[10];
     private String strUrl;
@@ -27,8 +27,11 @@ class BoardParsing extends Thread{
         super.run();
         GetHtmlText getHtmlText = new GetHtmlText(strUrl);
         this.htmlStr = getHtmlText.getHtmlString();
-        findUrl();
-        find();
+
+        if(!htmlStr.equals("noData")) {
+            findUrl();
+            find();
+        }
     }
 
     //none;'> 위치 찾기
