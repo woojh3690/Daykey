@@ -14,12 +14,15 @@ import android.widget.TextView;
  * 달력
  */
 
-class FmCalendar extends Fragment{
+public class FmCalendar extends Fragment{
     TextView calendarTextView;
     GridView monthView;
     MonthAdapter monthAdapter;
     private int year;
     private int month;
+
+    public FmCalendar() {
+    }
 
     FmCalendar(int year, int month, TextView textView) {
         this.year = year;

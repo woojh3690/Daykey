@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import static woo.Daykey.MainActivity.getMainContext;
 import static woo.Daykey.MainActivity.getWhatKindOfNetwork;
 
-class FmScience extends Fragment {
+public class FmScience extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private Context newsContext;
     private ListView listView;
@@ -46,19 +46,21 @@ class FmScience extends Fragment {
         db = SqlHelper.getReadableDatabase();
 
         new setAdaptor().execute(Boolean.FALSE); //리스트뷰에 아이템 넣기
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 new setAdaptor().execute(Boolean.TRUE);
             }
         });
+
         swipeRefreshLayout.setColorSchemeColors(
                 getResources().getColor(R.color.colorAccent),
                 getResources().getColor(R.color.colorPrimary));
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Log.i("주소", ""+position);
                 String url = null;
                 String[] columns = {"url"};
                 String where = " _id = ?";
@@ -172,11 +174,11 @@ class FmScience extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            NewsItemView view;
+            ListItemView view;
             if (convertView == null) {
-                view = new NewsItemView(newsContext);
+                view = new ListItemView(newsContext);
             } else {
-                view = (NewsItemView) convertView;
+                view = (ListItemView) convertView;
             }
 
             NewsItem item = items.get(position);

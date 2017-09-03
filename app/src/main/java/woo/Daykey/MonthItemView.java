@@ -15,13 +15,11 @@ class MonthItemView extends RelativeLayout {
 
     public MonthItemView(Context context) {
         super(context);
-
         init(context);
     }
 
     public MonthItemView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
         init(context);
     }
 

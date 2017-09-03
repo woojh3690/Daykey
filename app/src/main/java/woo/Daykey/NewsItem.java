@@ -6,7 +6,7 @@ class NewsItem {
     private String writer;
     private String visitors;
 
-    public NewsItem(String title, String date, String visitors, String writer) {
+    NewsItem(String title, String date, String visitors, String writer) {
         this.title = title;
         this.date = date;
         this.writer = writer;

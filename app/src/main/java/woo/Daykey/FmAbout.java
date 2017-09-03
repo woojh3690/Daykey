@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-class FmAbout extends Fragment {
+public class FmAbout extends Fragment {
 
     @Nullable
     @Override
@@ -15,4 +15,6 @@ class FmAbout extends Fragment {
         View view = inflater.inflate(R.layout.flagment_about, container, false);
         return view;
     }
+
+
 }

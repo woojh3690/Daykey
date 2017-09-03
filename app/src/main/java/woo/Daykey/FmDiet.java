@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 
-class FmDiet extends Fragment {
+public class FmDiet extends Fragment {
     int[] weekList = {R.id.mon, R.id.tue, R.id.wed, R.id.thu, R.id.fri};
     TextView[] weekTvList = new TextView[5];
     ViewPager viewPager;
@@ -24,6 +24,7 @@ class FmDiet extends Fragment {
     private int loopTime = 5;
     private int curDay;
     private int firstWeek;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

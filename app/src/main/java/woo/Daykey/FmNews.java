@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import static woo.Daykey.MainActivity.getMainContext;
 import static woo.Daykey.MainActivity.getWhatKindOfNetwork;
 
-class FmNews extends Fragment {
+public class FmNews extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private Context newsContext;
     private ListView listView;
@@ -58,7 +58,6 @@ class FmNews extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Log.i("주소", ""+position);
                 String url = null;
                 String[] columns = {"url"};
                 String where = " _id = ?";
@@ -172,11 +171,11 @@ class FmNews extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            NewsItemView view;
+            ListItemView view;
             if (convertView == null) {
-                view = new NewsItemView(newsContext);
+                view = new ListItemView(newsContext);
             } else {
-                view = (NewsItemView) convertView;
+                view = (ListItemView) convertView;
             }
 
             NewsItem item = items.get(position);

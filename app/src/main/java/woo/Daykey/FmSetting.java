@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import static java.lang.Integer.parseInt;
 
-class FmSetting extends PreferenceFragment{
+public class FmSetting extends PreferenceFragment{
     Context context = MainActivity.getMainContext();
     SettingPreferences set = new SettingPreferences(context);
     String strVersion;

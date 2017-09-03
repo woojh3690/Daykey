@@ -26,7 +26,7 @@ import static woo.Daykey.MainActivity.getWhatKindOfNetwork;
  *가정통신문
  */
 
-class FmHome extends Fragment {
+public class FmHome extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private Context newsContext;
     private ListView listView;
@@ -175,11 +175,11 @@ class FmHome extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            NewsItemView view;
+            ListItemView view;
             if (convertView == null) {
-                view = new NewsItemView(newsContext);
+                view = new ListItemView(newsContext);
             } else {
-                view = (NewsItemView) convertView;
+                view = (ListItemView) convertView;
             }
 
             NewsItem item = items.get(position);

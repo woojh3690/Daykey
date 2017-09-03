@@ -38,13 +38,10 @@ import com.gun0912.tedpermission.TedPermission;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import static woo.Daykey.R.id.calendar;
-import static woo.Daykey.R.id.diet;
-import static woo.Daykey.R.id.news;
-
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "MainActivityLog";
+    private int id;
     static boolean dismiss = false;
     static SqlHelper SqlHelper;
     static SQLiteDatabase db;
@@ -63,9 +60,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SqlHelper = new SqlHelper(mainContext);
         set = new SettingPreferences(mainContext);
 
-        setHandler();
-        newsSave();//공지사항 가져오기
-        defaultAlarm();//처음 앱을 시작했다면 알람 설정
+        if(savedInstanceState == null) {
+            setHandler();
+            newsSave();//공지사항 가져오기
+            defaultAlarm();//처음 앱을 시작했다면 알람 설정
+        }
 
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
@@ -76,7 +75,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         getPermission();
         fuc();//건들지 말것
-        viewMain();
+
+        if(savedInstanceState!=null) {
+            // 화면전환 전에 넣어주었던 pointList 를 꺼내서 세팅
+            Bundle bundle = savedInstanceState.getBundle("save_data");
+            id = bundle.getInt("restart", R.id.main);
+
+            if (id == R.id.main) {
+                viewMain();
+            } else if (id == R.id.diet) {
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.frm1, new FmDiet());
+
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                ft.commit();
+                toolbar.setTitle("식단");
+            } else if (id == R.id.calendar) {
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.frm1, new FmSchedule());
+
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                ft.commit();
+                toolbar.setTitle("학사일정");
+            }
+        } else {
+            viewMain();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Bundle bundle = new Bundle();
+        bundle.putInt("restart", id);
+        outState.putBundle("save_data", bundle);
     }
 
     //데이터베이스 확인, 없으면 네트워크 연결확인
@@ -186,20 +220,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //화면 전환기능
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation setView item clicks here.
-        int id = item.getItemId();
+        id = item.getItemId();
+        changeView();
 
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    public void changeView() {
         if (id == R.id.main) {
             viewMain();
-        } else if (id == diet) {
+        } else if (id == R.id.diet) {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             ft.replace(R.id.frm1, new FmDiet());
 
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
-
             toolbar.setTitle("식단");
-        } else if (id == calendar) {
+        } else if (id == R.id.calendar) {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             ft.replace(R.id.frm1, new FmSchedule());
@@ -215,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
             toolbar.setTitle("시간표");
-        } else if (id == news) {
+        } else if (id == R.id.news) {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             ft.replace(R.id.frm1, new FmNews());
@@ -256,12 +296,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ft.commit();
             toolbar.setTitle("About");
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
-
     // 메인 화면 보기
     public void viewMain() {
         FragmentManager fm = getFragmentManager();
@@ -416,4 +451,76 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .setPermissions(Manifest.permission.WRITE_CALENDAR)
                 .check();
     }
+
+    /*@Override
+    protected void onPostResume() {
+        super.onPostResume();
+        Log.i(TAG, "onPostResume");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i(TAG, "onSop");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy");
+    }
+
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+        Log.i(TAG, "onContentChanged");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i(TAG, "onPause");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume");
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.i(TAG, "onRestoreInstanceState");
+    }
+
+    @Override
+    public void onPostCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+        super.onPostCreate(savedInstanceState, persistentState);
+        Log.i(TAG, "onPostCreate");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.i(TAG, "onRestart");
+    }
+
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+        Log.i(TAG, "onAttachFragment");
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        Log.i(TAG, "onAttachedToWindow");
+    }*/
 }

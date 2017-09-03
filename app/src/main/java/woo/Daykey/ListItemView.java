@@ -1,31 +1,29 @@
 package woo.Daykey;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-class NewsItemView extends LinearLayout {
+class ListItemView extends LinearLayout {
     TextView titleView;
     TextView dateView;
     TextView writer;
     TextView visitors;
 
-    public NewsItemView(Context context) {
+    ListItemView(Context context) {
         super(context);
         init(context);
     }
 
-    public NewsItemView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-        init(context);
-    }
+//    public NewsItemView(Context context, @Nullable AttributeSet attrs) {
+//        super(context, attrs);
+//        init(context);
+//    }
 
     private void init(Context context) {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.item_news, this, true);
+        inflater.inflate(R.layout.list_item, this, true);
 
         titleView = (TextView)findViewById(R.id.titleView);
         dateView = (TextView)findViewById(R.id.dateView);
