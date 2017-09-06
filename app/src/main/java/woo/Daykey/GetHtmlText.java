@@ -7,7 +7,7 @@ import java.net.URL;
 
 class GetHtmlText{
     private String urlAddress;
-    private String htmlString;
+    private String htmlString = "noData";
 
     GetHtmlText(String urlAddress) {
         this.urlAddress = urlAddress;

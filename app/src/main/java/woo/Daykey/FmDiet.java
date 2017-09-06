@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,7 @@ public class FmDiet extends Fragment {
     private int jump = 4;
     private int loopTime = 5;
     private int curDay;
-    private int firstWeek;
+    private int firstDayOfWeek;
 
     @Nullable
     @Override
@@ -40,6 +41,7 @@ public class FmDiet extends Fragment {
         setWeekText(curDay);
         viewPager.setAdapter(dietAdapter);
         viewPager.setCurrentItem(curDay, false);
+        Log.i("curDay : ", ""+curDay);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
@@ -57,7 +59,7 @@ public class FmDiet extends Fragment {
 
     private void setAdapter() {
         int i;
-        dietAdapter.setFlagList(0, new FmChidedDiet(firstWeek, startDay, startDay + jump));
+        dietAdapter.setFlagList(0, new FmChidedDiet(firstDayOfWeek, startDay, startDay + jump));
         startDay = startDay + jump + 3;
         jump = 4;
 
@@ -76,20 +78,18 @@ public class FmDiet extends Fragment {
         curDay = mCalendar.get(Calendar.DATE);
         mCalendar.set(Calendar.DAY_OF_MONTH, 1);
 
-        firstWeek = mCalendar.get(Calendar.DAY_OF_WEEK);
-        int sumDay;
+        firstDayOfWeek = mCalendar.get(Calendar.DAY_OF_WEEK);
+        Log.i("firstDayOfWeek : ", ""+ firstDayOfWeek);
+        int sumDay = firstDayOfWeek - 1;
 
         //시작하는 요일에따라
-        if (firstWeek == 1) {//일요일이면
+        if (firstDayOfWeek == Calendar.SUNDAY) {//일요일이면
             startDay++;
-            sumDay = startDay - 1;
-        } else if (firstWeek == 7) {//토요일이면
+        } else if (firstDayOfWeek == Calendar.SATURDAY) {//토요일이면
             startDay += 2;
             loopTime = 4;
-            sumDay = -1;
         } else {
-            jump -= (firstWeek - 2);
-            sumDay = startDay - 1;
+            jump -= (firstDayOfWeek - 2);
         }
 
         curDay = (curDay + sumDay) / 7;
