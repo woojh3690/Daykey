@@ -16,9 +16,9 @@ class ListItemView extends LinearLayout {
         init(context);
     }
 
-//    public NewsItemView(Context context, @Nullable AttributeSet attrs) {
-//        super(context, attrs);
-//        init(context);
+//    public NewsItemView(Context mainContext, @Nullable AttributeSet attrs) {
+//        super(mainContext, attrs);
+//        init(mainContext);
 //    }
 
     private void init(Context context) {

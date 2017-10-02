@@ -10,8 +10,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -43,9 +41,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String TAG = "MainActivityLog";
     private int id;
     static boolean dismiss = false;
-    static SqlHelper SqlHelper;
-    static SQLiteDatabase db;
-    static Context mainContext;
+    private SqlHelper sqlHelper;
+    private SQLiteDatabase db;
+    private Context mainContext;
     static Handler mhandler;
     TextView name, grade;
     WebView mWebView;
@@ -57,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mainContext = getApplicationContext();
-        SqlHelper = new SqlHelper(mainContext);
+        sqlHelper = new SqlHelper(mainContext);
         set = new SettingPreferences(mainContext);
 
         if(savedInstanceState == null) {
@@ -86,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             } else if (id == R.id.diet) {
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.frm1, new FmDiet());
+                ft.replace(R.id.frm1, new FmDiet(db));
 
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 ft.commit();
@@ -94,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             } else if (id == R.id.calendar) {
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.frm1, new FmSchedule());
+                ft.replace(R.id.frm1, new FmSchedule(db));
 
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 ft.commit();
@@ -120,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             dietSave();
         } else {
             //Toast.makeText(this, "급식 데이터가 없습니다. 인터넷에서 데이터를 가져옵니다", Toast.LENGTH_SHORT).show();
-            if (getWhatKindOfNetwork(this)) {
+            if (GetWhatKindOfNetwork.check(mainContext)) {
                 loadWebView();
                 getSchedule();//일정가져오기
             } else {
@@ -164,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
             mWebSettings = mWebView.getSettings();
             mWebSettings.setJavaScriptEnabled(true);
-            mWebView.addJavascriptInterface(new DietParsing(), "HtmlViewer");
+            mWebView.addJavascriptInterface(new DietParsing(db, set), "HtmlViewer");
             mWebView.loadUrl("http://www.daykey.hs.kr/daykey/19152/food");//중식 로딩
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -174,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //테이블 데이터 확인
     public boolean checkDietTable() {
-        db = SqlHelper.getReadableDatabase();
+        db = sqlHelper.getReadableDatabase();
         String menuStr = "1";
         String[] columns = {"menu"};
 
@@ -189,13 +187,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    //네트워크에 연결됬는지 확인
-    public static boolean getWhatKindOfNetwork(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null;
-    }
-
     //back 버튼이 눌렸을때 목록창 닫기
     @Override
     public void onBackPressed() {
@@ -207,10 +198,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        //getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -234,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.diet) {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.frm1, new FmDiet());
+            ft.replace(R.id.frm1, new FmDiet(db));
 
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
@@ -242,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.calendar) {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.frm1, new FmSchedule());
+            ft.replace(R.id.frm1, new FmSchedule(db));
 
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
@@ -250,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.TimeTable) {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.frm1, new FmTimeTable());
+            ft.replace(R.id.frm1, new FmTimeTable(mainContext, db));
 
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
@@ -258,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.news) {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.frm1, new FmNews());
+            ft.replace(R.id.frm1, new FmNews(mainContext, db));
 
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
@@ -266,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.home) {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.frm1, new FmHome());
+            ft.replace(R.id.frm1, new FmHome(mainContext, db));
 
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
@@ -274,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.science) {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.frm1, new FmScience());
+            ft.replace(R.id.frm1, new FmScience(db, mainContext));
 
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
@@ -282,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.setting) {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.frm1, new FmSetting());
+            ft.replace(R.id.frm1, new FmSetting(mainContext, set));
 
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
@@ -301,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void viewMain() {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.frm1, new FmMain());
+        ft.replace(R.id.frm1, new FmMain(db));
 
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
@@ -342,13 +334,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    static Context getMainContext() {
-        return mainContext;
-    }
-
     public void newsSave() {
-        if (getWhatKindOfNetwork(getMainContext())) {
-            db = SqlHelper.getReadableDatabase();
+        if (GetWhatKindOfNetwork.check(mainContext)) {
+            db = sqlHelper.getReadableDatabase();
 
             String sql = "drop table " + "newsTable";
             String create3 = "create table " + "newsTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
@@ -415,9 +403,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void getSchedule() {
-        //Log.i("getSchedule", "실행됨");
-        Thread thread = new CalendarDataParsing();
-        thread.start();
+        CalendarDataParsing calendarDataParsing = new CalendarDataParsing();
+        calendarDataParsing.setSqlHelper(db, mainContext);
+        calendarDataParsing.start();
     }
 
     public void setHandler() {
@@ -451,76 +439,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .setPermissions(Manifest.permission.WRITE_CALENDAR)
                 .check();
     }
-
-    /*@Override
-    protected void onPostResume() {
-        super.onPostResume();
-        Log.i(TAG, "onPostResume");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.i(TAG, "onStart");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.i(TAG, "onSop");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG, "onDestroy");
-    }
-
-    @Override
-    public void onContentChanged() {
-        super.onContentChanged();
-        Log.i(TAG, "onContentChanged");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.i(TAG, "onPause");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.i(TAG, "onResume");
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        Log.i(TAG, "onRestoreInstanceState");
-    }
-
-    @Override
-    public void onPostCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onPostCreate(savedInstanceState, persistentState);
-        Log.i(TAG, "onPostCreate");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.i(TAG, "onRestart");
-    }
-
-    @Override
-    public void onAttachFragment(Fragment fragment) {
-        super.onAttachFragment(fragment);
-        Log.i(TAG, "onAttachFragment");
-    }
-
-    @Override
-    public void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        Log.i(TAG, "onAttachedToWindow");
-    }*/
 }

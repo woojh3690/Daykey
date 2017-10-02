@@ -8,23 +8,25 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.widget.TimePicker;
 
-import static woo.Daykey.MainActivity.getMainContext;
-
 /**
  * 시간 다이얼
  */
 
 class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
-    SettingPreferences set = new SettingPreferences(getMainContext());
+    SettingPreferences set;
+    Context mainContext;
+
+    public TimePickerFragment(Context mainContext, SettingPreferences set) {
+        this.mainContext = mainContext;
+        this.set = set;
+    }
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        Context context = getMainContext();
-
         set.saveInt("hour", hourOfDay);
         set.saveInt("min", minute);
 
-        AlarmBroadcast alarm = new AlarmBroadcast(context);
+        AlarmBroadcast alarm = new AlarmBroadcast(mainContext);
         alarm.Alarm(0);
     }
 

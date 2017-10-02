@@ -3,6 +3,7 @@ package woo.Daykey;
 import android.app.Fragment;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -10,14 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import static woo.Daykey.MainActivity.db;
-import static woo.Daykey.MainActivity.getMainContext;
-
 public class FmTimeTable extends Fragment {
-    private Context mainContext = getMainContext();
+    private Context mainContext;
+    private SQLiteDatabase db;
     private TextView[] textViews = new TextView[35];
     private int grade = -1;
     private int aClass = -1;
+
+    public FmTimeTable(Context mainContext, SQLiteDatabase db) {
+        this.mainContext = mainContext;
+        this.db = db;
+    }
 
     @Nullable
     @Override

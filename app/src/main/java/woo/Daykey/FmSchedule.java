@@ -2,6 +2,7 @@ package woo.Daykey;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -18,10 +20,16 @@ public class FmSchedule extends Fragment {
     TextView monthText, calendarTextView;
     Activity activity;
     Calendar calendar = Calendar.getInstance();
+    Button addSche;
     View view;
+    private SQLiteDatabase db;
     private int mSelectedPageIndex = 1;
     private ViewPager viewPager;
     final FmCalendar[] fragList = new FmCalendar[3];
+
+    public FmSchedule(SQLiteDatabase db) {
+        this.db = db;
+    }
 
     @Nullable
     @Override
@@ -31,6 +39,7 @@ public class FmSchedule extends Fragment {
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         monthText = (TextView) view.findViewById(R.id.monthText);
         calendarTextView = (TextView)view.findViewById(R.id.calendarTextView);
+        addSche = (Button)view.findViewById(R.id.add_schedule);
 
         monthText.setText(calendar.get(Calendar.YEAR) + "년 " + (calendar.get(Calendar.MONTH) + 1) + "월");
         activity = getActivity();
@@ -109,15 +118,15 @@ public class FmSchedule extends Fragment {
     }
 
     public void addFmCalendar() {
-        fragList[1] = new FmCalendar(calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH), calendarTextView);//현재달
+        fragList[1] = new FmCalendar(db, calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH), calendarTextView, addSche);//현재달
 
         calendar.add(Calendar.MONTH, -1);
-        fragList[0] = new FmCalendar(calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH), calendarTextView);//이전달
+        fragList[0] = new FmCalendar(db, calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH), calendarTextView, addSche);//이전달
 
         calendar.add(Calendar.MONTH, 2);
-        fragList[2] = new FmCalendar(calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH), calendarTextView);//다음달
+        fragList[2] = new FmCalendar(db, calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH), calendarTextView, addSche);//다음달
     }
 }

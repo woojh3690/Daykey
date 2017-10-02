@@ -1,6 +1,7 @@
 package woo.Daykey;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -11,6 +12,7 @@ import java.util.Objects;
 
 class MonthAdapter extends BaseAdapter {
     private Context mainContext;
+    private SQLiteDatabase db;
     private Calendar mCalendar;
 
     private MonthItem[] items;
@@ -19,11 +21,12 @@ class MonthAdapter extends BaseAdapter {
     private int setYear = 1; //보이는 달력 위치에 년도
     private int setMonth = 2; //보이는 달력 위치에 달
 
-    MonthAdapter(Context context, int year, int month) {
-        mainContext = context;
+    MonthAdapter(Context context, SQLiteDatabase db, int year, int month) {
+        this.mainContext = context;
+        this.db = db;
         this.setYear = year;
         this.setMonth = month;
-        items = new MonthItem[7 * 6];
+        this.items = new MonthItem[7 * 6];
 
         Date date = new Date();
         mCalendar = Calendar.getInstance();
@@ -40,7 +43,7 @@ class MonthAdapter extends BaseAdapter {
                 dayNumber = 0;
             }
 
-            items[i] = new MonthItem(dayNumber, setYear + "/" + fromChange(setMonth + 1) + "/" + fromChange(dayNumber));
+            items[i] = new MonthItem(dayNumber, setYear + "/" + fromChange(setMonth + 1) + "/" + fromChange(dayNumber), db);
         }
     }
 

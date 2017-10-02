@@ -2,6 +2,7 @@ package woo.Daykey;
 
 import android.app.Fragment;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -12,13 +13,15 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static woo.Daykey.MainActivity.SqlHelper;
-import static woo.Daykey.MainActivity.db;
-
 public class FmMain extends Fragment {
 
     TextView dietViewMain1;
     TextView dietViewMain2;
+    SQLiteDatabase db;
+
+    public FmMain(SQLiteDatabase db) {
+        this.db = db;
+    }
 
     @Nullable
     @Override
@@ -33,10 +36,8 @@ public class FmMain extends Fragment {
         return view;
     }
 
-    public void todayMenuPrint() {
+    void todayMenuPrint() {
         try {
-            db = SqlHelper.getReadableDatabase();
-
             String[] columns = {"date", "menu"};
             String where = "date = " + dateNow();
             Cursor cursor = db.query("dietTable", columns, where, null, null, null, null);
@@ -61,7 +62,6 @@ public class FmMain extends Fragment {
 
     public void todaySchedulePrint(TextView calendar) {
         try {
-            db = SqlHelper.getReadableDatabase();
             String[] columns = {"date", "schedule"};
             String where = " date = ?";
             String[] at = { dateNowFull() };

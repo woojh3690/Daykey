@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.net.Uri;
 import android.provider.CalendarContract;
@@ -15,20 +16,22 @@ import java.util.Date;
 
 import static android.provider.ContactsContract.Directory.ACCOUNT_NAME;
 import static java.lang.Integer.parseInt;
-import static woo.Daykey.MainActivity.SqlHelper;
-import static woo.Daykey.MainActivity.db;
-import static woo.Daykey.MainActivity.getMainContext;
 
 class CalendarDataParsing extends Thread{
     private int id;
     private String htmlString;
     private boolean account = false;
     private Context mainContext;
+    private SQLiteDatabase db;
+
+    void setSqlHelper(SQLiteDatabase db, Context mainContext) {
+        this.db = db;
+        this.mainContext = mainContext;
+    }
 
     @Override
     public void run() {
         super.run();
-        mainContext = getMainContext();
         addCalendarAccount();
         String strUrl1 = "http://www.daykey.hs.kr/daykey/0204/schedule?section=1&schdYear=2017";
         String strUrl2 = "http://www.daykey.hs.kr/daykey/0204/schedule?section=2&schdYear=2017";
@@ -57,7 +60,7 @@ class CalendarDataParsing extends Thread{
                     .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_NAME, ACCOUNT_NAME)
                     .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL)
                     .build();
-            Uri result = getMainContext().getContentResolver().insert(calUri, cv);
+            Uri result = mainContext.getContentResolver().insert(calUri, cv);
 
             assert result != null;
             id = Integer.parseInt(result.getLastPathSegment());
@@ -77,7 +80,7 @@ class CalendarDataParsing extends Thread{
                 CalendarContract.Calendars._ID
         };
 
-        ContentResolver contentResolver = getMainContext().getApplicationContext().getContentResolver();
+        ContentResolver contentResolver = mainContext.getApplicationContext().getContentResolver();
 
         Cursor cursor = contentResolver.query(CALENDAR_URI, FIELDS, null, null, null);
         try {
@@ -92,8 +95,9 @@ class CalendarDataParsing extends Thread{
                     }
                 }
             }
-        } catch (AssertionError ex) {
-            ex.printStackTrace();
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return check;
@@ -184,7 +188,7 @@ class CalendarDataParsing extends Thread{
                 insertCalendarData(finalDate, schedule[7]);
 
                 if (account) {
-                    new AddCalendar(id, finalDate, schedule[7]);//구글 캘린더에 스케줄 추가
+                    new AddCalendar(mainContext, id, finalDate, schedule[7]);//구글 캘린더에 스케줄 추가
                 }
             }
         }
@@ -210,12 +214,10 @@ class CalendarDataParsing extends Thread{
 
     private void insertCalendarData(String date, String schedule) {
         try {
-            db = SqlHelper.getWritableDatabase();
             ContentValues values = new ContentValues();
             values.put("date", date);
             values.put("schedule", schedule);
             db.insert("calendarTable", null, values);
-            //SqlHelper.close();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -223,12 +225,12 @@ class CalendarDataParsing extends Thread{
 
     //마지막일 구하는 함수
     private int lastDate(String date) {
-        SimpleDateFormat transeDate = new SimpleDateFormat("yyyyMMdd");//"yyyyMMdd"형식의 데이터포맷의 틀을 만든다.
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");//"yyyyMMdd"형식의 데이터포맷의 틀을 만든다.
 
         //String의 날짜를 Date로 형변환
         Date tdate = null;
         try {
-            tdate = transeDate.parse(date);
+            tdate = dateFormat.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }

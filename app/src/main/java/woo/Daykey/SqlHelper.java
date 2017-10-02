@@ -109,7 +109,7 @@ class SqlHelper extends SQLiteOpenHelper {
         db.execSQL("insert into timetable values('2','화','6','음진','물수','영경','수오','화장','수훈','국광');");
         db.execSQL("insert into timetable values('2','화','7','국임','체육','화장','국광','지현','미부','수오');");
         db.execSQL("insert into timetable values('2','화','8','수훈','체육','지현','영상','국고','수오','화장');");
-        db.execSQL("insert into timetable values('2','화','9','과강','미부','체육','물수','음김','생람','국고');");
+        db.execSQL("insert into timetable values('2','화','9','과강','미부','음김','물수','체육','생람','국고');");
         db.execSQL("insert into timetable values('2','화','10','화장','생람','체육','수송','음김','과강','미부');");
         db.execSQL("insert into timetable values('2','화','11','영경','수송','수훈','체육','물수','국고','생람');");
         db.execSQL("insert into timetable values('2','화','12','영지','지현','생람','체육','수훈','수송','음진');");

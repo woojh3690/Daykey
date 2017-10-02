@@ -19,14 +19,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import static woo.Daykey.MainActivity.getMainContext;
-import static woo.Daykey.MainActivity.getWhatKindOfNetwork;
-
 public class FmNews extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private Context newsContext;
     private ListView listView;
-    private Context context;
+    private Context mainContext;
     private SQLiteDatabase db;
 
     private String title;
@@ -34,16 +31,17 @@ public class FmNews extends Fragment {
     private String visitors;
     private String date;
 
+    public FmNews(Context mainContext, SQLiteDatabase db) {
+        this.mainContext = mainContext;
+        this.db = db;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.flagment_news, container, false);
         swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh_wrapper_news);
         listView = (ListView)view.findViewById(R.id.newsListView);
-
-        context = getMainContext();
         newsContext = view.getContext();
-        SqlHelper SqlHelper = new SqlHelper(context);
-        db = SqlHelper.getReadableDatabase();
 
         new setAdaptor().execute(Boolean.FALSE); //리스트뷰에 아이템 넣기
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -106,7 +104,7 @@ public class FmNews extends Fragment {
         }
 
         void newsSave() {
-            if (getWhatKindOfNetwork(context)) {
+            if (GetWhatKindOfNetwork.check(mainContext)) {
                 final String sql = "drop table " + "newsTable";
                 final String create3 = "create table " + "newsTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
 
@@ -116,7 +114,7 @@ public class FmNews extends Fragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                Thread thread = new BoardParsing(context, "http://www.daykey.hs.kr/daykey/0701/board/14117", 1);
+                Thread thread = new BoardParsing(mainContext, "http://www.daykey.hs.kr/daykey/0701/board/14117", 1);
                 thread.start();
 
                 try {

@@ -17,12 +17,17 @@ import android.widget.Toast;
 import static java.lang.Integer.parseInt;
 
 public class FmSetting extends PreferenceFragment{
-    Context context = MainActivity.getMainContext();
-    SettingPreferences set = new SettingPreferences(context);
+    Context mainContext;
+    SettingPreferences set;
     String strVersion;
     View view;
 
     Preference setTime, switchAlarm, calendarSyc, name, aClass, email, grade, version;
+
+    public FmSetting(Context mainContext, SettingPreferences set) {
+        this.mainContext = mainContext;
+        this.set = set;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -38,7 +43,7 @@ public class FmSetting extends PreferenceFragment{
         version = findPreference("version");
 
         try {
-            PackageInfo i = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            PackageInfo i = mainContext.getPackageManager().getPackageInfo(mainContext.getPackageName(), 0);
             strVersion = i.versionName;
         } catch(PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -49,7 +54,7 @@ public class FmSetting extends PreferenceFragment{
         switchAlarm.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                AlarmBroadcast alarmBroadcast = new AlarmBroadcast(context);
+                AlarmBroadcast alarmBroadcast = new AlarmBroadcast(mainContext);
                 boolean switched = (boolean)newValue;
 
                 if (switched) {
@@ -71,7 +76,7 @@ public class FmSetting extends PreferenceFragment{
         setTime.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                TimePickerFragment timePickerFragment = new TimePickerFragment();
+                TimePickerFragment timePickerFragment = new TimePickerFragment(mainContext, set);
                 timePickerFragment.show(getFragmentManager(), "TAG");
                 return false;
             }
@@ -86,14 +91,14 @@ public class FmSetting extends PreferenceFragment{
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            new AddCalendar(context);
+                            new AddCalendar(mainContext);
                         }
                     }).start();
 
                     set.saveBoolean("calendar", true);
                 } else {
-                    context.getContentResolver().delete (ContentUris.withAppendedId (CalendarContract.Calendars.CONTENT_URI, set.getInt("id")), null, null);
-                    Toast.makeText(context, "일정이 지워졌습니다.", Toast.LENGTH_SHORT).show();
+                    mainContext.getContentResolver().delete (ContentUris.withAppendedId (CalendarContract.Calendars.CONTENT_URI, set.getInt("id")), null, null);
+                    Toast.makeText(mainContext, "일정이 지워졌습니다.", Toast.LENGTH_SHORT).show();
                     set.saveBoolean("calendar", false);
                 }
 

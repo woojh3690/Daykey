@@ -2,6 +2,7 @@ package woo.Daykey;
 
 import android.app.Fragment;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -12,9 +13,8 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.Map;
 
-import static woo.Daykey.MainActivity.db;
-
 public class FmChidedDiet extends Fragment{
+    private SQLiteDatabase db;
     private int[] idArray = {R.id.dietText1, R.id.dietText2, R.id.dietText3, R.id.dietText4, R.id.dietText5, R.id.dietText6, R.id.dietText7, R.id.dietText8, R.id.dietText9, R.id.dietText10};
     private TextView[] tvArray = new TextView[10];
     private int start;
@@ -27,12 +27,14 @@ public class FmChidedDiet extends Fragment{
     public FmChidedDiet() {
     }
 
-    public FmChidedDiet(int start, int finish) {
+    public FmChidedDiet(SQLiteDatabase db, int start, int finish) {
+        this.db = db;
         this.start = start;
         this.finish = finish;
     }
 
-    public FmChidedDiet(int firstWeek, int start, int finish) {
+    public FmChidedDiet(SQLiteDatabase db, int firstWeek, int start, int finish) {
+        this.db = db;
         this.start = start;
         this.finish = finish;
         this.firstWeek = firstWeek - 2;

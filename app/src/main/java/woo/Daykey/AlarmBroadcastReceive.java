@@ -14,8 +14,6 @@ import android.util.Log;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static woo.Daykey.MainActivity.getWhatKindOfNetwork;
-
 /**
  * intent를 받아서 알람 보여주는 class
  */
@@ -70,7 +68,7 @@ public class AlarmBroadcastReceive extends BroadcastReceiver {
     //첫번째 공지사항 불러오기
     private void firstInfoSave(Context context) {
         db = SqlHelper.getReadableDatabase();
-        if (getWhatKindOfNetwork(context)) {
+        if (GetWhatKindOfNetwork.check(context)) {
             String sql = "drop table " + "newsTable";
             String create3 = "create table " + "newsTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
             try{

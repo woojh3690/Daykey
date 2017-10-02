@@ -1,15 +1,14 @@
 package woo.Daykey;
 
 import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.text.Html;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 
 import java.util.Calendar;
 
-import static woo.Daykey.MainActivity.db;
 import static woo.Daykey.MainActivity.dismiss;
-import static woo.Daykey.MainActivity.mainContext;
 import static woo.Daykey.MainActivity.mhandler;
 
 class DietParsing{
@@ -22,9 +21,16 @@ class DietParsing{
     private String tempBody;
 
     private ContentValues values;
+    private SettingPreferences set;
+    private SQLiteDatabase db;
 
     private int htmlInt;
     private int check = 1; //값이 '0'이 되면은 중첩된 소괄호 까지 완전히 닫힌 것
+
+    DietParsing(SQLiteDatabase db, SettingPreferences set) {
+        this.db = db;
+        this.set = set;
+    }
 
     @JavascriptInterface//NOTE: If your target API > 16 you must have @JavascriptInterface
     @SuppressWarnings("UnusedDeclaration")
@@ -44,13 +50,11 @@ class DietParsing{
                     //급식 DB 버전 저장
                     Calendar calendar = Calendar.getInstance();
                     int today = calendar.get(Calendar.MONTH);
-                    SettingPreferences set = new SettingPreferences(mainContext);
                     set.saveInt("db_version", today);
                 }
 
             }
         }).start();
-
     }
 
     //새창열림\> 위치 찾기

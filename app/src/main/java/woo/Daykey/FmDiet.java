@@ -2,6 +2,7 @@ package woo.Daykey;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -25,6 +26,11 @@ public class FmDiet extends Fragment {
     private int loopTime = 5;
     private int curDay;
     private int firstDayOfWeek;
+    private SQLiteDatabase db;
+
+    public FmDiet(SQLiteDatabase db) {
+        this.db = db;
+    }
 
     @Nullable
     @Override
@@ -59,17 +65,17 @@ public class FmDiet extends Fragment {
 
     private void setAdapter() {
         int i;
-        dietAdapter.setFlagList(0, new FmChidedDiet(firstDayOfWeek, startDay, startDay + jump));
+        dietAdapter.setFlagList(0, new FmChidedDiet(db, firstDayOfWeek, startDay, startDay + jump));
         startDay = startDay + jump + 3;
         jump = 4;
 
         for (i = 1; i < loopTime; i++) {
-            dietAdapter.setFlagList(i, new FmChidedDiet(startDay, startDay + jump));
+            dietAdapter.setFlagList(i, new FmChidedDiet(db, startDay, startDay + jump));
             startDay += 7;
         }
 
         if (loopTime == 4) {
-            dietAdapter.setFlagList(i, new FmChidedDiet(startDay, startDay));
+            dietAdapter.setFlagList(i, new FmChidedDiet(db, startDay, startDay));
         }
     }
 

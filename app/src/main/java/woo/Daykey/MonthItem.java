@@ -1,17 +1,21 @@
 package woo.Daykey;
 
 import android.database.Cursor;
-
-import static woo.Daykey.MainActivity.db;
-import static woo.Daykey.MainActivity.SqlHelper;
+import android.database.sqlite.SQLiteDatabase;
 
 class MonthItem {
     String dayText;//요일 + 일정 텍스트 변수
-    private String trimDay;//
+    private SQLiteDatabase db;
+    private int day;
+    private String trimDay;
+    private String strTodaySchedule;
 
-    MonthItem(int day, String trimDay) {
+    MonthItem(int day, String trimDay, SQLiteDatabase db) {
+        this.day = day;
         this.trimDay = trimDay;
-        this.dayText = day + "\n" + todaySchedule();
+        this.db = db;
+        this.strTodaySchedule = todaySchedule();
+        this.dayText = day + "\n" + strTodaySchedule;
     }
 
     //오늘의 일정 표시
@@ -19,7 +23,6 @@ class MonthItem {
         String schedule = "";
 
         try { //데이터베이스에 쿼리문을 날려 schedule변수에 오늘의 일정 저장
-            db = SqlHelper.getReadableDatabase();
             String[] columns = {"schedule"};
             String where = " date = ?";
             String[] at = {trimDay};
@@ -36,7 +39,7 @@ class MonthItem {
         return schedule;
     }
 
-    String getDayText() {
-        return dayText;
+    String[] getDayText() {
+        return new String[]{String.valueOf(day), strTodaySchedule};
     }
 }

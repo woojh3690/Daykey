@@ -15,40 +15,26 @@ import java.util.TimeZone;
 
 import static android.provider.CalendarContract.CONTENT_URI;
 import static android.provider.ContactsContract.Directory.ACCOUNT_NAME;
-import static woo.Daykey.MainActivity.getMainContext;
 
 class AddCalendar {//extends Thread{
     private int id;
     private String[] startTime;
-    private boolean aBoolean = true;
     SQLiteDatabase database;
     private String title;
-    private Context context;
-
-    /*
-    @Override
-    public synchronized void start() {
-        if (aBoolean) {
-            addAllDay();
-        } else {
-            add();
-        }
-    }*/
+    private Context mainContext;
 
     AddCalendar(Context mainContext) {
         SettingPreferences settingPreferences = new SettingPreferences(mainContext);
-        this.context = mainContext;
+        this.mainContext = mainContext;
         this.id = settingPreferences.getInt("id");
-        this.aBoolean = false;
         addCalendarAccount();
         add();
     }
 
-    AddCalendar(int id, String startTime, String title) {
-        this.context = getMainContext();
+    AddCalendar(Context mainContext, int id, String startTime, String title) {
+        this.mainContext = mainContext;
         this.id = id;
         this.startTime = startTime.split("/");
-        //this.finishTime = finishTime.split("/");
         this.title = title;
         addAllDay();
     }
@@ -68,11 +54,11 @@ class AddCalendar {//extends Thread{
         cv.put(CalendarContract.Events.DTEND, beginTime.getTimeInMillis());
         cv.put("allDay", 1);
         cv.put(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());
-        context.getContentResolver().insert(Uri.parse(CONTENT_URI + "/events"), cv);
+        mainContext.getContentResolver().insert(Uri.parse(CONTENT_URI + "/events"), cv);
     }
 
     private void add() {
-        SQLiteOpenHelper sqLiteOpenHelper = new SqlHelper(context);
+        SQLiteOpenHelper sqLiteOpenHelper = new SqlHelper(mainContext);
 
         try {
             database = sqLiteOpenHelper.getReadableDatabase();
@@ -113,12 +99,12 @@ class AddCalendar {//extends Thread{
                     .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_NAME, ACCOUNT_NAME)
                     .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL)
                     .build();
-            Uri result = getMainContext().getContentResolver().insert(calUri, cv);
+            Uri result = mainContext.getContentResolver().insert(calUri, cv);
 
             assert result != null;
             id = Integer.parseInt(result.getLastPathSegment());
 
-            SettingPreferences set = new SettingPreferences(context);
+            SettingPreferences set = new SettingPreferences(mainContext);
             set.saveInt("id", id);
         }
     }
@@ -131,7 +117,7 @@ class AddCalendar {//extends Thread{
                 CalendarContract.Calendars._ID
         };
 
-        ContentResolver contentResolver = getMainContext().getApplicationContext().getContentResolver();
+        ContentResolver contentResolver = mainContext.getApplicationContext().getContentResolver();
 
         Cursor cursor = contentResolver.query(CALENDAR_URI, FIELDS, null, null, null);
         try {
@@ -141,7 +127,7 @@ class AddCalendar {//extends Thread{
                     if (displayName.equals("학사일정")) {
                         check = true;
                         int accountId = cursor.getInt(1);
-                        SettingPreferences set = new SettingPreferences(context);
+                        SettingPreferences set = new SettingPreferences(mainContext);
                         set.saveInt("id", accountId);
                     }
                 }
