@@ -118,15 +118,15 @@ public class FmSchedule extends Fragment {
     }
 
     public void addFmCalendar() {
-        fragList[1] = new FmCalendar(db, calendar.get(Calendar.YEAR),
+        fragList[1] = new FmCalendar(db, getActivity(), calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH), calendarTextView, addSche);//현재달
 
         calendar.add(Calendar.MONTH, -1);
-        fragList[0] = new FmCalendar(db, calendar.get(Calendar.YEAR),
+        fragList[0] = new FmCalendar(db, getActivity(), calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH), calendarTextView, addSche);//이전달
 
         calendar.add(Calendar.MONTH, 2);
-        fragList[2] = new FmCalendar(db, calendar.get(Calendar.YEAR),
+        fragList[2] = new FmCalendar(db, getActivity(), calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH), calendarTextView, addSche);//다음달
     }
 }

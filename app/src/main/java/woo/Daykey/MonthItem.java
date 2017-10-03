@@ -42,4 +42,8 @@ class MonthItem {
     String[] getDayText() {
         return new String[]{String.valueOf(day), strTodaySchedule};
     }
+
+    String getTrimDay() {
+        return trimDay;
+    }
 }
