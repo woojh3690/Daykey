@@ -7,7 +7,6 @@ import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -82,21 +81,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (id == R.id.main) {
                 viewMain();
             } else if (id == R.id.diet) {
-                FragmentManager fm = getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.frm1, new FmDiet(db));
-
-                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                ft.commit();
-                toolbar.setTitle("식단");
-            } else if (id == R.id.calendar) {
-                FragmentManager fm = getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.frm1, new FmSchedule(db));
-
-                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                ft.commit();
-                toolbar.setTitle("학사일정");
+                changeDietView();
+            } else if (id == R.id.schedule) {
+                changeScheView();
             }
         } else {
             viewMain();
@@ -114,10 +101,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //데이터베이스 확인, 없으면 네트워크 연결확인
     private void DataCheck() {
         //Log.i("DataCheck", "실행됨");
-        if (checkDietTable()) {
+        if (set.getBoolean("diet")) {
             dietSave();
         } else {
-            //Toast.makeText(this, "급식 데이터가 없습니다. 인터넷에서 데이터를 가져옵니다", Toast.LENGTH_SHORT).show();
             if (GetWhatKindOfNetwork.check(mainContext)) {
                 loadWebView();
                 getSchedule();//일정가져오기
@@ -170,23 +156,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    //테이블 데이터 확인
-    public boolean checkDietTable() {
-        db = sqlHelper.getReadableDatabase();
-        String menuStr = "1";
-        String[] columns = {"menu"};
-
-        try (Cursor cursor = db.query("dietTable", columns, null, null, null, null, null)) {
-            while (cursor.moveToNext()) {
-                menuStr = cursor.getString(0);
-            }
-            return menuStr.length() > 2;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return false;
-        }
-    }
-
     //back 버튼이 눌렸을때 목록창 닫기
     @Override
     public void onBackPressed() {
@@ -198,20 +167,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        //주석은 툴바 메뉴버튼
         // Inflate the menu; this adds items to the action bar if it is present.
         //getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     //화면 전환기능
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Handle navigation setView item clicks here.
         id = item.getItemId();
         changeView();
 
@@ -224,21 +191,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.main) {
             viewMain();
         } else if (id == R.id.diet) {
-            FragmentManager fm = getFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.frm1, new FmDiet(db));
-
-            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-            ft.commit();
-            toolbar.setTitle("식단");
-        } else if (id == R.id.calendar) {
-            FragmentManager fm = getFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.frm1, new FmSchedule(db));
-
-            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-            ft.commit();
-            toolbar.setTitle("학사일정");
+            changeDietView();
+        } else if (id == R.id.schedule) {
+            changeScheView();
         } else if (id == R.id.TimeTable) {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
@@ -438,5 +393,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .setPermissionListener(permissionListener)
                 .setPermissions(Manifest.permission.WRITE_CALENDAR)
                 .check();
+    }
+
+    private void changeDietView() {
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.frm1, new FmDiet(db));
+
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.commit();
+        toolbar.setTitle("식단");
+        if(!set.getBoolean("diet")) {
+            Toast.makeText(mainContext, "식단이 올라오지 않았습니다.\n대기고등학교 홈페이에 문의 바랍니다.",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void changeScheView() {
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.frm1, new FmSchedule(db, set));
+
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.commit();
+        toolbar.setTitle("학사일정");
     }
 }

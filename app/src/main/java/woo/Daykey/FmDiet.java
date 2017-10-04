@@ -47,7 +47,7 @@ public class FmDiet extends Fragment {
         setWeekText(curDay);
         viewPager.setAdapter(dietAdapter);
         viewPager.setCurrentItem(curDay, false);
-        Log.i("curDay : ", ""+curDay);
+        //Log.i("curDay : ", ""+curDay);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}

@@ -22,7 +22,7 @@ public class FmSetting extends PreferenceFragment{
     String strVersion;
     View view;
 
-    Preference setTime, switchAlarm, calendarSyc, name, aClass, email, grade, version;
+    Preference setTime, switchAlarm, calendarSyc, name, aClass, email, grade, version, password;
 
     public FmSetting(Context mainContext, SettingPreferences set) {
         this.mainContext = mainContext;
@@ -40,6 +40,7 @@ public class FmSetting extends PreferenceFragment{
         grade = findPreference("grade");
         aClass = findPreference("class");
         email = findPreference("email");
+        password = findPreference("password");
         version = findPreference("version");
 
         try {
@@ -109,7 +110,7 @@ public class FmSetting extends PreferenceFragment{
         name.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                String textName = " ";
+                String textName;
                 textName = (String)newValue;
                 set.saveString("name", textName);
                 name.setSummary(textName);
@@ -154,10 +155,31 @@ public class FmSetting extends PreferenceFragment{
         email.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                String textEmail = " ";
-                textEmail = (String)newValue;
+                String textEmail = (String)newValue;
                 set.saveString("email", textEmail);
                 email.setSummary(textEmail);
+                return true;
+            }
+        });
+
+        password.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                try {
+                    String password = (String)newValue;
+                    if(!password.equals("")) {
+                        if(password.length() < 4) {
+                            Toast.makeText(mainContext, "비밀번호는 4자리 이상 입력해야 합니다.", Toast.LENGTH_SHORT).show();
+                            return false;
+                        } else {
+                            set.saveInt("password", parseInt(password.trim()));
+                        }
+                    } else {
+                        Toast.makeText(mainContext, "값을 입력해 주세요", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 return true;
             }
         });

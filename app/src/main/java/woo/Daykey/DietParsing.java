@@ -26,6 +26,7 @@ class DietParsing{
 
     private int htmlInt;
     private int check = 1; //값이 '0'이 되면은 중첩된 소괄호 까지 완전히 닫힌 것
+    private boolean insertCheck = false;
 
     DietParsing(SQLiteDatabase db, SettingPreferences set) {
         this.db = db;
@@ -35,7 +36,7 @@ class DietParsing{
     @JavascriptInterface//NOTE: If your target API > 16 you must have @JavascriptInterface
     @SuppressWarnings("UnusedDeclaration")
     public void showHTML(String html) {
-        Log.i("showHTML", "실행됨");
+        //Log.i("showHTML", "실행됨");
         htmlSr = html;
         htmlInt = htmlSr.length();
 
@@ -59,7 +60,7 @@ class DietParsing{
 
     //새창열림\> 위치 찾기
     private void find() {
-        Log.i("find", "실행됨");
+        //Log.i("find", "실행됨");
         for (int i = 0; i < htmlInt; i++) {
             if (string1.equals(changeType(i))) {
                 if (string2.equals(changeType(i + 1))) {
@@ -145,7 +146,6 @@ class DietParsing{
 
         //특수문자 해석
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N) {
-            // noinspection deprecation
             tempMenu = String.valueOf(Html.fromHtml(tempMenu));
         } else {
             tempMenu = String.valueOf(Html.fromHtml(tempMenu, Html.FROM_HTML_MODE_LEGACY));
@@ -157,7 +157,6 @@ class DietParsing{
             tempMenu = tempMenu.substring(1);
         }
 
-        Log.i("오류", date + "  " + tempMenu);
         insertDietData(Integer.parseInt(date),  tempMenu); //<br>을 enter 로 치환한다음 insertCalendarData 함수 호출
     }
 
@@ -174,6 +173,10 @@ class DietParsing{
             values.put("date", date);
             values.put("menu", menu);
             db.insert("dietTable", null, values);
+
+            if(!insertCheck) {
+                set.saveBoolean("diet", true);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

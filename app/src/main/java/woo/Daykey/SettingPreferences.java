@@ -11,11 +11,9 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 class SettingPreferences{
-    private Context mainContext;
     private SharedPreferences pref;
 
     SettingPreferences(Context mainContext) {
-        //this.mainContext = mainContext;
         pref = mainContext.getSharedPreferences("setting", MODE_PRIVATE);
     }
 
@@ -29,8 +27,12 @@ class SettingPreferences{
                 break;
             case "calendar":
                 defaultSetting = true;
+                break;
+            case "diet":
+                defaultSetting = false;
+                break;
             default:
-                Log.w("SettingReferences", "값 불러오기 오류");
+                Log.w("Setting getBoolean", "값 불러오기 오류");
                 break;
         }
 
@@ -66,6 +68,9 @@ class SettingPreferences{
             case "grade":
                 defaultSet = 0;
                 break;
+            case "password":
+                defaultSet = -1;
+                break;
             default:
                 defaultSet = -1;
         }
@@ -89,8 +94,9 @@ class SettingPreferences{
                 break;
             case "email":
                 defaultSetting = " ";
+                break;
             default:
-                Log.w("SettingReferences", "값 불러오기 오류");
+                Log.w("Setting getString", "값 불러오기 오류");
                 break;
         }
 

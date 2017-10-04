@@ -48,6 +48,13 @@
             android:singleLine="true"
             android:title="이메일"
             android:inputType="textEmailAddress"/>
+
+        <EditTextPreference
+            android:key="password"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="비밀번호"
+            android:inputType="numberPassword"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="정보">

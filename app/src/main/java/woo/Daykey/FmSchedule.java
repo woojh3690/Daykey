@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,18 +22,20 @@ public class FmSchedule extends Fragment {
     Button addSche;
     View view;
     private SQLiteDatabase db;
+    private SettingPreferences set;
     private int mSelectedPageIndex = 1;
     private ViewPager viewPager;
     final FmCalendar[] fragList = new FmCalendar[3];
 
-    public FmSchedule(SQLiteDatabase db) {
+    public FmSchedule(SQLiteDatabase db, SettingPreferences set) {
         this.db = db;
+        this.set = set;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.i("schedule", "onCreate");
+        //Log.i("schedule", "onCreate");
         view = inflater.inflate(R.layout.flagment_schedule, container, false);
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         monthText = (TextView) view.findViewById(R.id.monthText);
@@ -118,15 +119,15 @@ public class FmSchedule extends Fragment {
     }
 
     public void addFmCalendar() {
-        fragList[1] = new FmCalendar(db, getActivity(), calendar.get(Calendar.YEAR),
+        fragList[1] = new FmCalendar(db, getActivity(), set, calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH), calendarTextView, addSche);//현재달
 
         calendar.add(Calendar.MONTH, -1);
-        fragList[0] = new FmCalendar(db, getActivity(), calendar.get(Calendar.YEAR),
+        fragList[0] = new FmCalendar(db, getActivity(), set, calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH), calendarTextView, addSche);//이전달
 
         calendar.add(Calendar.MONTH, 2);
-        fragList[2] = new FmCalendar(db, getActivity(), calendar.get(Calendar.YEAR),
+        fragList[2] = new FmCalendar(db, getActivity(), set, calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH), calendarTextView, addSche);//다음달
     }
 }

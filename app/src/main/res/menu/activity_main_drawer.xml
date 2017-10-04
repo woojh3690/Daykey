@@ -11,7 +11,7 @@
             android:icon="@drawable/ic_restaurant_cutlery_symbol_of_a_cross"
             android:title="@string/diet_str" />
         <item
-            android:id="@+id/calendar"
+            android:id="@+id/schedule"
             android:icon="@drawable/ic_date_range_black_24dp"
             android:title="@string/calendar_str" />
         <item
