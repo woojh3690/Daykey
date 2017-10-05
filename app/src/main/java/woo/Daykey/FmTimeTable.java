@@ -36,7 +36,7 @@ public class FmTimeTable extends Fragment {
         }
         setProfile();
 
-        if ((grade == 0) || (aClass == 0)) {
+        if ((grade == -1) || (aClass == -1)) {
             textViews[17].setText("프로필을 설정해 주세요");
         }
         setTextViews();

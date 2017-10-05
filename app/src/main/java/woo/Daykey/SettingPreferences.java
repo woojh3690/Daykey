@@ -31,6 +31,9 @@ class SettingPreferences{
             case "diet":
                 defaultSetting = false;
                 break;
+            case "firstStart":
+                defaultSetting = false;
+                break;
             default:
                 Log.w("Setting getBoolean", "값 불러오기 오류");
                 break;
@@ -63,10 +66,10 @@ class SettingPreferences{
                 defaultSet = -1;
                 break;
             case "class":
-                defaultSet = 0;
+                defaultSet = -1;
                 break;
             case "grade":
-                defaultSet = 0;
+                defaultSet = -1;
                 break;
             case "password":
                 defaultSet = -1;

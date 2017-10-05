@@ -42,7 +42,6 @@ public class FmCalendar extends Fragment{
     Button addSche;
     private int year;
     private int month;
-    private ScheduleModel scheduleModel;
     static String trimDate = null;
 
     public FmCalendar() {
@@ -70,7 +69,28 @@ public class FmCalendar extends Fragment{
                 if (trimDate == null || trimDate.endsWith("00")) {
                     Toast.makeText(mainContext, "날짜를 선택해주세요.", Toast.LENGTH_SHORT).show();
                 } else {
-                    dialogShow();
+
+                    boolean check = false;
+                    if(set.getString("name").equals(" ")) {
+                        Toast.makeText(mainContext, "프로필에 정확한 이름을 입력해 주세요", Toast.LENGTH_SHORT).show();
+                        check = true;
+                    } else if(set.getInt("grade") == -1) {
+                        Toast.makeText(mainContext, "프로필에 정확한 학년을 설정해 주세요", Toast.LENGTH_SHORT).show();
+                        check = true;
+                    } else if(set.getInt("class") == -1) {
+                        Toast.makeText(mainContext, "프로필에 정확한 반을 설정해 주세요", Toast.LENGTH_SHORT).show();
+                        check = true;
+                    } else if(set.getInt("password") == -1) {
+                        Toast.makeText(mainContext, "프로필에 정확한 비밀번호를 설정해 주세요", Toast.LENGTH_SHORT).show();
+                        check = true;
+                    } else {
+                        dialogShow();
+                    }
+
+                    if (check) {
+                        Toast.makeText(mainContext, "설정에서 프로필을 변경할 수 있습니다.", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
             }
         });
@@ -106,12 +126,19 @@ public class FmCalendar extends Fragment{
         final AlertDialog dialog = builder.create();
         submit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String strSche = editTextSche.getText().toString();
-                String[] list = {strSche, "http://wooserver.iptime.org/daykey/schedule/save"};
-                HttpAsyncTask httpAsyncTask = new HttpAsyncTask();
-                httpAsyncTask.execute(list);
+                String strSche = null;
+                strSche = editTextSche.getText().toString();
+                Log.i("strSche : ? -->", " 호잇 : " + strSche);
 
-                dialog.dismiss();
+                if(!(strSche.equals(""))) {
+                    String[] list = {"http://wooserver.iptime.org/daykey/schedule/save", strSche};
+                    HttpAsyncTask httpAsyncTask = new HttpAsyncTask();
+                    httpAsyncTask.execute(list);
+                    dialog.dismiss();
+                } else {
+                    Toast.makeText(mainContext, "일정을 입력해 주세요.", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -135,10 +162,13 @@ public class FmCalendar extends Fragment{
 
     private class HttpAsyncTask extends AsyncTask<String, Void, String> {
 
+        HttpAsyncTask() {
+        }
+
         @Override
-        protected String doInBackground(String... sche) {
+        protected String doInBackground(String... urls) {
             String[] dateList = trimDate.split("/");
-            scheduleModel = new ScheduleModel();
+            ScheduleModel scheduleModel = new ScheduleModel();
             scheduleModel.setName(set.getString("name"));
             scheduleModel.setGrade(set.getInt("grade"));
             scheduleModel.setClass_(set.getInt("class"));
@@ -146,9 +176,15 @@ public class FmCalendar extends Fragment{
             scheduleModel.setYear(dateList[0]);
             scheduleModel.setMonth(dateList[1]);
             scheduleModel.setDate(dateList[2]);
-            scheduleModel.setSche(sche[0]);
+            scheduleModel.setSche(urls[1]);
 
-            return POST(sche[1],scheduleModel);
+            return POST(urls[0], scheduleModel);
+        }
+
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
         }
     }
 
@@ -161,7 +197,6 @@ public class FmCalendar extends Fragment{
 
             String json = "";
 
-            // build jsonObject
             JSONObject jsonObject = new JSONObject();
             jsonObject.accumulate("name", scheduleModel.getName());
             jsonObject.accumulate("grade", scheduleModel.getGrade());
@@ -189,9 +224,9 @@ public class FmCalendar extends Fragment{
             httpCon.setDoInput(true);
 
             OutputStream os = httpCon.getOutputStream();
-            os.write(json.getBytes("UTF-8"));
+            os.write(json.getBytes("utf-8"));
             os.flush();
-            /*// receive response as inputStream
+            // receive response as inputStream
             try {
                 is = httpCon.getInputStream();
                 // convert inputstream to string
@@ -199,14 +234,18 @@ public class FmCalendar extends Fragment{
                     result = convertInputStreamToString(is);
                 else
                     result = "Did not work!";
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
-            } finally {
+            }
+            finally {
                 httpCon.disconnect();
-            }*/
-        } catch (IOException e) {
+            }
+        }
+        catch (IOException e) {
             e.printStackTrace();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             Log.d("InputStream", e.getLocalizedMessage());
         }
 

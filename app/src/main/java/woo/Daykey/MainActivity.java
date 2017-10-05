@@ -107,8 +107,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (GetWhatKindOfNetwork.check(mainContext)) {
                 loadWebView();
                 getSchedule();//일정가져오기
+                set.saveBoolean("firstStart", true);
             } else {
-                Toast.makeText(this, "인터넷을 연결해 주세요", Toast.LENGTH_SHORT).show();
+                if(!set.getBoolean("firstStart")) {
+                    Toast.makeText(mainContext, "인터넷을 연결해 주세요\n" +
+                            "처음 앱을 실행했을 때에는 데이터를 가져오는 과정이 필요합니다.", Toast.LENGTH_LONG).show();
+                    finish();
+                } else {
+                    Toast.makeText(this, "인터넷을 연결해 주세요", Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }

@@ -9,6 +9,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,6 +99,7 @@ public class FmSetting extends PreferenceFragment{
 
                     set.saveBoolean("calendar", true);
                 } else {
+                    Log.i("id", " " + set.getInt("id"));
                     mainContext.getContentResolver().delete (ContentUris.withAppendedId (CalendarContract.Calendars.CONTENT_URI, set.getInt("id")), null, null);
                     Toast.makeText(mainContext, "일정이 지워졌습니다.", Toast.LENGTH_SHORT).show();
                     set.saveBoolean("calendar", false);
@@ -166,17 +168,21 @@ public class FmSetting extends PreferenceFragment{
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 try {
+
                     String password = (String)newValue;
                     if(!password.equals("")) {
+
                         if(password.length() < 4) {
                             Toast.makeText(mainContext, "비밀번호는 4자리 이상 입력해야 합니다.", Toast.LENGTH_SHORT).show();
                             return false;
                         } else {
                             set.saveInt("password", parseInt(password.trim()));
                         }
+
                     } else {
                         Toast.makeText(mainContext, "값을 입력해 주세요", Toast.LENGTH_SHORT).show();
                     }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -193,11 +199,11 @@ public class FmSetting extends PreferenceFragment{
         name.setSummary(set.getString("name"));
         email.setSummary(set.getString("email"));
 
-        if (!(intGrade == 0)) {
+        if (!(intGrade == -1)) {
             grade.setSummary(intGrade + "학년");
         }
 
-        if (!(intClass == 0)) {
+        if (!(intClass == -1)) {
             aClass.setSummary(intClass + "반");
         }
 
