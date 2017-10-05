@@ -47,11 +47,8 @@ class DietParsing{
                 find();
                 if (dismiss) {
                     mhandler.sendEmptyMessage(1); //작업 종료 메시지
-
-                    //급식 DB 버전 저장
-                    Calendar calendar = Calendar.getInstance();
-                    int today = calendar.get(Calendar.MONTH);
-                    set.saveInt("db_version", today);
+                } else {
+                    dismiss = true;
                 }
 
             }
@@ -176,6 +173,10 @@ class DietParsing{
 
             if(!insertCheck) {
                 set.saveBoolean("diet", true);
+                //급식 DB 버전 저장
+                Calendar calendar = Calendar.getInstance();
+                int today = calendar.get(Calendar.MONTH);
+                set.saveInt("db_version", today);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

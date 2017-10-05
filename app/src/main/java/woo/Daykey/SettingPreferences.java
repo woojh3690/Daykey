@@ -32,7 +32,7 @@ class SettingPreferences{
                 defaultSetting = false;
                 break;
             case "firstStart":
-                defaultSetting = false;
+                defaultSetting = true;
                 break;
             default:
                 Log.w("Setting getBoolean", "값 불러오기 오류");

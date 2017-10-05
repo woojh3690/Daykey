@@ -40,10 +40,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String TAG = "MainActivityLog";
     private int id;
     static boolean dismiss = false;
+    static Handler mhandler;
     private SqlHelper sqlHelper;
     private SQLiteDatabase db;
     private Context mainContext;
-    static Handler mhandler;
     TextView name, grade;
     WebView mWebView;
     WebSettings mWebSettings;
@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         mainContext = getApplicationContext();
         sqlHelper = new SqlHelper(mainContext);
+        db = sqlHelper.getReadableDatabase();
         set = new SettingPreferences(mainContext);
 
         if(savedInstanceState == null) {
@@ -70,10 +71,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mWebView = (WebView) findViewById(R.id.webview);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        getPermission();
         fuc();//건들지 말것
 
-        if(savedInstanceState!=null) {
+        if (savedInstanceState!=null) {
             // 화면전환 전에 넣어주었던 pointList 를 꺼내서 세팅
             Bundle bundle = savedInstanceState.getBundle("save_data");
             id = bundle.getInt("restart", R.id.main);
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 changeScheView();
             }
         } else {
-            viewMain();
+            getPermission();
         }
     }
 
@@ -100,23 +100,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //데이터베이스 확인, 없으면 네트워크 연결확인
     private void DataCheck() {
-        //Log.i("DataCheck", "실행됨");
-        if (set.getBoolean("diet")) {
-            dietSave();
-        } else {
+        Calendar calendar = Calendar.getInstance();
+        int curMonth = calendar.get(Calendar.MONTH);
+
+        if (curMonth == set.getInt("db_version") || !set.getBoolean("diet")) {
             if (GetWhatKindOfNetwork.check(mainContext)) {
-                loadWebView();
-                getSchedule();//일정가져오기
-                set.saveBoolean("firstStart", true);
+                dietSave();
+                if (set.getBoolean("firstStart")) {
+                    getSchedule();
+                    set.saveBoolean("firstStart", false);
+                }
             } else {
-                if(!set.getBoolean("firstStart")) {
+                if(set.getBoolean("firstStart")) {
                     Toast.makeText(mainContext, "인터넷을 연결해 주세요\n" +
                             "처음 앱을 실행했을 때에는 데이터를 가져오는 과정이 필요합니다.", Toast.LENGTH_LONG).show();
                     finish();
                 } else {
-                    Toast.makeText(this, "인터넷을 연결해 주세요", Toast.LENGTH_SHORT).show();
+                    viewMain();
+                    Toast.makeText(this, "식단 데이터가 없습니다.\n인터넷을 연결해 주세요", Toast.LENGTH_SHORT).show();
                 }
             }
+        } else {
+            viewMain();
         }
     }
 
@@ -149,7 +154,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     if (!dismiss) {
                         mWebView.loadUrl("javascript:chgTab('D')");//석식 로딩
-                        dismiss = true;
                     }
                 }
             });
@@ -288,7 +292,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         View header = navigationView.getHeaderView(0);
 
-        if ( (set.getInt("grade") != 0) && (set.getInt("class") != 0)) { //메뉴머리 텍스트 설정
+        if ( (set.getInt("grade") != -1) && (set.getInt("class") != -1)) { //메뉴머리 텍스트 설정
             name = (TextView)header.findViewById(R.id.tv_name);
             grade = (TextView)header.findViewById(R.id.tv_grade);
             name.setText(set.getString("name"));
@@ -296,10 +300,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    //뉴스 저장
     public void newsSave() {
         if (GetWhatKindOfNetwork.check(mainContext)) {
-            db = sqlHelper.getReadableDatabase();
-
             String sql = "drop table " + "newsTable";
             String create3 = "create table " + "newsTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
             try {
@@ -314,9 +317,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             homeSave();
             sciSave();
+            //new ServerScheduleParsing(db);
         }
     }
 
+    //가정통신문 저장
     public void homeSave() {
         String sql = "drop table " + "homeTable";
         String create3 = "create table " + "homeTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
@@ -331,6 +336,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         thread.start();
     }
 
+    //과학중점 저장
     public void sciSave() {
         String sql = "drop table " + "sciTable";
         String create3 = "create table " + "sciTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
@@ -345,26 +351,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         thread.start();
     }
 
+    //식단 저장
     public void dietSave() {
-        Calendar calendar = Calendar.getInstance();
-        int curMonth = calendar.get(Calendar.MONTH);
-
-        //만약 식단 DB 버전이 다르다면
-        if(! (curMonth == set.getInt("db_version")) ) {
-            String sql = "drop table " + "dietTable";
-            String create1 = "create table " + "dietTable " + "(date INTEGER, menu text);";
-            try {
-                db.execSQL(sql);
-                db.execSQL(create1);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-            loadWebView();
+        String sql = "drop table " + "dietTable";
+        String create1 = "create table " + "dietTable " + "(date INTEGER, menu text);";
+        try {
+            db.execSQL(sql);
+            db.execSQL(create1);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
+        loadWebView();
     }
 
+    //일정 저장
     public void getSchedule() {
+        Log.i("get", "get");
         CalendarDataParsing calendarDataParsing = new CalendarDataParsing();
         calendarDataParsing.setSqlHelper(db, mainContext);
         calendarDataParsing.start();
@@ -377,6 +380,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 super.handleMessage(msg);
                 if (msg.what == 1) {
                     dialog.dismiss();
+                    viewMain();
                 }
             }
         };

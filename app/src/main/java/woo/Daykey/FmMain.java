@@ -31,6 +31,7 @@ public class FmMain extends Fragment {
         dietViewMain1 = (TextView) view.findViewById(R.id.dietViewMain1);
         dietViewMain2 = (TextView) view.findViewById(R.id.dietViewMain2);
         todayMenuPrint();
+
         TextView mainCalendarView = (TextView) view.findViewById(R.id.mainCalendarView);
         todaySchedulePrint(mainCalendarView);
         return view;

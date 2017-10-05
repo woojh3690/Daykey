@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
 import android.net.Uri;
 import android.provider.CalendarContract;
-import android.util.Log;
 
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -25,7 +24,7 @@ class AddCalendar {//extends Thread{
     private Context mainContext;
 
     AddCalendar(Context mainContext) {
-        Log.i("addCalendar : " , "시작됨");
+        //Log.i("addCalendar : " , "시작됨");
         SettingPreferences settingPreferences = new SettingPreferences(mainContext);
         this.mainContext = mainContext;
         this.id = settingPreferences.getInt("id");
@@ -42,7 +41,6 @@ class AddCalendar {//extends Thread{
     }
 
     private void addAllDay() {
-        Log.i("addallDay" , title);
         Calendar beginTime = Calendar.getInstance();
         beginTime.set(Integer.parseInt(startTime[0]), Integer.parseInt(startTime[1]) - 1, Integer.parseInt(startTime[2]), 0, 0);
         beginTime.add(Calendar.DATE, 1);

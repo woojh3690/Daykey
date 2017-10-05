@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,7 +84,7 @@ public class FmDiet extends Fragment {
         mCalendar.set(Calendar.DAY_OF_MONTH, 1);
 
         firstDayOfWeek = mCalendar.get(Calendar.DAY_OF_WEEK);
-        Log.i("firstDayOfWeek : ", ""+ firstDayOfWeek);
+        //Log.i("firstDayOfWeek : ", ""+ firstDayOfWeek);
         int sumDay = firstDayOfWeek - 1;
 
         //시작하는 요일에따라

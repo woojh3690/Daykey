@@ -126,9 +126,7 @@ public class FmCalendar extends Fragment{
         final AlertDialog dialog = builder.create();
         submit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String strSche = null;
-                strSche = editTextSche.getText().toString();
-                Log.i("strSche : ? -->", " 호잇 : " + strSche);
+                String strSche = editTextSche.getText().toString();
 
                 if(!(strSche.equals(""))) {
                     String[] list = {"http://wooserver.iptime.org/daykey/schedule/save", strSche};

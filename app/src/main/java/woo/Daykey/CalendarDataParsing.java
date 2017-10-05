@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.net.Uri;
 import android.provider.CalendarContract;
-import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,12 +41,12 @@ class CalendarDataParsing extends Thread{
     }
 
     private void dropCalendarTable() {
-        final String drop = "drop table " + "calendarTable";
-        final String create = "create table " + "calendarTable " + "(date text, schedule text);";
+        //final String drop = "drop table " + "calendarTable";
+        //final String create = "create table " + "calendarTable " + "(date text, schedule text);";
 
         try {
-            db.execSQL(drop);
-            db.execSQL(create);
+            //db.execSQL(drop);
+            //db.execSQL(create);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -56,7 +55,7 @@ class CalendarDataParsing extends Thread{
     private void addCalendarAccount() {
 
         if (!checkAccount()) {
-            Log.i("계정 없음", "ㅇㅇ");
+            //Log.i("계정 없음", "ㅇㅇ");
             Uri calUri = CalendarContract.Calendars.CONTENT_URI;
 
             ContentValues cv = new ContentValues();
@@ -83,7 +82,7 @@ class CalendarDataParsing extends Thread{
             SettingPreferences set = new SettingPreferences(mainContext);
             set.saveInt("id", id);
         } else {
-            Log.i("계정 있음", "ㅇㅇ");
+            //Log.i("계정 있음", "ㅇㅇ");
             account = true;
         }
     }
@@ -204,7 +203,7 @@ class CalendarDataParsing extends Thread{
                 insertCalendarData(finalDate, schedule[7]);
 
                 if (account) {
-                    Log.i("확인 : ", id + finalDate + schedule[7]);
+                    //Log.i("확인 : ", id + finalDate + schedule[7]);
                     new AddCalendar(mainContext, id, finalDate, schedule[7]);//구글 캘린더에 스케줄 추가
                 }
             }
