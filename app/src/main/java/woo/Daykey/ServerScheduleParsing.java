@@ -3,7 +3,8 @@ package woo.Daykey;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteAbortException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Message;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,19 +14,37 @@ import org.json.JSONObject;
  * 서버에 있는 스케줄 json으로 파싱하고 데이터 베이스에 넣기
  */
 
-class ServerScheduleParsing {
-    SQLiteDatabase db;
+class ServerScheduleParsing extends Thread{
+    private SQLiteDatabase db;
+    private Handler handler;
+    private boolean send = false;
 
     ServerScheduleParsing(SQLiteDatabase db) {
-        Log.i("serverschedule", "싲가도");
         this.db = db;
-        reset();
-        insert();
     }
 
-    void reset() {
+    ServerScheduleParsing(SQLiteDatabase db, Handler handler) {
+        this.db = db;
+        this.handler = handler;
+        this.send = true;
+    }
+
+    @Override
+    public void run() {
+        super.run();
+        reset();
+        insert();
+        if (send) {
+            Message message = handler.obtainMessage();
+            message.what = 2;
+            handler.sendMessage(message);
+        }
+    }
+
+    private void reset() {
         String drop = "drop table if exists " + "userTable";
-        String create = "create table " + "userTable" + "(num integer, name text, grade integer, class integer, date text, schedule text)";
+        String create = "create table " + "userTable" + "(num integer, name text, " +
+                "grade integer, class integer, password integer, date text, schedule text)";
         try {
             db.execSQL(drop);
             db.execSQL(create);
@@ -34,7 +53,7 @@ class ServerScheduleParsing {
         }
     }
 
-    void insert() {
+    private void insert() {
         GetHtmlText getHtmlText = new GetHtmlText("http://wooserver.iptime.org/daykey/schedule");
         String strJson = getHtmlText.getHtmlString();
 
@@ -42,16 +61,19 @@ class ServerScheduleParsing {
             JSONArray jsonArray = new JSONArray(strJson);
             for(int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                //변수 저장
                 int num = Integer.parseInt(jsonObject.getString("num"));
                 String name = jsonObject.getString("name");
                 int grade = Integer.parseInt(jsonObject.getString("grade"));
-                int intClass = Integer.parseInt(jsonObject.getString("class"));
-                String date = jsonObject.getString("year") + jsonObject.getString("month")
-                        + jsonObject.getString("date");
+                int intClass = Integer.parseInt(jsonObject.getString("class_"));
+                int password = Integer.parseInt(jsonObject.getString("password"));
+                String date = jsonObject.getString("year") + "/"
+                        + jsonObject.getString("month") + "/" + jsonObject.getString("date");
                 String sche = jsonObject.getString("sche");
 
-                Log.i("data : ", num + name + grade + intClass + date + sche);
-                insertCalendarData(num, name, grade, intClass, date, sche);
+
+                insertCalendarData(num, name, grade, intClass, password, date, sche);
 
             }
         } catch (JSONException e) {
@@ -59,13 +81,14 @@ class ServerScheduleParsing {
         }
     }
 
-    private void insertCalendarData(int num, String name, int grade, int intClass, String date, String schedule) {
+    private void insertCalendarData(int num, String name, int grade, int intClass, int password, String date, String schedule) {
         try {
             ContentValues values = new ContentValues();
             values.put("num", num);
             values.put("name", name);
             values.put("grade", grade);
             values.put("class", intClass);
+            values.put("password", password);
             values.put("date", date);
             values.put("schedule", schedule);
             db.insert("userTable", null, values);

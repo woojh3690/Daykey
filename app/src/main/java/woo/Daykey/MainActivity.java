@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 changeScheView();
             }
         } else {
+            viewMain();
             getPermission();
         }
     }
@@ -301,7 +302,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //뉴스 저장
-    public void newsSave() {
+    private void newsSave() {
         if (GetWhatKindOfNetwork.check(mainContext)) {
             String sql = "drop table " + "newsTable";
             String create3 = "create table " + "newsTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
@@ -317,12 +318,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             homeSave();
             sciSave();
-            //new ServerScheduleParsing(db);
+            ServerScheduleParsing serverScheduleParsing = new ServerScheduleParsing(db);
+            serverScheduleParsing.start();
         }
     }
 
     //가정통신문 저장
-    public void homeSave() {
+    private void homeSave() {
         String sql = "drop table " + "homeTable";
         String create3 = "create table " + "homeTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
         try {
@@ -337,7 +339,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //과학중점 저장
-    public void sciSave() {
+    private void sciSave() {
         String sql = "drop table " + "sciTable";
         String create3 = "create table " + "sciTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
         try {
@@ -352,7 +354,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //식단 저장
-    public void dietSave() {
+    private void dietSave() {
         String sql = "drop table " + "dietTable";
         String create1 = "create table " + "dietTable " + "(date INTEGER, menu text);";
         try {
@@ -366,27 +368,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //일정 저장
-    public void getSchedule() {
+    private void getSchedule() {
         Log.i("get", "get");
         CalendarDataParsing calendarDataParsing = new CalendarDataParsing();
         calendarDataParsing.setSqlHelper(db, mainContext);
         calendarDataParsing.start();
     }
 
-    public void setHandler() {
+    private void setHandler() {
         mhandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                if (msg.what == 1) {
-                    dialog.dismiss();
-                    viewMain();
+                switch (msg.what) {
+                    case 1:
+                        dialog.dismiss();
+                        viewMain();
+                        break;
+                    case 2:
+                        changeScheView();
                 }
             }
         };
     }
 
-    public void getPermission() {
+    private void getPermission() {
         PermissionListener permissionListener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
@@ -423,7 +429,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void changeScheView() {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.frm1, new FmSchedule(db, set));
+        ft.replace(R.id.frm1, new FmSchedule(db, set, mhandler));
 
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();

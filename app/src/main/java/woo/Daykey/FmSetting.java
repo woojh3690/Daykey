@@ -9,6 +9,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -114,8 +115,13 @@ public class FmSetting extends PreferenceFragment{
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 String textName;
                 textName = (String)newValue;
-                set.saveString("name", textName);
-                name.setSummary(textName);
+                if (!TextUtils.isEmpty(textName)) {
+                    set.saveString("name", textName);
+                    name.setSummary(textName);
+                } else {
+                    Toast.makeText(mainContext, "이름을 입력해 주세요", Toast.LENGTH_SHORT).show();
+                }
+
                 return true;
             }
         });
