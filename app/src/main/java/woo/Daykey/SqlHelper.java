@@ -15,18 +15,12 @@ class SqlHelper extends SQLiteOpenHelper {
         try {
             String create1 = "create table " + "dietTable " + "(date INTEGER, menu text);";
             String create2 = "create table " + "calendarTable " + "(date text, schedule text);";
-            String create3 = "create table " + "newsTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
-            String create4 = "create table " + "homeTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
-            String create5 = "create table " + "sciTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
-            String create6 = "create table " + "timetable " + "(grade integer, week text, class integer, first text, second text, third text, fourth text, fifth text, sixth text, seventh text)";
-            String create7 = "create table " + "userTable" + "(num integer, name text, grade integer, class integer, date text, schedule text)";
+            String create3 = "create table " + "timetable " + "(grade integer, week text, class integer, first text, second text, third text, fourth text, fifth text, sixth text, seventh text)";
+            String create4 = "create table " + "userTable" + "(num integer, name text, grade integer, class integer, date text, schedule text)";
             db.execSQL(create1);
             db.execSQL(create2);
             db.execSQL(create3);
             db.execSQL(create4);
-            db.execSQL(create5);
-            db.execSQL(create6);
-            db.execSQL(create7);
 
             insertTimeTable(db); //시간표
         } catch(Exception ex) {

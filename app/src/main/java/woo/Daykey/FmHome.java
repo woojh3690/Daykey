@@ -109,7 +109,7 @@ public class FmHome extends Fragment {
 
         void newsSave() {
             if (GetWhatKindOfNetwork.check(mainContext)) {
-                final String sql = "drop table " + "homeTable";
+                final String sql = "drop table if exists " + "homeTable";
                 final String create3 = "create table " + "homeTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
 
                 try {

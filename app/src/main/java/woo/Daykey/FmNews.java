@@ -105,7 +105,7 @@ public class FmNews extends Fragment {
 
         void newsSave() {
             if (GetWhatKindOfNetwork.check(mainContext)) {
-                final String sql = "drop table " + "newsTable";
+                final String sql = "drop table if exists " + "newsTable";
                 final String create3 = "create table " + "newsTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
 
                 try {

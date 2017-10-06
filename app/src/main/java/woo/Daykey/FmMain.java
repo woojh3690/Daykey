@@ -114,7 +114,7 @@ public class FmMain extends Fragment {
         @Override
         protected void onPreExecute() {
             cal = new GregorianCalendar();
-            timeCre = String.format("%d/%d/%d\n%d:%d", cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
+            timeCre = String.format("%d:%d", cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE));
             timer.setText(timeCre);
             super.onPreExecute();
         }

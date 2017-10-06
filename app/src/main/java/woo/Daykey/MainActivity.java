@@ -304,7 +304,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //뉴스 저장
     private void newsSave() {
         if (GetWhatKindOfNetwork.check(mainContext)) {
-            String sql = "drop table " + "newsTable";
+            String sql = "drop table if exists " + "newsTable";
             String create3 = "create table " + "newsTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
             try {
                 db.execSQL(sql);
@@ -325,7 +325,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //가정통신문 저장
     private void homeSave() {
-        String sql = "drop table " + "homeTable";
+        String sql = "drop table if exists " + "homeTable";
         String create3 = "create table " + "homeTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
         try {
             db.execSQL(sql);
@@ -340,7 +340,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //과학중점 저장
     private void sciSave() {
-        String sql = "drop table " + "sciTable";
+        String sql = "drop table if exists " + "sciTable";
         String create3 = "create table " + "sciTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
         try {
             db.execSQL(sql);
@@ -355,7 +355,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //식단 저장
     private void dietSave() {
-        String sql = "drop table " + "dietTable";
+        String sql = "drop table if exists " + "dietTable";
         String create1 = "create table " + "dietTable " + "(date INTEGER, menu text);";
         try {
             db.execSQL(sql);

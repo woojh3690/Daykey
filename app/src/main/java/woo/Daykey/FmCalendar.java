@@ -155,10 +155,14 @@ public class FmCalendar extends Fragment{
 
                 if(!TextUtils.isEmpty(strSche)) {
                     if (strSche.length() > 2) {
-                        String[] list = {"http://wooserver.iptime.org/daykey/schedule/save", strSche};
-                        HttpAsyncTask httpAsyncTask = new HttpAsyncTask();
-                        httpAsyncTask.execute(list);
-                        dialog.dismiss();
+                        if (GetWhatKindOfNetwork.check(mainContext)) {
+                            String[] list = {"http://wooserver.iptime.org/daykey/schedule/save", strSche};
+                            HttpAsyncTask httpAsyncTask = new HttpAsyncTask();
+                            httpAsyncTask.execute(list);
+                            dialog.dismiss();
+                        } else {
+                            Toast.makeText(mainContext, "네트워크에 연결해 주세요", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
                         Toast.makeText(mainContext, "일정은 3자 이상이여햐 합니다", Toast.LENGTH_SHORT).show();
                     }
