@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 changeScheView();
             }
         } else {
-            viewMain();
+            //viewMain();
             getPermission();
         }
     }
@@ -369,7 +369,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //일정 저장
     private void getSchedule() {
-        Log.i("get", "get");
         CalendarDataParsing calendarDataParsing = new CalendarDataParsing();
         calendarDataParsing.setSqlHelper(db, mainContext);
         calendarDataParsing.start();

@@ -3,6 +3,7 @@ package woo.Daykey;
 import android.app.Fragment;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -11,13 +12,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class FmMain extends Fragment {
 
     TextView dietViewMain1;
     TextView dietViewMain2;
+    TextView timer;
     SQLiteDatabase db;
+    private boolean goTime = true;
 
     public FmMain(SQLiteDatabase db) {
         this.db = db;
@@ -27,7 +32,7 @@ public class FmMain extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.flagment_main, container, false);
-
+        timer = (TextView)view.findViewById(R.id.timer);
         dietViewMain1 = (TextView) view.findViewById(R.id.dietViewMain1);
         dietViewMain2 = (TextView) view.findViewById(R.id.dietViewMain2);
         todayMenuPrint();
@@ -100,5 +105,62 @@ public class FmMain extends Fragment {
         // nowDate 변수에 값을 저장한다.
 
         return sdfNow.format(date);
+    }
+
+    private class AsyncTaskTimer extends AsyncTask<Void, Void, Void> {
+        Calendar cal;
+        String timeCre;
+
+        @Override
+        protected void onPreExecute() {
+            cal = new GregorianCalendar();
+            timeCre = String.format("%d/%d/%d\n%d:%d", cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
+            timer.setText(timeCre);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            while (goTime) {
+                cal = new GregorianCalendar();
+                timeCre = String.format("%d:%d", cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE));
+                publishProgress();
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                timeCre = String.format("%d %d", cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE));
+                publishProgress();
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            //Log.i("test", timeCre);
+            timer.setText(timeCre);
+            super.onProgressUpdate(values);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        goTime = false;
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        goTime = true;
+        AsyncTaskTimer asyncTaskTimer = new AsyncTaskTimer();
+        asyncTaskTimer.execute();
+        super.onResume();
     }
 }

@@ -107,22 +107,22 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:weightSum="2"
                 android:layout_weight="2"
+                android:weightSum="7"
                 android:orientation="vertical">
 
                 <Button
                     android:id="@+id/add_schedule"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="3"
                     android:text="일정\n추가" />
 
                 <Button
                     android:id="@+id/delete_schedule"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="4"
                     android:text="일정\n삭제" />
             </LinearLayout>
         </LinearLayout>

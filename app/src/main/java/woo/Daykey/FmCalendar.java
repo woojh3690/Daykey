@@ -155,7 +155,7 @@ public class FmCalendar extends Fragment{
 
                 if(!TextUtils.isEmpty(strSche)) {
                     if (strSche.length() > 2) {
-                        String[] list = {"http://192.168.0.9:8080/schedule/save", strSche};
+                        String[] list = {"http://wooserver.iptime.org/daykey/schedule/save", strSche};
                         HttpAsyncTask httpAsyncTask = new HttpAsyncTask();
                         httpAsyncTask.execute(list);
                         dialog.dismiss();
