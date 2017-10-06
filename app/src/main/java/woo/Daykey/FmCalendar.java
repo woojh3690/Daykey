@@ -53,7 +53,7 @@ public class FmCalendar extends Fragment{
     private int month;
     private Handler handler;
     static HashMap<String, Integer> map;
-    static String textSche = null;
+    static String scheAndName = null;
     static String trimDate = null;
 
     public FmCalendar() {
@@ -112,7 +112,7 @@ public class FmCalendar extends Fragment{
         deleteSche.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (textSche == null || trimDate.endsWith("00") || TextUtils.isEmpty(textSche)) {
+                if (trimDate == null || trimDate.endsWith("00") || TextUtils.isEmpty(scheAndName)) {
                     Toast.makeText(mainContext, "일정이 있는 날짜를 선택해 주세요", Toast.LENGTH_SHORT).show();
                 } else {
                     deleteDialogShow();
@@ -128,8 +128,8 @@ public class FmCalendar extends Fragment{
                 MonthItem item = (MonthItem)monthAdapter.getItem(position);
                 String[] listDayText = item.getDayText();
                 trimDate = item.getTrimDay();
-                textSche = listDayText[1].replace(",", "\n");
-                calendarTextView.setText(textSche);
+                scheAndName = item.getScheAndName().replace(",", "\n");
+                calendarTextView.setText(scheAndName);
                 addSche.setText(listDayText[0] + "일\n일정\n추가");
                 map = item.getMap();
             }
@@ -178,7 +178,7 @@ public class FmCalendar extends Fragment{
     private void deleteDialogShow()
     {
         final List<String> ListItems = new ArrayList<>();
-        Collections.addAll(ListItems, textSche.split("\n"));
+        Collections.addAll(ListItems, scheAndName.split("\n"));
         final CharSequence[] items =  ListItems.toArray(new String[ ListItems.size()]);
 
         final List<Integer> SelectedItems  = new ArrayList<>();

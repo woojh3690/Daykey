@@ -12,8 +12,10 @@ class MonthItem {
     private String trimDay;
     private String schoolSche;
     private String userSche = "";
+    private String userScheAndName = "";
     private HashMap<String, Integer> map = new HashMap<>();
     private String sche;
+    private String scheAndName;
 
     MonthItem(int day, String trimDay, SQLiteDatabase db) {
         this.day = day;
@@ -32,8 +34,10 @@ class MonthItem {
     private void setDayText() {
         if (schoolSche.equals("")) {
             sche = userSche;
+            scheAndName = userScheAndName;
         } else {
             sche = schoolSche + "\n" + userSche;
+            scheAndName = schoolSche + "\n" + userScheAndName;
         }
         dayText = day + "\n" + sche;
     }
@@ -42,7 +46,7 @@ class MonthItem {
         String schedule;
 
         try {
-            String[] columns = {"schedule, num"};
+            String[] columns = {"schedule, num, name"};
             String where = " date = ?";
             String[] at = {trimDay};
             Cursor cursor = db.query("userTable", columns,  where, at, null, null, null);
@@ -50,12 +54,15 @@ class MonthItem {
             while (cursor.moveToNext()) {
                 schedule = cursor.getString(0);
                 int num = cursor.getInt(1);
-                map.put(schedule, num);
+                String name = cursor.getString(2);
+                map.put(schedule + "(" + name + ")", num);
 
                 if (userSche.equals("")) {
                     userSche = schedule;
+                    userScheAndName = schedule + "(" + name + ")";
                 } else {
-                    userSche += "\n" +schedule;
+                    userSche += "\n" + schedule;
+                    userScheAndName += "\n" + schedule + "(" + name + ")";
                 }
             }
             cursor.close();
@@ -92,6 +99,10 @@ class MonthItem {
 
     String getTrimDay() {
         return trimDay;
+    }
+
+    String getScheAndName() {
+        return scheAndName;
     }
 
     HashMap<String, Integer> getMap() {
