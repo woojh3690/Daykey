@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,7 +31,6 @@ public class AlarmBroadcastReceive extends BroadcastReceiver {
             SqlHelper = new SqlHelper(context);
             firstInfoSave(context);
             todayMenuSave();
-            //todayScheduleSave();
 
             //NotificationManager 안드로이드 상태바에 메세지를 던지기위한 서비스 불러오고
             NotificationManager notificationmanager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -42,7 +40,7 @@ public class AlarmBroadcastReceive extends BroadcastReceiver {
             Notification.BigTextStyle style = new Notification.BigTextStyle();
             style.setSummaryText("급식보기 +");
             style.setBigContentTitle("오늘의 급식!");
-            style.bigText("점심 : " + launch + "저녁 : " + dinner);
+            style.bigText("점심 : " + launch + "\n" + "저녁 : " + dinner);
 
             //노티바 만들기
             Notification.Builder builder = new Notification.Builder(context);
@@ -127,8 +125,6 @@ public class AlarmBroadcastReceive extends BroadcastReceiver {
             cursor.close();
         } catch (Exception ex) {
             ex.printStackTrace();
-            String TAG = "AlarmBroadcastReceive";
-            Log.e(TAG, "allCalendarPrint error");
         }
     }
 

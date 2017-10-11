@@ -220,9 +220,13 @@ public class FmCalendar extends Fragment{
                                         if (set.getInt("grade") == cursor.getInt(1)) {
                                             if (set.getInt("class") == cursor.getInt(2)) {
                                                 if (set.getInt("password") == cursor.getInt(3)) {
-                                                    PostDeleteId post = new PostDeleteId(num, db, mainContext, handler);
-                                                    post.start();
-                                                    Toast.makeText(mainContext, "삭제되었습니다", Toast.LENGTH_SHORT).show();
+                                                    if(GetWhatKindOfNetwork.check(mainContext)) {
+                                                        PostDeleteId post = new PostDeleteId(num, db, mainContext, handler);
+                                                        post.start();
+                                                        Toast.makeText(mainContext, "삭제되었습니다", Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        Toast.makeText(mainContext, "네트워크에 연결해 주세요", Toast.LENGTH_SHORT).show();
+                                                    }
                                                 } else {
                                                     Toast.makeText(mainContext, "프로필 비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
                                                 }
@@ -236,6 +240,8 @@ public class FmCalendar extends Fragment{
                                         Toast.makeText(mainContext, "프로필 이름이 일치하지 않습니다", Toast.LENGTH_SHORT).show();
                                     }
                                 }
+
+                                cursor.close();
                             } catch (SQLException e) {
                                 e.printStackTrace();
                             }
@@ -295,13 +301,13 @@ public class FmCalendar extends Fragment{
     }
 
     private static String post(String url, ScheduleModel scheduleModel){
-        InputStream is = null;
+        InputStream is;
         String result = "";
         try {
             URL urlCon = new URL(url);
             HttpURLConnection httpCon = (HttpURLConnection)urlCon.openConnection();
 
-            String json = "";
+            String json;
 
             JSONObject jsonObject = new JSONObject();
             jsonObject.accumulate("name", scheduleModel.getName());
@@ -360,7 +366,7 @@ public class FmCalendar extends Fragment{
 
     private static String convertInputStreamToString(InputStream inputStream) throws IOException{
         BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
-        String line = "";
+        String line;
         String result = "";
         while((line = bufferedReader.readLine()) != null)
             result += line;

@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Calendar calendar = Calendar.getInstance();
         int curMonth = calendar.get(Calendar.MONTH);
 
-        if (curMonth == set.getInt("db_version") || !set.getBoolean("diet")) {
+        if (!(curMonth == set.getInt("db_version")) || !set.getBoolean("diet")) {
             if (GetWhatKindOfNetwork.check(mainContext)) {
                 dietSave();
                 if (set.getBoolean("firstStart")) {
@@ -258,13 +258,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     // 메인 화면 보기
     public void viewMain() {
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.frm1, new FmMain(db));
+        try {
+            FragmentManager fm = getFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.frm1, new FmMain(db));
 
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.commit();
-        toolbar.setTitle("대기고등학교");
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.commit();
+            toolbar.setTitle("대기고등학교");
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
+
     }
 
     //프로그레스 다이얼 로그
