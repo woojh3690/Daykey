@@ -126,7 +126,7 @@ public class FmMain extends Fragment {
                 timeCre = String.format("%d:%d", cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE));
                 publishProgress();
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -134,7 +134,7 @@ public class FmMain extends Fragment {
                 timeCre = String.format("%d %d", cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE));
                 publishProgress();
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

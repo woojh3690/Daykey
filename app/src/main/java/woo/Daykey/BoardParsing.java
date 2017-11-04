@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.Html;
+import android.util.Log;
 
 class BoardParsing extends Thread{
     private String htmlStr = "noData";
@@ -92,6 +93,7 @@ class BoardParsing extends Thread{
             String[] date = info[3].split("</td>");
 
             if (tempTitle.endsWith("&nbsp;")) { //새로운 개시글인지 확인
+                Log.i("temptitle", tempTitle);
                 tempTitle = tempTitle.substring(0, tempTitle.length() - 91) + " (new)";
             }
 

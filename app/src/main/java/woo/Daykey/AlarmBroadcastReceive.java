@@ -84,21 +84,20 @@ public class AlarmBroadcastReceive extends BroadcastReceiver {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        } else {
+            try {
+                String[] columns = {"_id", "title"};
+                String where = " _id = 1";
+                Cursor cursor = db.query("newsTable", columns,  where, null, null, null, null);
 
-        try {
-            String[] columns = {"_id", "title"};
-            String where = " _id = 1";
-            Cursor cursor = db.query("newsTable", columns,  where, null, null, null, null);
-
-            while (cursor.moveToNext()) {
-                info = cursor.getString(1);
+                while (cursor.moveToNext()) {
+                    info = cursor.getString(1);
+                }
+                cursor.close();
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-            cursor.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
-
     }
     //오늘의 매뉴 저장
     private void todayMenuSave() {
