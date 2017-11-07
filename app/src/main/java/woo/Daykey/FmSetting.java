@@ -17,18 +17,15 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import static java.lang.Integer.parseInt;
+import static woo.Daykey.MainActivity.set;
 
 public class FmSetting extends PreferenceFragment{
-    Context mainContext;
-    SettingPreferences set;
     String strVersion;
     View view;
 
     Preference setTime, switchAlarm, calendarSyc, name, aClass, email, grade, version, password;
 
-    public FmSetting(Context mainContext, SettingPreferences set) {
-        this.mainContext = mainContext;
-        this.set = set;
+    public FmSetting() {
     }
 
     @Override
@@ -46,7 +43,7 @@ public class FmSetting extends PreferenceFragment{
         version = findPreference("version");
 
         try {
-            PackageInfo i = mainContext.getPackageManager().getPackageInfo(mainContext.getPackageName(), 0);
+            PackageInfo i = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
             strVersion = i.versionName;
         } catch(PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -57,7 +54,7 @@ public class FmSetting extends PreferenceFragment{
         switchAlarm.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                AlarmBroadcast alarmBroadcast = new AlarmBroadcast(mainContext);
+                AlarmBroadcast alarmBroadcast = new AlarmBroadcast(getActivity());
                 boolean switched = (boolean)newValue;
 
                 if (switched) {
@@ -79,7 +76,7 @@ public class FmSetting extends PreferenceFragment{
         setTime.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                TimePickerFragment timePickerFragment = new TimePickerFragment(mainContext, set);
+                TimePickerFragment timePickerFragment = new TimePickerFragment(getActivity(), set);
                 timePickerFragment.show(getFragmentManager(), "TAG");
                 return false;
             }
@@ -94,15 +91,14 @@ public class FmSetting extends PreferenceFragment{
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            new AddCalendar(mainContext);
+                            new AddCalendar(getActivity());
                         }
                     }).start();
 
                     set.saveBoolean("calendar", true);
                 } else {
-                    Log.i("id", " " + set.getInt("id"));
-                    mainContext.getContentResolver().delete (ContentUris.withAppendedId (CalendarContract.Calendars.CONTENT_URI, set.getInt("id")), null, null);
-                    Toast.makeText(mainContext, "일정이 지워졌습니다.", Toast.LENGTH_SHORT).show();
+                    getActivity().getContentResolver().delete (ContentUris.withAppendedId (CalendarContract.Calendars.CONTENT_URI, set.getInt("id")), null, null);
+                    Toast.makeText(getActivity(), "일정이 지워졌습니다.", Toast.LENGTH_SHORT).show();
                     set.saveBoolean("calendar", false);
                 }
 
@@ -119,7 +115,7 @@ public class FmSetting extends PreferenceFragment{
                     set.saveString("name", textName);
                     name.setSummary(textName);
                 } else {
-                    Toast.makeText(mainContext, "이름을 입력해 주세요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "이름을 입력해 주세요", Toast.LENGTH_SHORT).show();
                 }
 
                 return true;
@@ -179,14 +175,14 @@ public class FmSetting extends PreferenceFragment{
                     if(!password.equals("")) {
 
                         if(password.length() < 4) {
-                            Toast.makeText(mainContext, "비밀번호는 4자리 이상 입력해야 합니다.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "비밀번호는 4자리 이상 입력해야 합니다.", Toast.LENGTH_SHORT).show();
                             return false;
                         } else {
                             set.saveInt("password", parseInt(password.trim()));
                         }
 
                     } else {
-                        Toast.makeText(mainContext, "값을 입력해 주세요", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "값을 입력해 주세요", Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (Exception e) {

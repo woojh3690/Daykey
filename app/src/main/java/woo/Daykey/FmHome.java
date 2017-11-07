@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import static woo.Daykey.MainActivity.db;
+
 /**
  *가정통신문
  */
@@ -27,17 +30,13 @@ public class FmHome extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private Context newsContext;
     private ListView listView;
-    private Context mainContext;
-    private SQLiteDatabase db;
 
     private String title;
     private String teacherName;
     private String visitors;
     private String date;
 
-    public FmHome(Context mainContext, SQLiteDatabase db) {
-        this.mainContext = mainContext;
-        this.db = db;
+    public FmHome() {
     }
 
     @Override
@@ -108,7 +107,7 @@ public class FmHome extends Fragment {
         }
 
         void newsSave() {
-            if (GetWhatKindOfNetwork.check(mainContext)) {
+            if (GetWhatKindOfNetwork.check(getActivity())) {
                 final String sql = "drop table if exists " + "homeTable";
                 final String create3 = "create table " + "homeTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
 
@@ -118,7 +117,7 @@ public class FmHome extends Fragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                Thread thread = new BoardParsing(mainContext, "http://www.daykey.hs.kr/daykey/0601/board/14114", 2);
+                Thread thread = new BoardParsing(getActivity(), "http://www.daykey.hs.kr/daykey/0601/board/14114", 2);
                 thread.start();
 
                 try {

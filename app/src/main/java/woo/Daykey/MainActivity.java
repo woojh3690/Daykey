@@ -41,20 +41,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int id;
     static boolean dismiss = false;
     static Handler mhandler;
-    private SqlHelper sqlHelper;
-    private SQLiteDatabase db;
+    static SQLiteDatabase db;
+    static SettingPreferences set;
     private Context mainContext;
     TextView name, grade;
     WebView mWebView;
     WebSettings mWebSettings;
     ProgressDialog dialog;
     Toolbar toolbar;
-    SettingPreferences set;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mainContext = getApplicationContext();
-        sqlHelper = new SqlHelper(mainContext);
+        SqlHelper sqlHelper = new SqlHelper(mainContext);
         db = sqlHelper.getReadableDatabase();
         set = new SettingPreferences(mainContext);
 
@@ -76,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (savedInstanceState!=null) {
             // 화면전환 전에 넣어주었던 pointList 를 꺼내서 세팅
             Bundle bundle = savedInstanceState.getBundle("save_data");
+            assert bundle != null;
             id = bundle.getInt("restart", R.id.main);
 
             if (id == R.id.main) {
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //웹뷰 로딩
     public void loadWebView() {
         //Log.i("loadWebView", "실행됨");
-        showProgressDialog("데이터를 가져오고 있습니다. 잠시만 기다려 주세요");
+        showProgressDialog();
         try {
             mWebView.setWebViewClient(new WebViewClient() {
                 @Override//페이지 로딩이 끝나면 불린다.
@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
             mWebSettings = mWebView.getSettings();
             mWebSettings.setJavaScriptEnabled(true);
-            mWebView.addJavascriptInterface(new DietParsing(db, set), "HtmlViewer");
+            mWebView.addJavascriptInterface(new DietParsing(set), "HtmlViewer");
             mWebView.loadUrl("http://www.daykey.hs.kr/daykey/19152/food");//중식 로딩
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.TimeTable) {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.frm1, new FmTimeTable(mainContext, db));
+            ft.replace(R.id.frm1, new FmTimeTable());
 
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.news) {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.frm1, new FmNews(mainContext, db));
+            ft.replace(R.id.frm1, new FmNews());
 
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.home) {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.frm1, new FmHome(mainContext, db));
+            ft.replace(R.id.frm1, new FmHome());
 
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.science) {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.frm1, new FmScience(db, mainContext));
+            ft.replace(R.id.frm1, new FmScience());
 
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.setting) {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.frm1, new FmSetting(mainContext, set));
+            ft.replace(R.id.frm1, new FmSetting());
 
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
@@ -261,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         try {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.frm1, new FmMain(db));
+            ft.replace(R.id.frm1, new FmMain());
 
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
@@ -273,10 +273,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //프로그레스 다이얼 로그
-    private void showProgressDialog(String message) {
+    private void showProgressDialog() {
         dialog = new ProgressDialog(this);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        dialog.setMessage(message);
+        dialog.setMessage("데이터를 가져오고 있습니다. 잠시만 기다려 주세요");
         dialog.setCancelable(false);
 
         dialog.show();
@@ -391,6 +391,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         break;
                     case 2:
                         changeScheView();
+                        break;
                 }
             }
         };
@@ -433,7 +434,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void changeScheView() {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.frm1, new FmSchedule(db, set, mhandler));
+        ft.replace(R.id.frm1, new FmSchedule(mhandler));
 
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();

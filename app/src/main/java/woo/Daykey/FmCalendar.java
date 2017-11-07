@@ -2,11 +2,9 @@ package woo.Daykey;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,14 +35,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import static woo.Daykey.MainActivity.db;
+import static woo.Daykey.MainActivity.set;
+
 /**
  * 달력
  */
 
 public class FmCalendar extends Fragment{
-    private Context mainContext;
-    private SQLiteDatabase db;
-    private SettingPreferences set;
     TextView calendarTextView;
     GridView monthView;
     MonthAdapter monthAdapter;
@@ -59,10 +57,7 @@ public class FmCalendar extends Fragment{
     public FmCalendar() {
     }
 
-    FmCalendar(SQLiteDatabase db, Context mainContext, SettingPreferences set, Handler handler, int year, int month, TextView textView, Button addSche, Button deleteSche) {
-        this.mainContext = mainContext;
-        this.db = db;
-        this.set = set;
+    FmCalendar(Handler handler, int year, int month, TextView textView, Button addSche, Button deleteSche) {
         this.year = year;
         this.month = month;
         this.calendarTextView = textView;
@@ -81,28 +76,28 @@ public class FmCalendar extends Fragment{
             @Override
             public void onClick(View v) {
                 if (trimDate == null || trimDate.endsWith("00")) {
-                    Toast.makeText(mainContext, "날짜를 선택해주세요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "날짜를 선택해주세요", Toast.LENGTH_SHORT).show();
                 } else {
 
                     boolean check = false;
                     if(set.getString("name").equals(" ")) {
-                        Toast.makeText(mainContext, "프로필에 정확한 이름을 입력해 주세요", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "프로필에 정확한 이름을 입력해 주세요", Toast.LENGTH_SHORT).show();
                         check = true;
                     } else if(set.getInt("grade") == -1) {
-                        Toast.makeText(mainContext, "프로필에 정확한 학년을 설정해 주세요", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "프로필에 정확한 학년을 설정해 주세요", Toast.LENGTH_SHORT).show();
                         check = true;
                     } else if(set.getInt("class") == -1) {
-                        Toast.makeText(mainContext, "프로필에 정확한 반을 설정해 주세요", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "프로필에 정확한 반을 설정해 주세요", Toast.LENGTH_SHORT).show();
                         check = true;
                     } else if(set.getInt("password") == -1) {
-                        Toast.makeText(mainContext, "프로필에 정확한 비밀번호를 설정해 주세요", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "프로필에 정확한 비밀번호를 설정해 주세요", Toast.LENGTH_SHORT).show();
                         check = true;
                     } else {
                         addDialogShow();
                     }
 
                     if (check) {
-                        Toast.makeText(mainContext, "설정에서 프로필을 변경할 수 있습니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "설정에서 프로필을 변경할 수 있습니다.", Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -113,7 +108,7 @@ public class FmCalendar extends Fragment{
             @Override
             public void onClick(View v) {
                 if (trimDate == null || trimDate.endsWith("00") || TextUtils.isEmpty(scheAndName)) {
-                    Toast.makeText(mainContext, "일정이 있는 날짜를 선택해 주세요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "일정이 있는 날짜를 선택해 주세요", Toast.LENGTH_SHORT).show();
                 } else {
                     deleteDialogShow();
                 }
@@ -138,7 +133,7 @@ public class FmCalendar extends Fragment{
     }
 
     private void addDialogShow() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mainContext);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_add_schedule, null);
         builder.setView(dialogView);
@@ -154,20 +149,21 @@ public class FmCalendar extends Fragment{
                 String strSche = editTextSche.getText().toString();
 
                 if(!TextUtils.isEmpty(strSche)) {
-                    if (strSche.length() > 2) {
-                        if (GetWhatKindOfNetwork.check(mainContext)) {
+                    if (strSche.length() > 1) {
+                        if (GetWhatKindOfNetwork.check(getActivity())) {
                             String[] list = {"http://wooserver.iptime.org/daykey/schedule/save", strSche};
                             HttpAsyncTask httpAsyncTask = new HttpAsyncTask();
                             httpAsyncTask.execute(list);
+                            Toast.makeText(getActivity(), "[" + strSche + "]" + " 일정이 추가되었습니다.", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                         } else {
-                            Toast.makeText(mainContext, "네트워크에 연결해 주세요", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "네트워크에 연결해 주세요", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(mainContext, "일정은 3자 이상이여햐 합니다", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "일정은 2자 이상이여햐 합니다", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(mainContext, "일정을 입력해 주세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "일정을 입력해 주세요.", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -185,7 +181,7 @@ public class FmCalendar extends Fragment{
         int defaultItem = 0;
         SelectedItems.add(defaultItem);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(mainContext);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("일정삭제");
         builder.setSingleChoiceItems(items, defaultItem,
                 new DialogInterface.OnClickListener() {
@@ -207,7 +203,7 @@ public class FmCalendar extends Fragment{
                         int num = map.get(msg);
 
                         if (num == -1) {
-                            Toast.makeText(mainContext, "공식 일정은 삭제할 수 없습니다", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "공식 일정은 삭제할 수 없습니다", Toast.LENGTH_SHORT).show();
                         } else {
 
                             try {
@@ -220,24 +216,24 @@ public class FmCalendar extends Fragment{
                                         if (set.getInt("grade") == cursor.getInt(1)) {
                                             if (set.getInt("class") == cursor.getInt(2)) {
                                                 if (set.getInt("password") == cursor.getInt(3)) {
-                                                    if(GetWhatKindOfNetwork.check(mainContext)) {
-                                                        PostDeleteId post = new PostDeleteId(num, db, mainContext, handler);
+                                                    if(GetWhatKindOfNetwork.check(getActivity())) {
+                                                        PostDeleteId post = new PostDeleteId(num, db, getActivity(), handler);
                                                         post.start();
-                                                        Toast.makeText(mainContext, "삭제되었습니다", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(getActivity(), "삭제되었습니다", Toast.LENGTH_SHORT).show();
                                                     } else {
-                                                        Toast.makeText(mainContext, "네트워크에 연결해 주세요", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(getActivity(), "네트워크에 연결해 주세요", Toast.LENGTH_SHORT).show();
                                                     }
                                                 } else {
-                                                    Toast.makeText(mainContext, "프로필 비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(getActivity(), "프로필 비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
                                                 }
                                             } else {
-                                                Toast.makeText(mainContext, "프로필 반이 일치하지 않습니다", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getActivity(), "프로필 반이 일치하지 않습니다", Toast.LENGTH_SHORT).show();
                                             }
                                         } else {
-                                            Toast.makeText(mainContext, "프로필 학년이 일치하지 않습니다", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getActivity(), "프로필 학년이 일치하지 않습니다", Toast.LENGTH_SHORT).show();
                                         }
                                     } else {
-                                        Toast.makeText(mainContext, "프로필 이름이 일치하지 않습니다", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getActivity(), "프로필 이름이 일치하지 않습니다", Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
@@ -367,11 +363,11 @@ public class FmCalendar extends Fragment{
     private static String convertInputStreamToString(InputStream inputStream) throws IOException{
         BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
         String line;
-        String result = "";
+        StringBuilder result = new StringBuilder();
         while((line = bufferedReader.readLine()) != null)
-            result += line;
+            result.append(line);
 
         inputStream.close();
-        return result;
+        return result.toString();
     }
 }

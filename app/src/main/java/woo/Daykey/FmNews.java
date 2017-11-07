@@ -19,21 +19,19 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import static woo.Daykey.MainActivity.db;
+
 public class FmNews extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private Context newsContext;
     private ListView listView;
-    private Context mainContext;
-    private SQLiteDatabase db;
 
     private String title;
     private String teacherName;
     private String visitors;
     private String date;
 
-    public FmNews(Context mainContext, SQLiteDatabase db) {
-        this.mainContext = mainContext;
-        this.db = db;
+    public FmNews() {
     }
 
     @Override
@@ -104,7 +102,7 @@ public class FmNews extends Fragment {
         }
 
         void newsSave() {
-            if (GetWhatKindOfNetwork.check(mainContext)) {
+            if (GetWhatKindOfNetwork.check(getActivity())) {
                 final String sql = "drop table if exists " + "newsTable";
                 final String create3 = "create table " + "newsTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
 
@@ -114,7 +112,7 @@ public class FmNews extends Fragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                Thread thread = new BoardParsing(mainContext, "http://www.daykey.hs.kr/daykey/0701/board/14117", 1);
+                Thread thread = new BoardParsing(getActivity(), "http://www.daykey.hs.kr/daykey/0701/board/14117", 1);
                 thread.start();
 
                 try {

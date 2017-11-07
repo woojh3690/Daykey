@@ -13,11 +13,13 @@ class GetWhatKindOfNetwork {
 
     static boolean check(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean check = false;
-        check = activeNetwork != null && activeNetwork.isConnected();
-        Log.i("check" +
-                "network", check + "");
-        return check;
+        NetworkInfo activeNetwork = null;
+        try {
+            assert cm != null;
+            activeNetwork = cm.getActiveNetworkInfo();
+        } catch (AssertionError e) {
+            e.printStackTrace();
+        }
+        return activeNetwork != null && activeNetwork.isConnected();
     }
 }

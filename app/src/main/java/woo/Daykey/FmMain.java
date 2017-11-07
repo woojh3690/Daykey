@@ -16,16 +16,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import static woo.Daykey.MainActivity.db;
+
 public class FmMain extends Fragment {
 
     TextView dietViewMain1;
     TextView dietViewMain2;
     TextView timer;
-    SQLiteDatabase db;
     private boolean goTime = true;
 
-    public FmMain(SQLiteDatabase db) {
-        this.db = db;
+    public FmMain() {
     }
 
     @Nullable

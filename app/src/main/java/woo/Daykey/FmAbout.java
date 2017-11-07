@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 
 public class FmAbout extends Fragment {
 
+    public FmAbout() {
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {

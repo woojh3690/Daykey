@@ -1,9 +1,7 @@
 package woo.Daykey;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -11,23 +9,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import static woo.Daykey.MainActivity.db;
+
 public class FmTimeTable extends Fragment {
-    private Context mainContext;
-    private SQLiteDatabase db;
     private TextView[] textViews = new TextView[35];
     private int grade = -1;
     private int aClass = -1;
 
-    public FmTimeTable(Context mainContext, SQLiteDatabase db) {
-        this.mainContext = mainContext;
-        this.db = db;
+    public FmTimeTable() {
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.flagment_timetable, container, false);
-        String packageName = mainContext.getPackageName();
+        String packageName = getActivity().getPackageName();
 
         for(int i = 0; i < 35; i++) {
             String resName = "timetable_tv_" + (i + 1);
@@ -60,7 +56,7 @@ public class FmTimeTable extends Fragment {
     }
 
     void setProfile() {
-        SettingPreferences set = new SettingPreferences(mainContext);
+        SettingPreferences set = new SettingPreferences(getActivity());
         grade = set.getInt("grade");
         aClass = set.getInt("class");
     }

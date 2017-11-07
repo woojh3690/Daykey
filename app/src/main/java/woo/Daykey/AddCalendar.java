@@ -120,8 +120,8 @@ class AddCalendar {//extends Thread{
 
         ContentResolver contentResolver = mainContext.getApplicationContext().getContentResolver();
 
-        Cursor cursor = contentResolver.query(CALENDAR_URI, FIELDS, null, null, null);
-        try {
+        try (Cursor cursor = contentResolver.query(CALENDAR_URI, FIELDS, null, null, null)) {
+            assert cursor != null;
             if (cursor.getCount() > 0) {
                 while (cursor.moveToNext()) {
                     String displayName = cursor.getString(0);

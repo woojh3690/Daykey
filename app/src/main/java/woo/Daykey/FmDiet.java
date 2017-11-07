@@ -27,6 +27,9 @@ public class FmDiet extends Fragment {
     private int firstDayOfWeek;
     private SQLiteDatabase db;
 
+    public FmDiet() {
+    }
+
     public FmDiet(SQLiteDatabase db) {
         this.db = db;
     }

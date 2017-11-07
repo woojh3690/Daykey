@@ -8,6 +8,7 @@ import android.webkit.JavascriptInterface;
 
 import java.util.Calendar;
 
+import static woo.Daykey.MainActivity.db;
 import static woo.Daykey.MainActivity.dismiss;
 import static woo.Daykey.MainActivity.mhandler;
 
@@ -22,14 +23,12 @@ class DietParsing{
 
     private ContentValues values;
     private SettingPreferences set;
-    private SQLiteDatabase db;
 
     private int htmlInt;
     private int check = 1; //값이 '0'이 되면은 중첩된 소괄호 까지 완전히 닫힌 것
     private boolean insertCheck = false;
 
-    DietParsing(SQLiteDatabase db, SettingPreferences set) {
-        this.db = db;
+    DietParsing(SettingPreferences set) {
         this.set = set;
     }
 

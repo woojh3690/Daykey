@@ -94,7 +94,7 @@ class BoardParsing extends Thread{
 
             if (tempTitle.endsWith("&nbsp;")) { //새로운 개시글인지 확인
                 Log.i("temptitle", tempTitle);
-                tempTitle = tempTitle.substring(0, tempTitle.length() - 91) + " (new)";
+                tempTitle = tempTitle.substring(0, tempTitle.length() - 5) + " (new)";
             }
 
             String title;

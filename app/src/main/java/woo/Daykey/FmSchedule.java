@@ -22,16 +22,15 @@ public class FmSchedule extends Fragment {
     Calendar calendar = Calendar.getInstance();
     Button addSche, deleteSche;
     View view;
-    private SQLiteDatabase db;
-    private SettingPreferences set;
     private Handler handler;
     private int mSelectedPageIndex = 1;
     private ViewPager viewPager;
     final FmCalendar[] fragList = new FmCalendar[3];
 
-    public FmSchedule(SQLiteDatabase db, SettingPreferences set, Handler handler) {
-        this.db = db;
-        this.set = set;
+    public FmSchedule() {
+    }
+
+    public FmSchedule(Handler handler) {
         this.handler = handler;
     }
 
@@ -122,15 +121,15 @@ public class FmSchedule extends Fragment {
     }
 
     public void addFmCalendar() {
-        fragList[1] = new FmCalendar(db, getActivity(), set, handler, calendar.get(Calendar.YEAR),
+        fragList[1] = new FmCalendar(handler, calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH), calendarTextView, addSche, deleteSche);//현재달
 
         calendar.add(Calendar.MONTH, -1);
-        fragList[0] = new FmCalendar(db, getActivity(), set, handler, calendar.get(Calendar.YEAR),
+        fragList[0] = new FmCalendar(handler, calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH), calendarTextView, addSche, deleteSche);//이전달
 
         calendar.add(Calendar.MONTH, 2);
-        fragList[2] = new FmCalendar(db, getActivity(), set, handler, calendar.get(Calendar.YEAR),
+        fragList[2] = new FmCalendar(handler, calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH), calendarTextView, addSche, deleteSche);//다음달
     }
 }
