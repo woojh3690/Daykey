@@ -2,7 +2,6 @@ package woo.Daykey;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;

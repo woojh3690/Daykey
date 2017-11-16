@@ -104,6 +104,8 @@ public class FmCalendar extends Fragment{
             }
         });
 
+
+
         deleteSche.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
