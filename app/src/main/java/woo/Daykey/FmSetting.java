@@ -23,7 +23,8 @@ public class FmSetting extends PreferenceFragment{
     String strVersion;
     View view;
 
-    Preference setTime, switchAlarm, calendarSyc, name, aClass, email, grade, version, password, reset;
+    Preference setTime, switchAlarm, calendarSyc, name, aClass, email, grade, version, password,
+            reset, timer;
 
     public FmSetting() {
     }
@@ -42,6 +43,7 @@ public class FmSetting extends PreferenceFragment{
         password = findPreference("password");
         version = findPreference("version");
         reset = findPreference("reset");
+        timer = findPreference("timer");
 
         try {
             PackageInfo i = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
@@ -79,6 +81,20 @@ public class FmSetting extends PreferenceFragment{
             public boolean onPreferenceClick(Preference preference) {
                 TimePickerFragment timePickerFragment = new TimePickerFragment(getActivity(), set);
                 timePickerFragment.show(getFragmentManager(), "TAG");
+                return true;
+            }
+        });
+
+        timer.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                boolean switched = (boolean)newValue;
+
+                if (switched) {
+                    set.saveBoolean("timer", true);
+                } else {
+                    set.saveBoolean("timer", false);
+                }
                 return true;
             }
         });

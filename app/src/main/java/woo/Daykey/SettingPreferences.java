@@ -34,6 +34,8 @@ class SettingPreferences{
             case "firstStart":
                 defaultSetting = true;
                 break;
+            case "timer":
+                defaultSetting = true;
             default:
                 Log.w("Setting getBoolean", "값 불러오기 오류");
                 break;

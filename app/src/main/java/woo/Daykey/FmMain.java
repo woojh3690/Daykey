@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import static woo.Daykey.MainActivity.db;
+import static woo.Daykey.MainActivity.set;
 
 public class FmMain extends Fragment {
 
@@ -114,16 +115,16 @@ public class FmMain extends Fragment {
         @Override
         protected void onPreExecute() {
             cal = new GregorianCalendar();
-            timeCre = String.format("%d:%d", cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE));
+            timeCre = String.format("%d:%s", cal.get(Calendar.HOUR), formChange(cal.get(Calendar.MINUTE)));
             timer.setText(timeCre);
             super.onPreExecute();
         }
 
         @Override
         protected Void doInBackground(Void... params) {
-            while (goTime) {
+            while (set.getBoolean("timer") && goTime) {
                 cal = new GregorianCalendar();
-                timeCre = String.format("%d:%d", cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE));
+                timeCre = String.format("%d:%s", cal.get(Calendar.HOUR), formChange(cal.get(Calendar.MINUTE)));
                 publishProgress();
                 try {
                     Thread.sleep(1000);
@@ -131,7 +132,7 @@ public class FmMain extends Fragment {
                     e.printStackTrace();
                 }
 
-                timeCre = String.format("%d %d", cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE));
+                timeCre = String.format("%d %s", cal.get(Calendar.HOUR), formChange(cal.get(Calendar.MINUTE)));
                 publishProgress();
                 try {
                     Thread.sleep(1000);
@@ -139,6 +140,7 @@ public class FmMain extends Fragment {
                     e.printStackTrace();
                 }
             }
+            timer.setText(" ");
             return null;
         }
 
@@ -162,5 +164,21 @@ public class FmMain extends Fragment {
         AsyncTaskTimer asyncTaskTimer = new AsyncTaskTimer();
         asyncTaskTimer.execute();
         super.onResume();
+    }
+
+    //int 1이면 string 01로변경
+    private String formChange(int num) {
+        String result;
+        String date1 = String.valueOf(num);
+
+        if (date1.length() == 1) {
+            result = "0" + date1;
+        } else if (date1.length() == 2) {
+            result = date1;
+        } else {
+            result = null;
+        }
+
+        return result;
     }
 }

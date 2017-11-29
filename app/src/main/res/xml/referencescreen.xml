@@ -11,6 +11,14 @@
             android:title="알림시간 설정"/>
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="메인화면">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="timer"
+            android:summary="메인화면에 시계를 표시합니다"
+            android:title="시계" />
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="달력">
         <SwitchPreference
             android:defaultValue="true"

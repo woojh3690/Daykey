@@ -194,7 +194,7 @@ class CalendarDataParsing extends Thread{
                         if (month > 12) {
                             month = 1;
                         }
-                        startSplit[1] = fromChange(month);
+                        startSplit[1] = formChange(month);
                     }
                 }
 
@@ -257,7 +257,7 @@ class CalendarDataParsing extends Thread{
     }
 
     //int 1이면 string 01로변경
-    private String fromChange(int num) {
+    private String formChange(int num) {
         String result;
         String date1 = String.valueOf(num);
 
@@ -271,5 +271,4 @@ class CalendarDataParsing extends Thread{
 
         return result;
     }
-
 }
