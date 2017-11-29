@@ -65,6 +65,8 @@
         android:layout_above="@+id/textView8"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="71dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:text="김상현, 신현규, 김민철(디자인)
 서준혁, 고준혁, 고민수, 강민서"
         android:textSize="24dp" />

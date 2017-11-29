@@ -84,19 +84,10 @@ public class AlarmBroadcastReceive extends BroadcastReceiver {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else {
-            try {
-                String[] columns = {"_id", "title"};
-                String where = " _id = 1";
-                Cursor cursor = db.query("newsTable", columns,  where, null, null, null, null);
 
-                while (cursor.moveToNext()) {
-                    info = cursor.getString(1);
-                }
-                cursor.close();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+            setInfo();
+        } else {
+            setInfo();
         }
     }
     //오늘의 매뉴 저장
@@ -133,5 +124,20 @@ public class AlarmBroadcastReceive extends BroadcastReceiver {
         Date date = new Date(now);// 현재시간을 date 변수에 저장한다.
         SimpleDateFormat sdfNow = new SimpleDateFormat("d");// 시간을 나타냇 포맷을 정한다 ( yyyy/MM/dd 같은 형태로 변형 가능 )
         return sdfNow.format(date);// nowDate 변수에 값을 장한다.
+    }
+
+    private void setInfo() {
+        try {
+            String[] columns = {"_id", "title"};
+            String where = " _id = 1";
+            Cursor cursor = db.query("newsTable", columns,  where, null, null, null, null);
+
+            while (cursor.moveToNext()) {
+                info = cursor.getString(1);
+            }
+            cursor.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

@@ -57,6 +57,13 @@
             android:inputType="numberPassword"/>
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="초기화">
+        <Preference
+            android:key="reset"
+            android:summary="학식, 학사일정의 데이터가 정확하지 않은 경우\n초기화 합니다"
+            android:title="초기화"/>
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="정보">
         <EditTextPreference
             android:enabled="false"
