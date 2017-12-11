@@ -116,12 +116,13 @@ public class FmMain extends Fragment {
         protected void onPreExecute() {
             cal = new GregorianCalendar();
             timeCre = String.format("%d:%s", cal.get(Calendar.HOUR), formChange(cal.get(Calendar.MINUTE)));
-            timer.setText(timeCre);
+            //timer.setText(timeCre);
             super.onPreExecute();
         }
 
         @Override
         protected Void doInBackground(Void... params) {
+
             while (set.getBoolean("timer") && goTime) {
                 cal = new GregorianCalendar();
                 timeCre = String.format("%d:%s", cal.get(Calendar.HOUR), formChange(cal.get(Calendar.MINUTE)));
@@ -140,7 +141,7 @@ public class FmMain extends Fragment {
                     e.printStackTrace();
                 }
             }
-            timer.setText(" ");
+
             return null;
         }
 
@@ -155,6 +156,7 @@ public class FmMain extends Fragment {
     @Override
     public void onPause() {
         goTime = false;
+        timer.setText(" ");
         super.onPause();
     }
 
