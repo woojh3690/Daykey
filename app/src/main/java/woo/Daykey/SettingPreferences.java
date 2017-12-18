@@ -37,7 +37,7 @@ class SettingPreferences{
             case "timer":
                 defaultSetting = true;
             default:
-                Log.w("Setting getBoolean", "값 불러오기 오류");
+                Log.w("Setting getBoolean", "값 불러오기 오류" + "key : " + key);
                 break;
         }
 
@@ -76,6 +76,9 @@ class SettingPreferences{
             case "password":
                 defaultSet = -1;
                 break;
+            case "dbversion":
+                defaultSet = -1;
+                break;
             default:
                 defaultSet = -1;
         }
@@ -101,7 +104,7 @@ class SettingPreferences{
                 defaultSetting = " ";
                 break;
             default:
-                Log.w("Setting getString", "값 불러오기 오류");
+                Log.w("Setting getString", "값 불러오기 오류"  + "key : " + key);
                 break;
         }
 

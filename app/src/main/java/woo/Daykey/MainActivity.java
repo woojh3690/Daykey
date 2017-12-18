@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if(savedInstanceState == null) {
             setHandler();
+            //sqlHelper.onUpgrade(db, set.getInt("dbversion"), 1);
             newsSave();//공지사항 가져오기
             defaultAlarm();//처음 앱을 시작했다면 알람 설정
         }

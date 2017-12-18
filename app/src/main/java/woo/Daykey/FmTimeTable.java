@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import static woo.Daykey.MainActivity.db;
 
@@ -33,7 +34,8 @@ public class FmTimeTable extends Fragment {
         setProfile();
 
         if ((grade == -1) || (aClass == -1)) {
-            textViews[17].setText("프로필을 설정해 주세요");
+            //textViews[17].setText("설정에서 프로필을 설정해 주세요");
+            Toast.makeText(getActivity(), "설정에서 프로필을 설정해 주세요", Toast.LENGTH_LONG).show();
         }
         setTextViews();
         return view;

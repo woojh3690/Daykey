@@ -24,6 +24,7 @@ class ResetFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int id) {
                         SettingPreferences set = new SettingPreferences(getActivity());
                         set.saveInt("db_version", -1);
+                        set.saveBoolean("firstStart", true);
                         Toast.makeText(getActivity(), "앱을 다시 시작하면 데이터를 가져옵니다", Toast.LENGTH_LONG).show();
                         getActivity().moveTaskToBack(true);
                         getActivity().finish();

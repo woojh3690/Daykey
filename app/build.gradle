@@ -7,8 +7,8 @@ android {
         applicationId "woo.daykey"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 19
-        versionName "1.5.2"
+        versionCode 21
+        versionName "1.5.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
