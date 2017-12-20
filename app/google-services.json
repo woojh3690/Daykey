@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "133552915718",
+    "firebase_url": "https://daykey-68260.firebaseio.com",
+    "project_id": "daykey-68260",
+    "storage_bucket": "daykey-68260.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:133552915718:android:cd311488cf340a1f",
+        "android_client_info": {
+          "package_name": "woo.daykey"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "133552915718-p2d85ia48kak0a6c3ochchsvjj7q6517.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoj2urpL47A6bR4xBuqvCzUrpM4pv0EW0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -29,6 +29,7 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -109,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (GetWhatKindOfNetwork.check(mainContext)) {
                 dietSave();
                 if (set.getBoolean("firstStart")) {
+                    FirebaseMessaging.getInstance().subscribeToTopic("ALL");
                     getSchedule();
                     set.saveBoolean("firstStart", false);
                 }
