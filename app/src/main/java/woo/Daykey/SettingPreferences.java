@@ -28,9 +28,6 @@ class SettingPreferences{
             case "calendar":
                 defaultSetting = true;
                 break;
-            case "diet":
-                defaultSetting = false;
-                break;
             case "firstStart":
                 defaultSetting = true;
                 break;

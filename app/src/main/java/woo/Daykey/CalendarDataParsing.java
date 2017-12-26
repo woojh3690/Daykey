@@ -13,6 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import static android.provider.ContactsContract.Directory.ACCOUNT_NAME;
 import static java.lang.Integer.parseInt;
@@ -33,20 +34,22 @@ class CalendarDataParsing extends Thread{
     public void run() {
         super.run();
         addCalendarAccount();
-        String strUrl1 = "http://www.daykey.hs.kr/daykey/0204/schedule?section=1&schdYear=2017";
-        String strUrl2 = "http://www.daykey.hs.kr/daykey/0204/schedule?section=2&schdYear=2017";
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy", Locale.KOREA );
+        Date date = new Date();
+        String strUrl1 = "http://www.daykey.hs.kr/daykey/0204/schedule?section=1&schdYear=" + formatter.format(date);
+        String strUrl2 = "http://www.daykey.hs.kr/daykey/0204/schedule?section=2&schdYear=" + formatter.format(date);
         dropCalendarTable();
         getUrlToHTML(strUrl1);
         getUrlToHTML(strUrl2);
     }
 
     private void dropCalendarTable() {
-        //final String drop = "drop table " + "calendarTable";
-        //final String create = "create table " + "calendarTable " + "(date text, schedule text);";
+        final String drop = "drop table if exists" + "calendarTable";
+        final String create = "create table " + "calendarTable " + "(date text, schedule text);";
 
         try {
-            //db.execSQL(drop);
-            //db.execSQL(create);
+            db.execSQL(drop);
+            db.execSQL(create);
         } catch (Exception e) {
             e.printStackTrace();
         }

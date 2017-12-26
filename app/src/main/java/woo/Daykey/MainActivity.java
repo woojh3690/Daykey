@@ -58,13 +58,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SqlHelper sqlHelper = new SqlHelper(mainContext);
         db = sqlHelper.getReadableDatabase();
         set = new SettingPreferences(mainContext);
+        setid();
 
         if(savedInstanceState == null) {
             setHandler();
             newsSave();//공지사항 가져오기
             defaultAlarm();//처음 앱을 시작했다면 알람 설정
             try {
-                Thread.sleep(500);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -79,22 +80,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         fuc();//건들지 말것
 
-        if (savedInstanceState!=null) {
+        if (savedInstanceState != null) {
             // 화면전환 전에 넣어주었던 pointList 를 꺼내서 세팅
             Bundle bundle = savedInstanceState.getBundle("save_data");
             assert bundle != null;
             id = bundle.getInt("restart", R.id.main);
-
-            if (id == R.id.main) {
-                viewMain();
-            } else if (id == R.id.diet) {
-                changeDietView();
-            } else if (id == R.id.schedule) {
-                changeScheView();
-            }
+            changeView();
         } else {
-            //viewMain();
             getPermission();
+        }
+    }
+
+    private void setid() {
+        id = R.id.main;
+        String type = getIntent().getStringExtra("type");
+        if (type != null) {
+            switch (type) {
+                case "news":
+                    id = R.id.news;
+                    break;
+                case "home":
+                    id = R.id.home;
+                    break;
+                case "sci":
+                    id = R.id.science;
+                    break;
+            }
         }
     }
 
@@ -111,26 +122,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Calendar calendar = Calendar.getInstance();
         int curMonth = calendar.get(Calendar.MONTH);
 
-        if (!(curMonth == set.getInt("db_version")) || !set.getBoolean("diet")) {
+        if (curMonth != set.getInt("db_version")) {
             if (GetWhatKindOfNetwork.check(mainContext)) {
                 dietSave();
-                if (set.getBoolean("firstStart")) {
-                    FirebaseMessaging.getInstance().subscribeToTopic("ALL");
-                    getSchedule();
-                    set.saveBoolean("firstStart", false);
-                }
             } else {
                 if(set.getBoolean("firstStart")) {
                     Toast.makeText(mainContext, "인터넷을 연결해 주세요\n" +
                             "처음 앱을 실행했을 때에는 데이터를 가져오는 과정이 필요합니다.", Toast.LENGTH_LONG).show();
                     finish();
                 } else {
-                    viewMain();
-                    Toast.makeText(this, "식단 데이터가 없습니다.\n인터넷을 연결해 주세요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "새로운 식단 데이터를 가져오기 위해\n인터넷을 연결해 주세요", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             }
         } else {
-            viewMain();
+            Log.i(TAG, "id값 : " + id);
+            changeView();
         }
     }
 
@@ -151,8 +158,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //웹뷰 로딩
     public void loadWebView() {
-        //Log.i("loadWebView", "실행됨");
-        showProgressDialog();
         try {
             mWebView.setWebViewClient(new WebViewClient() {
                 @Override//페이지 로딩이 끝나면 불린다.
@@ -172,7 +177,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mWebView.loadUrl("http://www.daykey.hs.kr/daykey/19152/food");//중식 로딩
         } catch (Exception ex) {
             ex.printStackTrace();
-            Log.e(TAG, "loadView Error");
         }
     }
 
@@ -368,6 +372,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //식단 저장
     private void dietSave() {
+        showProgressDialog();
+
         String sql = "drop table if exists " + "dietTable";
         String create1 = "create table " + "dietTable " + "(date INTEGER, menu text);";
         try {
@@ -375,6 +381,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             db.execSQL(create1);
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+
+        if (set.getBoolean("firstStart")) {
+            FirebaseMessaging.getInstance().subscribeToTopic("ALL");
+            getSchedule();
+            set.saveBoolean("firstStart", false);
         }
 
         loadWebView();
@@ -395,7 +407,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 switch (msg.what) {
                     case 1:
                         dialog.dismiss();
-                        viewMain();
+                        changeView();
                         break;
                     case 2:
                         changeScheView();

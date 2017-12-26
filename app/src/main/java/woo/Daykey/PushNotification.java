@@ -20,10 +20,11 @@ class PushNotification {
         this.context = context;
     }
 
-    void send(String tag, String title, String message, int priority, int requestCode, Notification.Style style) {
+    void send(String tag, String title, String message, int priority, String type, Notification.Style style) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
+        intent.putExtra("type", type);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 

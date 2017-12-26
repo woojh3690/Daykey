@@ -171,7 +171,6 @@ class DietParsing{
             db.insert("dietTable", null, values);
 
             if(!insertCheck) {
-                set.saveBoolean("diet", true);
                 //급식 DB 버전 저장
                 Calendar calendar = Calendar.getInstance();
                 int today = calendar.get(Calendar.MONTH);
