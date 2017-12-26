@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.Html;
 import android.util.Log;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 class BoardParsing extends Thread{
     private String htmlStr = "noData";
     private final String str6 = ">";
@@ -97,13 +99,13 @@ class BoardParsing extends Thread{
                 tempTitle = tempTitle.substring(0, tempTitle.length() - 91) + "(new)";
             }
 
-            String title;
-            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N) {
+            String title = StringEscapeUtils.unescapeHtml4(tempTitle);
+            /*if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N) {
                 // noinspection deprecation
                 title = String.valueOf(Html.fromHtml(tempTitle));
             } else {
                 title = String.valueOf(Html.fromHtml(tempTitle, Html.FROM_HTML_MODE_LEGACY));
-            }
+            }*/
 
             insertNewsData(title, teacherName[0], NumOfVisitors[0], date[0], url[finish]); //저장
         } catch (Exception e) {
@@ -175,4 +177,5 @@ class BoardParsing extends Thread{
             }
         }
     }
+
 }

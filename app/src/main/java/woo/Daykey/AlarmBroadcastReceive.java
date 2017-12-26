@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.nfc.Tag;
+import android.view.View;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,9 +20,9 @@ import java.util.Date;
  */
 
 public class AlarmBroadcastReceive extends BroadcastReceiver {
+    private static final String TAG = "AlarmBroadcastReceive";
     String launch = "점심이 없다 OTL";
     String dinner = "저녁이 없다 OTL";
-    String info = "데이터가 없습니다.";
 
     SqlHelper SqlHelper;
     SQLiteDatabase db;
@@ -29,31 +31,17 @@ public class AlarmBroadcastReceive extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) { //알람 시간이 되었을때 onReceive를 호출함
         try {
             SqlHelper = new SqlHelper(context);
-            firstInfoSave(context);
             todayMenuSave();
-
-            //NotificationManager 안드로이드 상태바에 메세지를 던지기위한 서비스 불러오고
-            NotificationManager notificationmanager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
             //노티바 스타일
             Notification.BigTextStyle style = new Notification.BigTextStyle();
             style.setSummaryText("급식보기 +");
-            style.setBigContentTitle("오늘의 급식!");
-            style.bigText("점심 : " + launch + "\n" + "저녁 : " + dinner);
+            style.setBigContentTitle("오늘의 메뉴!");
+            String message = "점심 : " + launch + "\n" + "저녁 : " + dinner;
+            style.bigText(message);
 
-            //노티바 만들기
-            Notification.Builder builder = new Notification.Builder(context);
-            builder.setSmallIcon(R.mipmap.ic_launcher)
-                    .setWhen(System.currentTimeMillis())
-                    .setContentTitle("공지사항")
-                    .setContentText(info)
-                    .setDefaults(Notification.DEFAULT_SOUND|Notification.DEFAULT_VIBRATE)
-                    .setContentIntent(pendingIntent)
-                    .setAutoCancel(true)
-                    .setStyle(style);//스타일 넣어주기
-
-            notificationmanager.notify(1, builder.build());
+            PushNotification pushNotification = new PushNotification(context);
+            pushNotification.send(TAG, "오늘의 메뉴!", message.split("\\r?\\n")[0], Notification.PRIORITY_DEFAULT, 0, style);
 
             AlarmBroadcast alarmBroadcast = new AlarmBroadcast(context);
             alarmBroadcast.Alarm(1);
@@ -63,33 +51,6 @@ public class AlarmBroadcastReceive extends BroadcastReceiver {
 
     }
 
-    //첫번째 공지사항 불러오기
-    private void firstInfoSave(Context context) {
-        db = SqlHelper.getReadableDatabase();
-        if (GetWhatKindOfNetwork.check(context)) {
-            String sql = "drop table " + "newsTable";
-            String create3 = "create table " + "newsTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
-            try{
-                db.execSQL(sql);
-                db.execSQL(create3);
-            }catch(SQLException e){
-                e.printStackTrace();
-            }
-
-            Thread thread = new BoardParsing(context, "http://www.daykey.hs.kr/daykey/0701/board/14117", 1);
-            thread.start();
-
-            try {
-                thread.join();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            setInfo();
-        } else {
-            setInfo();
-        }
-    }
     //오늘의 매뉴 저장
     private void todayMenuSave() {
         try {
@@ -124,20 +85,5 @@ public class AlarmBroadcastReceive extends BroadcastReceiver {
         Date date = new Date(now);// 현재시간을 date 변수에 저장한다.
         SimpleDateFormat sdfNow = new SimpleDateFormat("d");// 시간을 나타냇 포맷을 정한다 ( yyyy/MM/dd 같은 형태로 변형 가능 )
         return sdfNow.format(date);// nowDate 변수에 값을 장한다.
-    }
-
-    private void setInfo() {
-        try {
-            String[] columns = {"_id", "title"};
-            String where = " _id = 1";
-            Cursor cursor = db.query("newsTable", columns,  where, null, null, null, null);
-
-            while (cursor.moveToNext()) {
-                info = cursor.getString(1);
-            }
-            cursor.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 }

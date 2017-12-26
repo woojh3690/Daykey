@@ -36,6 +36,7 @@ class SettingPreferences{
                 break;
             case "timer":
                 defaultSetting = true;
+                break;
             default:
                 Log.w("Setting getBoolean", "값 불러오기 오류" + "key : " + key);
                 break;

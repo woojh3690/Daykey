@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -60,9 +61,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if(savedInstanceState == null) {
             setHandler();
-            //sqlHelper.onUpgrade(db, set.getInt("dbversion"), 1);
             newsSave();//공지사항 가져오기
             defaultAlarm();//처음 앱을 시작했다면 알람 설정
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         setTheme(R.style.AppTheme);
