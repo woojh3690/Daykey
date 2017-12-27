@@ -390,6 +390,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         loadWebView();
+
+        set.saveBoolean("diet", true);
     }
 
     //일정 저장
