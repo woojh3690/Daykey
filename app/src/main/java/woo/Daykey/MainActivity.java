@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         fuc();//건들지 말것
+        FirebaseMessaging.getInstance().subscribeToTopic("ALL");
 
         if (savedInstanceState != null) {
             // 화면전환 전에 넣어주었던 pointList 를 꺼내서 세팅
@@ -384,7 +385,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         if (set.getBoolean("firstStart")) {
-            FirebaseMessaging.getInstance().subscribeToTopic("ALL");
             getSchedule();
             set.saveBoolean("firstStart", false);
         }
