@@ -74,7 +74,6 @@ class ServerScheduleParsing extends Thread{
 
 
                 insertCalendarData(num, name, grade, intClass, password, date, sche);
-
             }
         } catch (JSONException e) {
             e.printStackTrace();

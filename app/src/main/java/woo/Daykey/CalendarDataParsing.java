@@ -34,17 +34,23 @@ class CalendarDataParsing extends Thread{
     public void run() {
         super.run();
         addCalendarAccount();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy", Locale.KOREA );
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy", Locale.KOREA);
+        SimpleDateFormat formatter2 = new SimpleDateFormat("MM", Locale.KOREA);
         Date date = new Date();
-        String strUrl1 = "http://www.daykey.hs.kr/daykey/0204/schedule?section=1&schdYear=" + formatter.format(date);
-        String strUrl2 = "http://www.daykey.hs.kr/daykey/0204/schedule?section=2&schdYear=" + formatter.format(date);
+        int year = Integer.parseInt(formatter.format(date));
+        int month = Integer.parseInt(formatter2.format(date));
+        if (month < 3) {
+            year -= 1;
+        }
+        String strUrl1 = "http://www.daykey.hs.kr/daykey/0204/schedule?section=1&schdYear=" + year;
+        String strUrl2 = "http://www.daykey.hs.kr/daykey/0204/schedule?section=2&schdYear=" + year;
         dropCalendarTable();
         getUrlToHTML(strUrl1);
         getUrlToHTML(strUrl2);
     }
 
     private void dropCalendarTable() {
-        final String drop = "drop table if exists" + "calendarTable";
+        final String drop = "drop table if exists" + " calendarTable";
         final String create = "create table " + "calendarTable " + "(date text, schedule text);";
 
         try {

@@ -117,7 +117,7 @@ public class FmHome extends Fragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                Thread thread = new BoardParsing(getActivity(), "http://www.daykey.hs.kr/daykey/0601/board/14114", 2);
+                Thread thread = new BoardParsing(db, "http://www.daykey.hs.kr/daykey/0601/board/14114", 2);
                 thread.start();
 
                 try {

@@ -12,7 +12,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,7 +19,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -126,6 +124,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (curMonth != set.getInt("db_version")) {
             if (GetWhatKindOfNetwork.check(mainContext)) {
                 dietSave();
+                getSchedule();
+                set.saveBoolean("firstStart", false);
             } else {
                 if(set.getBoolean("firstStart")) {
                     Toast.makeText(mainContext, "인터넷을 연결해 주세요\n" +
@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         } else {
-            Log.i(TAG, "id값 : " + id);
+            //Log.i(TAG, "id값 : " + id);
             changeView();
         }
     }
@@ -331,7 +331,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 e.printStackTrace();
             }
 
-            Thread thread = new BoardParsing(mainContext, "http://www.daykey.hs.kr/daykey/0701/board/14117", 1);
+            Thread thread = new BoardParsing(db, "http://www.daykey.hs.kr/daykey/0701/board/14117", 1);
             thread.start();
 
             homeSave();
@@ -352,7 +352,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             e.printStackTrace();
         }
 
-        Thread thread = new BoardParsing(mainContext, "http://www.daykey.hs.kr/daykey/0601/board/14114", 2);
+        Thread thread = new BoardParsing(db, "http://www.daykey.hs.kr/daykey/0601/board/14114", 2);
         thread.start();
     }
 
@@ -367,7 +367,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             e.printStackTrace();
         }
 
-        Thread thread = new BoardParsing(mainContext, "http://www.daykey.hs.kr/daykey/19516/board/20170", 3);
+        Thread thread = new BoardParsing(db, "http://www.daykey.hs.kr/daykey/19516/board/20170", 3);
         thread.start();
     }
 
@@ -382,11 +382,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             db.execSQL(create1);
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-
-        if (set.getBoolean("firstStart")) {
-            getSchedule();
-            set.saveBoolean("firstStart", false);
         }
 
         loadWebView();

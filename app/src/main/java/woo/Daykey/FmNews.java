@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -71,6 +70,10 @@ public class FmNews extends Fragment {
                 startActivity(intent);
             }
         });
+
+        BoardParsing boardParsingtest = new BoardParsing(db, "http://www.daykey.hs.kr/daykey/0701/board/14117", 1);
+        boardParsingtest.start();
+
         return view;
     }
 
@@ -112,7 +115,7 @@ public class FmNews extends Fragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                Thread thread = new BoardParsing(getActivity(), "http://www.daykey.hs.kr/daykey/0701/board/14117", 1);
+                Thread thread = new BoardParsing(db, "http://www.daykey.hs.kr/daykey/0701/board/14117", 1);
                 thread.start();
 
                 try {
