@@ -50,7 +50,7 @@ class BoardParsing extends Thread{
                 String numOfVisitors = tr.get(i).select("td").get(3).text();
                 String date = tr.get(i).select("td").get(4).text();
                 String tempUrl = elementsTitle.select("a").attr("onclick");
-                tempUrl = tempUrl.substring(27, 33);
+                tempUrl = tempUrl.substring(27, 34);
 
                 insertNewsData(title, teacherName, numOfVisitors, date, tempUrl);
             }
