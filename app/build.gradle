@@ -7,8 +7,8 @@ android {
         applicationId "woo.daykey"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 24
-        versionName "1.6.2"
+        versionCode 25
+        versionName "1.7.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -39,7 +39,7 @@ dependencies {
     compile 'gun0912.ted:tedpermission:1.0.2'
     compile 'com.google.firebase:firebase-messaging:11.8.0'
     compile 'org.apache.commons:commons-lang3:3.6'
-    compile 'org.jsoup:jsoup:1.11.2'
+    compile 'org.jsoup:jsoup:1.7.3'
     testCompile 'junit:junit:4.12'
 }
 

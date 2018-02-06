@@ -11,12 +11,14 @@ class ScheduleModel implements java.io.Serializable {
 	private String month;
 	private String date;
 	private String sche;
+	private String email;
+	private byte boolean_public;
 
 	ScheduleModel() {
 	}
 
 	public ScheduleModel(int num, String name, int grade, int class_, int password, String year,
-						 String month, String date, String sche) {
+						 String month, String date, String sche, String email, byte boolean_public ) {
 		this.num = num;
 		this.name = name;
 		this.grade = grade;
@@ -26,6 +28,8 @@ class ScheduleModel implements java.io.Serializable {
 		this.month = month;
 		this.date = date;
 		this.sche = sche;
+		this.email = email;
+		this.boolean_public = boolean_public;
 	}
 
 	public int getNum() {
@@ -98,5 +102,21 @@ class ScheduleModel implements java.io.Serializable {
 
 	public void setMonth(String month) {
 		this.month = month;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public byte getBoolean_public() {
+		return boolean_public;
+	}
+
+	public void setBoolean_public(byte boolean_public) {
+		this.boolean_public = boolean_public;
 	}
 }

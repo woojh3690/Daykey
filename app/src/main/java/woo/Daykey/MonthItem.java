@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.HashMap;
 
+import static woo.Daykey.MainActivity.set;
+
 class MonthItem {
     String dayText = "";//요일 + 일정 텍스트 변수
     private SQLiteDatabase db;
@@ -47,8 +49,12 @@ class MonthItem {
 
         try {
             String[] columns = {"schedule, num, name"};
-            String where = " date = ?";
-            String[] at = {trimDay};
+            String where = " date = ? AND ((grade = ? AND class = ?) OR boolean_public = 1)";
+
+            int grade = set.getInt("grade");
+            int aClass = set.getInt("class");
+
+            String[] at = {trimDay, String.valueOf(grade), String.valueOf(aClass)};
             Cursor cursor = db.query("userTable", columns,  where, at, null, null, null);
 
             while (cursor.moveToNext()) {

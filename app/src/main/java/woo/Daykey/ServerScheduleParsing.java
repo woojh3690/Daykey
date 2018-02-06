@@ -44,7 +44,7 @@ class ServerScheduleParsing extends Thread{
     private void reset() {
         String drop = "drop table if exists " + "userTable";
         String create = "create table " + "userTable" + "(num integer, name text, " +
-                "grade integer, class integer, password integer, date text, schedule text)";
+                "grade integer, class integer, password integer, date text, schedule text, boolean_public integer)";
         try {
             db.execSQL(drop);
             db.execSQL(create);
@@ -71,16 +71,17 @@ class ServerScheduleParsing extends Thread{
                 String date = jsonObject.getString("year") + "/"
                         + jsonObject.getString("month") + "/" + jsonObject.getString("date");
                 String sche = jsonObject.getString("sche");
+                byte boolean_public = (byte)jsonObject.getInt("booleanPublic");
 
 
-                insertCalendarData(num, name, grade, intClass, password, date, sche);
+                insertCalendarData(num, name, grade, intClass, password, date, sche, boolean_public);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void insertCalendarData(int num, String name, int grade, int intClass, int password, String date, String schedule) {
+    private void insertCalendarData(int num, String name, int grade, int intClass, int password, String date, String schedule, byte boolean_public) {
         try {
             ContentValues values = new ContentValues();
             values.put("num", num);
@@ -90,6 +91,7 @@ class ServerScheduleParsing extends Thread{
             values.put("password", password);
             values.put("date", date);
             values.put("schedule", schedule);
+            values.put("boolean_public", boolean_public);
             db.insert("userTable", null, values);
         } catch (Exception ex) {
             ex.printStackTrace();

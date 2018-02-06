@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -80,24 +81,27 @@ public class FmCalendar extends Fragment{
                 } else {
 
                     boolean check = false;
-                    if(set.getString("name").equals(" ")) {
+                    if (set.getString("name").equals(" ")) {
                         Toast.makeText(getActivity(), "프로필에 정확한 이름을 입력해 주세요", Toast.LENGTH_SHORT).show();
                         check = true;
-                    } else if(set.getInt("grade") == -1) {
+                    } else if (set.getInt("grade") == -1) {
                         Toast.makeText(getActivity(), "프로필에 정확한 학년을 설정해 주세요", Toast.LENGTH_SHORT).show();
                         check = true;
-                    } else if(set.getInt("class") == -1) {
+                    } else if (set.getInt("class") == -1) {
                         Toast.makeText(getActivity(), "프로필에 정확한 반을 설정해 주세요", Toast.LENGTH_SHORT).show();
                         check = true;
-                    } else if(set.getInt("password") == -1) {
+                    } else if (set.getInt("password") == -1) {
                         Toast.makeText(getActivity(), "프로필에 정확한 비밀번호를 설정해 주세요", Toast.LENGTH_SHORT).show();
+                        check = true;
+                    } else if (set.getString("email").equals(" ")) {
+                        Toast.makeText(getActivity(), "프로필에 정확한 이메일을 설정해 주세요", Toast.LENGTH_SHORT).show();
                         check = true;
                     } else {
                         addDialogShow();
                     }
 
                     if (check) {
-                        Toast.makeText(getActivity(), "설정에서 프로필을 변경할 수 있습니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "설정에서 프로필을 변경할 수 있습니다.\n프로필은 일정을 삭제할 때 사용됩니다", Toast.LENGTH_LONG).show();
                     }
 
                 }
@@ -127,7 +131,7 @@ public class FmCalendar extends Fragment{
                 trimDate = item.getTrimDay();
                 scheAndName = item.getScheAndName().replace(",", "\n");
                 calendarTextView.setText(scheAndName);
-                addSche.setText(listDayText[0] + "일\n일정\n추가");
+                addSche.setText(listDayText[0] + "일\n일정 추가");
                 map = item.getMap();
             }
         });
@@ -142,6 +146,7 @@ public class FmCalendar extends Fragment{
         final Button submit = (Button) dialogView.findViewById(R.id.buttonSubmit);
         final TextView textDate = (TextView) dialogView.findViewById(R.id.textViewDate);
         final EditText editTextSche = (EditText) dialogView.findViewById(R.id.editTextSchedule);
+        final CheckBox boolean_public = (CheckBox) dialogView.findViewById(R.id.boolean_public);
 
         textDate.setText(trimDate); //텍스트 날짜 설정
 
@@ -153,7 +158,8 @@ public class FmCalendar extends Fragment{
                 if(!TextUtils.isEmpty(strSche)) {
                     if (strSche.length() > 1) {
                         if (GetWhatKindOfNetwork.check(getActivity())) {
-                            String[] list = {"http://wooserver.iptime.org/daykey/schedule/save", strSche};
+                            int check_public = boolean_public.isChecked() ? 1 : 0;
+                            String[] list = {"http://wooserver.iptime.org/daykey/schedule/save", strSche, set.getString("email"), String.valueOf(check_public)};
                             HttpAsyncTask httpAsyncTask = new HttpAsyncTask();
                             httpAsyncTask.execute(list);
                             Toast.makeText(getActivity(), "[" + strSche + "]" + " 일정이 추가되었습니다.", Toast.LENGTH_SHORT).show();
@@ -167,7 +173,6 @@ public class FmCalendar extends Fragment{
                 } else {
                     Toast.makeText(getActivity(), "일정을 입력해 주세요.", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
         dialog.show();
@@ -286,6 +291,8 @@ public class FmCalendar extends Fragment{
             scheduleModel.setMonth(dateList[1]);
             scheduleModel.setDate(dateList[2]);
             scheduleModel.setSche(urls[1]);
+            scheduleModel.setEmail(urls[2]);
+            scheduleModel.setBoolean_public(Byte.valueOf(urls[3]));
 
             return post(urls[0], scheduleModel);
         }
@@ -316,6 +323,8 @@ public class FmCalendar extends Fragment{
             jsonObject.accumulate("month", scheduleModel.getMonth());
             jsonObject.accumulate("date", scheduleModel.getDate());
             jsonObject.accumulate("sche", scheduleModel.getSche());
+            jsonObject.accumulate("email", scheduleModel.getEmail());
+            jsonObject.accumulate("boolean_public", scheduleModel.getBoolean_public());
 
             // convert JSONObject to JSON to String
             json = jsonObject.toString();

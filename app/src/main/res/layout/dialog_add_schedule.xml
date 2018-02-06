@@ -57,9 +57,21 @@
 
     <Button
         android:id="@+id/buttonSubmit"
-        android:layout_width="100dp"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/editTextSchedule"
         android:text="확인" />
+
+    <CheckBox
+        android:id="@+id/boolean_public"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/buttonSubmit"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/editTextSchedule"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="전체 공개일정"
+        android:textSize="24dp" />
+
 </RelativeLayout>

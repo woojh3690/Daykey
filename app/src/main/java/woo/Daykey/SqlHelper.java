@@ -18,7 +18,7 @@ class SqlHelper extends SQLiteOpenHelper {
             String create1 = "create table " + "dietTable " + "(date INTEGER, menu text);";
             String create2 = "create table " + "calendarTable " + "(date text, schedule text);";
             String create3 = "create table " + "timetable " + "(grade integer, week text, class integer, first text, second text, third text, fourth text, fifth text, sixth text, seventh text)";
-            String create4 = "create table " + "userTable" + "(num integer, name text, grade integer, class integer, date text, schedule text)";
+            String create4 = "create table " + "userTable" + "(num integer, name text, grade integer, class integer, date text, schedule text, boolean_public integer)";
             db.execSQL(create1);
             db.execSQL(create2);
             db.execSQL(create3);

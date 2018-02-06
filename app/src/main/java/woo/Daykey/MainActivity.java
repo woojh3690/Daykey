@@ -375,6 +375,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void dietSave() {
         showProgressDialog();
 
+        set.saveBoolean("diet", false);
+
         String sql = "drop table if exists " + "dietTable";
         String create1 = "create table " + "dietTable " + "(date INTEGER, menu text);";
         try {
