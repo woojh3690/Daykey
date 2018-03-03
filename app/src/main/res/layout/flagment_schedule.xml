@@ -95,14 +95,25 @@
             android:layout_height="0dp"
             android:orientation="horizontal"
             android:layout_weight="2.5"
-            android:weightSum="13">
+            android:weightSum="15">
 
-            <TextView
-                android:id="@+id/calendarTextView"
+            <ScrollView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="10"
-                android:textSize="24sp" />
+                android:layout_weight="12">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/calendarTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="24sp" />
+                </LinearLayout>
+            </ScrollView>
 
             <LinearLayout
                 android:layout_width="0dp"
