@@ -129,7 +129,7 @@ public class FmCalendar extends Fragment{
                 MonthItem item = (MonthItem)monthAdapter.getItem(position);
                 String[] listDayText = item.getDayText();
                 trimDate = item.getTrimDay();
-                scheAndName = item.getScheAndName().replace(",", "\n");
+                scheAndName = item.getScheAndName().replace(", ", "\n");
                 calendarTextView.setText(scheAndName);
                 addSche.setText(listDayText[0] + "일\n일정 추가");
                 map = item.getMap();
