@@ -36,6 +36,7 @@ class SettingPreferences{
                 break;
             case "diet":
                 defaultSetting = false;
+                break;
             default:
                 Log.w("Setting getBoolean", "값 불러오기 오류" + "key : " + key);
                 break;

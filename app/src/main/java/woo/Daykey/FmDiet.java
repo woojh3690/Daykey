@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,19 +20,21 @@ public class FmDiet extends Fragment {
     TextView[] weekTvList = new TextView[5];
     ViewPager viewPager;
     DietAdapter dietAdapter;
-    Calendar mCalendar = Calendar.getInstance();
+    private Calendar mCalendar;
     private int startDay = 1;
     private int jump = 4;
     private int loopTime = 5;
     private int curDay;
-    private int firstDayOfWeek;
+    private int firstDayOfWeek = 0;
     private SQLiteDatabase db;
 
     public FmDiet() {
+        this.mCalendar = Calendar.getInstance();
     }
 
     public FmDiet(SQLiteDatabase db) {
         this.db = db;
+        this.mCalendar = Calendar.getInstance();
     }
 
     @Nullable
@@ -87,12 +90,12 @@ public class FmDiet extends Fragment {
         mCalendar.set(Calendar.DAY_OF_MONTH, 1);
 
         firstDayOfWeek = mCalendar.get(Calendar.DAY_OF_WEEK);
-        //Log.i("firstDayOfWeek : ", ""+ firstDayOfWeek);
         int sumDay = firstDayOfWeek - 1;
 
         //시작하는 요일에따라
         if (firstDayOfWeek == Calendar.SUNDAY) {//일요일이면
             startDay++;
+            firstDayOfWeek = 2;
         } else if (firstDayOfWeek == Calendar.SATURDAY) {//토요일이면
             startDay += 2;
             loopTime = 4;
