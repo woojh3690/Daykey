@@ -1,6 +1,5 @@
 package woo.Daykey;
 
-import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Message;
@@ -22,15 +21,11 @@ import java.net.URL;
 
 class PostDeleteId extends Thread {
     int num;
-    SQLiteDatabase db;
-    Context mainContext;
-    private Handler handler;
+    SQLiteDatabase db = MainActivity.db;
+    private Handler handler = MainActivity.mhandler;
 
-    PostDeleteId(int num, SQLiteDatabase db, Context mainContext, Handler handler) {
+    PostDeleteId(int num) {
         this.num = num;
-        this.db = db;
-        this.mainContext = mainContext;
-        this.handler = handler;
     }
 
     @Override
@@ -107,11 +102,11 @@ class PostDeleteId extends Thread {
     private static String convertInputStreamToString(InputStream inputStream) throws IOException{
         BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
         String line = "";
-        String result = "";
+        StringBuilder result = new StringBuilder();
         while((line = bufferedReader.readLine()) != null)
-            result += line;
+            result.append(line);
 
         inputStream.close();
-        return result;
+        return result.toString();
     }
 }

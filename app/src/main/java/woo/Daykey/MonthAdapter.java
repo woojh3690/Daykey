@@ -21,9 +21,9 @@ class MonthAdapter extends BaseAdapter {
     private int setYear = 1; //보이는 달력 위치에 년도
     private int setMonth = 2; //보이는 달력 위치에 달
 
-    MonthAdapter(Context context, SQLiteDatabase db, int year, int month) {
+    MonthAdapter(Context context, int year, int month) {
         this.mainContext = context;
-        this.db = db;
+        this.db = MainActivity.db;
         this.setYear = year;
         this.setMonth = month;
         this.items = new MonthItem[7 * 6];

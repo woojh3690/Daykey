@@ -336,8 +336,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             homeSave();
             sciSave();
-            ServerScheduleParsing serverScheduleParsing = new ServerScheduleParsing(db);
-            serverScheduleParsing.start();
+            new ServerScheduleParsing(false).start();
         }
     }
 
@@ -453,7 +452,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void changeScheView() {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.frm1, new FmSchedule(mhandler));
+        ft.replace(R.id.frm1, new FmSchedule());
 
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();

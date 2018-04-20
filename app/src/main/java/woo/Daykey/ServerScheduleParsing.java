@@ -15,18 +15,12 @@ import org.json.JSONObject;
  */
 
 class ServerScheduleParsing extends Thread{
-    private SQLiteDatabase db;
-    private Handler handler;
-    private boolean send = false;
+    private SQLiteDatabase db = MainActivity.db;
+    private Handler handler = MainActivity.mhandler;
+    private boolean send;
 
-    ServerScheduleParsing(SQLiteDatabase db) {
-        this.db = db;
-    }
-
-    ServerScheduleParsing(SQLiteDatabase db, Handler handler) {
-        this.db = db;
-        this.handler = handler;
-        this.send = true;
+    ServerScheduleParsing(boolean value) {
+        this.send = value;
     }
 
     @Override
