@@ -1,28 +1,42 @@
 package woo.Daykey;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.google.android.gms.common.internal.Objects;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Vector;
+
+import static woo.Daykey.MainActivity.db;
+
 class SqlHelper extends SQLiteOpenHelper {
+    private final String[] match = {"newsTable", "homeTable", "sciTable"};
+    Context context;
 
     SqlHelper(Context context) {
         super(context, "Database.db", null, 3);
+        this.context = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         try {
-            String create1 = "create table " + "dietTable " + "(date INTEGER, menu text);";
-            String create2 = "create table " + "calendarTable " + "(date text, schedule text);";
-            String create3 = "create table " + "timetable " + "(grade integer, week text, class integer, first text, second text, third text, fourth text, fifth text, sixth text, seventh text)";
-            String create4 = "create table " + "userTable" + "(num integer, name text, grade integer, class integer, date text, schedule text, boolean_public integer)";
-            db.execSQL(create1);
-            db.execSQL(create2);
-            db.execSQL(create3);
-            db.execSQL(create4);
+            db.execSQL("create table " + "dietTable " + "(date INTEGER, menu text);");
+            db.execSQL("create table " + "calendarTable " + "(date text, schedule text);");
+            db.execSQL("create table " + "timetable " + "(grade integer, week text, class integer, first text, second text, third text, fourth text, fifth text, sixth text, seventh text)");
+            db.execSQL("create table " + "userTable" + "(num integer, name text, grade integer, class integer, date text, schedule text, boolean_public integer)");
 
             insertTimeTable(db); //시간표
         } catch(Exception ex) {
@@ -43,6 +57,113 @@ class SqlHelper extends SQLiteOpenHelper {
         }
 
         insertTimeTable(db);
+    }
+
+    public boolean boardParsing(int num) {
+        final String[] matchUrl= {"http://www.daykey.hs.kr/daykey/0701/board/14117",
+                "http://www.daykey.hs.kr/daykey/0601/board/14114", "http://www.daykey.hs.kr/daykey/19516/board/20170"};
+        if (GetWhatKindOfNetwork.check(context)) {
+            try {
+                SQLiteDatabase db = super.getWritableDatabase();
+                db.execSQL("drop table if exists " + String.valueOf(match[num]));
+                db.execSQL("create table " + String.valueOf(match[num]) + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);");
+
+                Thread thread = new BoardParsing(matchUrl[num], num);
+                thread.start();
+                thread.join();
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public String[][] getBoardData(int num) {
+        String[] columns = {"title", "teacherName", "visitors", "date"};
+        String[][] data = new String[10][4];
+        try {
+            SQLiteDatabase db = super.getWritableDatabase();
+            Cursor cursor = db.query(match[num], columns, null, null, null, null, null);
+            int i = 0;
+            while (cursor.moveToNext()) {
+                data[i][0] = cursor.getString(0);
+                data[i][1] = cursor.getString(1);
+                data[i][2] = cursor.getString(2);
+                data[i][3] = cursor.getString(3);
+                i++;
+            }
+            cursor.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return data;
+    }
+
+    private class BoardParsing extends Thread {
+
+        private String strUrl;
+        private int num;
+
+        BoardParsing(String url, int num) {
+            this.strUrl = url;
+            this.num = num;
+        }
+
+        @Override
+        public void run() {
+            super.run();
+            try {
+                Document doc = Jsoup.connect(strUrl).get();
+                Elements table = doc.select("table.wb");
+                table = table.select("tbody");
+                Elements tr = table.select("tr");
+
+                for (int i = 0; i < tr.size(); i++) {
+                    Element elementsTitle = tr.get(i).select("td").get(1);
+                    String title = elementsTitle.text();
+                    String num = tr.get(i).select("td").get(0).text();
+                    if (num.equals("")) {
+                        title = "[공지]"+ title;
+                    }
+
+                    Elements temp = elementsTitle.select("img");
+                    if(temp.size() != 0) {
+                        title += "(new)";
+                    }
+
+                    String teacherName = tr.get(i).select("td").get(2).text();
+                    String numOfVisitors = tr.get(i).select("td").get(3).text();
+                    String date = tr.get(i).select("td").get(4).text();
+                    String tempUrl = elementsTitle.select("a").attr("onclick");
+                    tempUrl = tempUrl.substring(27, 34);
+
+                    insertNewsData(title, teacherName, numOfVisitors, date, tempUrl);
+                }
+                //Log.i("보드 : ", "데이터 : " + table.text());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        //테이블에 공지사항 데이터 쓰기
+        void insertNewsData(String title, String teacherName, String numOfVisitors, String date, String url) {
+            //Log.i("finish 호출됨", title + " / " + teacherName + " / " + numOfVisitors + " / " + date + " / " + tempUrl);
+            try {
+                ContentValues values = new ContentValues();
+                values.put("title", title);
+                values.put("teacherName", teacherName);
+                values.put("visitors", numOfVisitors);
+                values.put("date", date);
+                values.put("url", url);
+                db.insert(match[num], null, values);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     //기본 보충시간표

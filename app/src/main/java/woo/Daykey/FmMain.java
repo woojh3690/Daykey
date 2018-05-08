@@ -16,8 +16,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import static woo.Daykey.MainActivity.db;
 import static woo.Daykey.MainActivity.set;
+import static woo.Daykey.MainActivity.db;
 
 public class FmMain extends Fragment {
 
@@ -33,12 +33,12 @@ public class FmMain extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.flagment_main, container, false);
-        timer = (TextView)view.findViewById(R.id.timer);
-        dietViewMain1 = (TextView) view.findViewById(R.id.dietViewMain1);
-        dietViewMain2 = (TextView) view.findViewById(R.id.dietViewMain2);
+        timer = view.findViewById(R.id.timer);
+        dietViewMain1 = view.findViewById(R.id.dietViewMain1);
+        dietViewMain2 = view.findViewById(R.id.dietViewMain2);
         todayMenuPrint();
 
-        TextView mainCalendarView = (TextView) view.findViewById(R.id.mainCalendarView);
+        TextView mainCalendarView = view.findViewById(R.id.mainCalendarView);
         todaySchedulePrint(mainCalendarView);
         return view;
     }

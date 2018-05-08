@@ -61,7 +61,7 @@ public class FmSetting extends PreferenceFragment{
                 boolean switched = (boolean)newValue;
 
                 if (switched) {
-                    alarmBroadcast.Alarm(0);
+                    alarmBroadcast.Alarm();
                     set.saveBoolean("alarm", true);
                     setTime.setEnabled(true);
                     setTime.setShouldDisableView(true);
@@ -79,7 +79,7 @@ public class FmSetting extends PreferenceFragment{
         setTime.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                TimePickerFragment timePickerFragment = new TimePickerFragment(getActivity(), set);
+                TimePickerFragment timePickerFragment = new TimePickerFragment();
                 timePickerFragment.show(getFragmentManager(), "TAG");
                 return true;
             }
@@ -104,17 +104,17 @@ public class FmSetting extends PreferenceFragment{
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 boolean switched = (boolean)newValue;
 
+
                 if (switched) {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            new AddCalendar(getActivity());
+                            new CalendarManager(getActivity()).addSchedule();
                         }
                     }).start();
 
                     set.saveBoolean("calendar", true);
                 } else {
-                    getActivity().getContentResolver().delete (ContentUris.withAppendedId (CalendarContract.Calendars.CONTENT_URI, set.getInt("id")), null, null);
                     Toast.makeText(getActivity(), "일정이 지워졌습니다.", Toast.LENGTH_SHORT).show();
                     set.saveBoolean("calendar", false);
                 }

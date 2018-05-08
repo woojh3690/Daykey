@@ -1,6 +1,5 @@
 package woo.Daykey;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -15,13 +14,14 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import static woo.Daykey.MainActivity.db;
+
 /**
  * 데이터 전송
  */
 
 class PostDeleteId extends Thread {
     int num;
-    SQLiteDatabase db = MainActivity.db;
     private Handler handler = MainActivity.mhandler;
 
     PostDeleteId(int num) {
@@ -34,8 +34,12 @@ class PostDeleteId extends Thread {
         String result = post(num);
         Log.i("Delete Post Result", "기본 "+result);
 
-        String delete = "DELETE FROM userTable WHERE num=" + num + ";";
-        db.execSQL(delete);
+        try {
+            String delete = "DELETE FROM userTable WHERE num=" + num + ";";
+            db.execSQL(delete);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Message message = handler.obtainMessage();
         message.what = 2;

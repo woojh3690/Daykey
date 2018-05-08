@@ -1,12 +1,11 @@
 package woo.Daykey;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -32,15 +31,15 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
+import java.sql.SQLInput;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
-    private static final String TAG = "MainActivityLog";
     private int id;
     static boolean dismiss = false;
     static Handler mhandler;
+    static SqlHelper sqlHelper;
     static SQLiteDatabase db;
     static SettingPreferences set;
     private Context mainContext;
@@ -53,17 +52,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mainContext = getApplicationContext();
-        SqlHelper sqlHelper = new SqlHelper(mainContext);
+        sqlHelper = new SqlHelper(mainContext);
         db = sqlHelper.getReadableDatabase();
         set = new SettingPreferences(mainContext);
         setid();
 
         if(savedInstanceState == null) {
             setHandler();
-            newsSave();//공지사항 가져오기
-            defaultAlarm();//처음 앱을 시작했다면 알람 설정
+            network();//공지사항 가져오기
+            //defaultAlarm();//처음 앱을 시작했다면 알람 설정
             try {
-                Thread.sleep(1000);
+                Thread.sleep(1500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -73,11 +72,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mWebView = (WebView) findViewById(R.id.webview);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        mWebView = findViewById(R.id.webview);
+        toolbar = findViewById(R.id.toolbar);
 
         fuc();//건들지 말것
-        FirebaseMessaging.getInstance().subscribeToTopic("ALL");
 
         if (savedInstanceState != null) {
             // 화면전환 전에 넣어주었던 pointList 를 꺼내서 세팅
@@ -123,8 +121,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (curMonth != set.getInt("db_version")) {
             if (GetWhatKindOfNetwork.check(mainContext)) {
+                FirebaseMessaging.getInstance().subscribeToTopic("ALL");
                 dietSave();
-                getSchedule();
+                new CalendarDataParsing(mainContext).start(); //학사일정 가져오기
                 set.saveBoolean("firstStart", false);
             } else {
                 if(set.getBoolean("firstStart")) {
@@ -137,54 +136,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         } else {
-            //Log.i(TAG, "id값 : " + id);
             changeView();
-        }
-    }
-
-    //처음 앱을 시작하면 알람 설정
-    private void defaultAlarm() {
-        SettingPreferences set = new SettingPreferences(mainContext);
-
-        if (set.getBoolean("alarm")) {
-            Intent intent = new Intent(mainContext, AlarmBroadcastReceive.class);
-            PendingIntent sender = PendingIntent.getBroadcast(mainContext, 0, intent, PendingIntent.FLAG_NO_CREATE);
-
-            if (sender == null) {
-                AlarmBroadcast alarmBroadcast = new AlarmBroadcast(mainContext);
-                alarmBroadcast.Alarm(1);
-            }
-        }
-    }
-
-    //웹뷰 로딩
-    public void loadWebView() {
-        try {
-            mWebView.setWebViewClient(new WebViewClient() {
-                @Override//페이지 로딩이 끝나면 불린다.
-                public void onPageFinished(WebView view, String url) {
-                    super.onPageFinished(view, url);
-
-                    mWebView.loadUrl("javascript:window.HtmlViewer.showHTML('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>');");
-
-                    if (!dismiss) {
-                        mWebView.loadUrl("javascript:chgTab('D')");//석식 로딩
-                    }
-                }
-            });
-            mWebSettings = mWebView.getSettings();
-            mWebSettings.setJavaScriptEnabled(true);
-            mWebView.addJavascriptInterface(new DietParsing(set), "HtmlViewer");
-            mWebView.loadUrl("http://www.daykey.hs.kr/daykey/19152/food");//중식 로딩
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
     }
 
     //back 버튼이 눌렸을때 목록창 닫기
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -207,9 +166,125 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         id = item.getItemId();
         changeView();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    //프로그레스 다이얼 로그
+    private void showProgressDialog() {
+        dialog = new ProgressDialog(this);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setMessage("데이터를 가져오고 있습니다. 잠시만 기다려 주세요");
+        dialog.setCancelable(false);
+
+        dialog.show();
+    }
+
+    //모르는 기능, 건들지 말것
+    private void fuc() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        View header = navigationView.getHeaderView(0);
+
+        if ( (set.getInt("grade") != -1) && (set.getInt("class") != -1)) { //메뉴머리 텍스트 설정
+            name = header.findViewById(R.id.tv_name);
+            grade = header.findViewById(R.id.tv_grade);
+            name.setText(set.getString("name"));
+            grade.setText(set.getInt("grade") + "학년 " + set.getInt("class") + "반");
+        }
+    }
+
+    private void network() {
+        sqlHelper.boardParsing(0);
+        sqlHelper.boardParsing(1);
+        sqlHelper.boardParsing(2);
+        new ServerScheduleParsing(false).start();
+    }
+
+    //식단 저장
+    @SuppressLint("SetJavaScriptEnabled")
+    private void dietSave() {
+        showProgressDialog();
+        try {
+            db.execSQL("drop table if exists " + "dietTable");
+            db.execSQL("create table " + "dietTable " + "(date INTEGER, menu text);");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        set.saveBoolean("diet", false);
+
+        try {
+            mWebView.setWebViewClient(new WebViewClient() {
+                @Override//페이지 로딩이 끝나면 불린다.
+                public void onPageFinished(WebView view, String url) {
+                    super.onPageFinished(view, url);
+
+                    mWebView.loadUrl("javascript:window.HtmlViewer.showHTML('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>');");
+
+                    if (!dismiss) {
+                        mWebView.loadUrl("javascript:chgTab('D')");//석식 로딩
+                    }
+                }
+            });
+            mWebSettings = mWebView.getSettings();
+            mWebSettings.setJavaScriptEnabled(true);
+            mWebView.addJavascriptInterface(new DietParsing(set), "HtmlViewer");
+            mWebView.loadUrl("http://www.daykey.hs.kr/daykey/19152/food");//중식 로딩
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        set.saveBoolean("diet", true);
+    }
+
+    @SuppressLint("HandlerLeak")
+    private void setHandler() {
+        mhandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what) {
+                    case 1:
+                        dialog.dismiss();
+                        changeView();
+                        break;
+                    case 2:
+                        changeScheView();
+                        break;
+                }
+            }
+        };
+    }
+
+    private void getPermission() {
+        PermissionListener permissionListener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                DataCheck();
+            }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                Toast.makeText(mainContext, "권한 거부", Toast.LENGTH_LONG).show();
+                finish();
+            }
+        };
+
+        new TedPermission(mainContext)
+                .setPermissionListener(permissionListener)
+                .setPermissions(Manifest.permission.WRITE_CALENDAR)
+                .check();
     }
 
     public void changeView() {
@@ -269,6 +344,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             toolbar.setTitle("About");
         }
     }
+
     // 메인 화면 보기
     public void viewMain() {
         try {
@@ -285,160 +361,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    //프로그레스 다이얼 로그
-    private void showProgressDialog() {
-        dialog = new ProgressDialog(this);
-        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        dialog.setMessage("데이터를 가져오고 있습니다. 잠시만 기다려 주세요");
-        dialog.setCancelable(false);
-
-        dialog.show();
-    }
-
-    //모르는 기능, 건들지 말것
-    private void fuc() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        View header = navigationView.getHeaderView(0);
-
-        if ( (set.getInt("grade") != -1) && (set.getInt("class") != -1)) { //메뉴머리 텍스트 설정
-            name = (TextView)header.findViewById(R.id.tv_name);
-            grade = (TextView)header.findViewById(R.id.tv_grade);
-            name.setText(set.getString("name"));
-            grade.setText(set.getInt("grade") + "학년 " + set.getInt("class") + "반");
-        }
-    }
-
-    //뉴스 저장
-    private void newsSave() {
-        if (GetWhatKindOfNetwork.check(mainContext)) {
-            String sql = "drop table if exists " + "newsTable";
-            String create3 = "create table " + "newsTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
-            try {
-                db.execSQL(sql);
-                db.execSQL(create3);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-            Thread thread = new BoardParsing(db, "http://www.daykey.hs.kr/daykey/0701/board/14117", 1);
-            thread.start();
-
-            homeSave();
-            sciSave();
-            new ServerScheduleParsing(false).start();
-        }
-    }
-
-    //가정통신문 저장
-    private void homeSave() {
-        String sql = "drop table if exists " + "homeTable";
-        String create3 = "create table " + "homeTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
-        try {
-            db.execSQL(sql);
-            db.execSQL(create3);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        Thread thread = new BoardParsing(db, "http://www.daykey.hs.kr/daykey/0601/board/14114", 2);
-        thread.start();
-    }
-
-    //과학중점 저장
-    private void sciSave() {
-        String sql = "drop table if exists " + "sciTable";
-        String create3 = "create table " + "sciTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
-        try {
-            db.execSQL(sql);
-            db.execSQL(create3);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        Thread thread = new BoardParsing(db, "http://www.daykey.hs.kr/daykey/19516/board/20170", 3);
-        thread.start();
-    }
-
-    //식단 저장
-    private void dietSave() {
-        showProgressDialog();
-
-        set.saveBoolean("diet", false);
-
-        String sql = "drop table if exists " + "dietTable";
-        String create1 = "create table " + "dietTable " + "(date INTEGER, menu text);";
-        try {
-            db.execSQL(sql);
-            db.execSQL(create1);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        loadWebView();
-
-        set.saveBoolean("diet", true);
-    }
-
-    //일정 저장
-    private void getSchedule() {
-        CalendarDataParsing calendarDataParsing = new CalendarDataParsing();
-        calendarDataParsing.setSqlHelper(db, mainContext);
-        calendarDataParsing.start();
-    }
-
-    private void setHandler() {
-        mhandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                switch (msg.what) {
-                    case 1:
-                        dialog.dismiss();
-                        changeView();
-                        break;
-                    case 2:
-                        changeScheView();
-                        break;
-                }
-            }
-        };
-    }
-
-    private void getPermission() {
-        PermissionListener permissionListener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-                DataCheck();
-            }
-
-            @Override
-            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                Toast.makeText(mainContext, "권한 거부", Toast.LENGTH_LONG).show();
-                finish();
-            }
-        };
-
-        new TedPermission(mainContext)
-                .setPermissionListener(permissionListener)
-                .setPermissions(Manifest.permission.WRITE_CALENDAR)
-                .check();
-    }
-
     private void changeDietView() {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.frm1, new FmDiet(db));
+        ft.replace(R.id.frm1, new FmDiet());
 
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();

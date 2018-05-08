@@ -8,9 +8,9 @@ import android.webkit.JavascriptInterface;
 
 import java.util.Calendar;
 
-import static woo.Daykey.MainActivity.db;
 import static woo.Daykey.MainActivity.dismiss;
 import static woo.Daykey.MainActivity.mhandler;
+import static woo.Daykey.MainActivity.db;
 
 class DietParsing{
     private static final String TAG = "DietParsing";

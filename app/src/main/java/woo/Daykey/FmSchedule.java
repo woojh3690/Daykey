@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,8 +41,8 @@ import java.util.List;
 import static woo.Daykey.FmCalendar.map;
 import static woo.Daykey.FmCalendar.scheAndName;
 import static woo.Daykey.FmCalendar.trimDate;
-import static woo.Daykey.MainActivity.db;
 import static woo.Daykey.MainActivity.set;
+import static woo.Daykey.MainActivity.db;
 
 public class FmSchedule extends Fragment {
     CalendarAdapter calendarAdapter;
@@ -62,11 +63,11 @@ public class FmSchedule extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.flagment_schedule, container, false);
-        viewPager = (ViewPager) view.findViewById(R.id.viewPager);
-        monthText = (TextView) view.findViewById(R.id.monthText);
-        calendarTextView = (TextView)view.findViewById(R.id.calendarTextView);
-        addSche = (Button)view.findViewById(R.id.add_schedule);
-        deleteSche = (Button)view.findViewById(R.id.delete_schedule);
+        viewPager = view.findViewById(R.id.viewPager);
+        monthText = view.findViewById(R.id.monthText);
+        calendarTextView = view.findViewById(R.id.calendarTextView);
+        addSche = view.findViewById(R.id.add_schedule);
+        deleteSche = view.findViewById(R.id.delete_schedule);
         buttonInit();
         monthText.setText(calendar.get(Calendar.YEAR) + "년 " + (calendar.get(Calendar.MONTH) + 1) + "월");
         activity = getActivity();
@@ -172,16 +173,28 @@ public class FmSchedule extends Fragment {
     }
 
     public void addFmCalendar() {
-        fragList[1] = new FmCalendar(calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH));//현재달
+        FmCalendar fmCalendar = new FmCalendar();
+        Bundle args = new Bundle();
+        args.putInt("year", calendar.get(Calendar.YEAR));
+        args.putInt("month", calendar.get(Calendar.MONTH));
+        fmCalendar.setArguments(args);
+        fragList[1] = fmCalendar;//현재달
 
         calendar.add(Calendar.MONTH, -1);
-        fragList[0] = new FmCalendar(calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH));//이전달
+        fmCalendar = new FmCalendar();
+        args = new Bundle();
+        args.putInt("year", calendar.get(Calendar.YEAR));
+        args.putInt("month", calendar.get(Calendar.MONTH));
+        fmCalendar.setArguments(args);
+        fragList[0] = fmCalendar;//이전달
 
         calendar.add(Calendar.MONTH, 2);
-        fragList[2] = new FmCalendar(calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH));//다음달
+        fmCalendar = new FmCalendar();
+        args = new Bundle();
+        args.putInt("year", calendar.get(Calendar.YEAR));
+        args.putInt("month", calendar.get(Calendar.MONTH));
+        fmCalendar.setArguments(args);
+        fragList[2] = fmCalendar;//다음달
     }
 
     private void addDialogShow() {
@@ -189,10 +202,10 @@ public class FmSchedule extends Fragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_add_schedule, null);
         builder.setView(dialogView);
-        final Button submit = (Button) dialogView.findViewById(R.id.buttonSubmit);
-        final TextView textDate = (TextView) dialogView.findViewById(R.id.textViewDate);
-        final EditText editTextSche = (EditText) dialogView.findViewById(R.id.editTextSchedule);
-        final CheckBox boolean_public = (CheckBox) dialogView.findViewById(R.id.boolean_public);
+        final Button submit = dialogView.findViewById(R.id.buttonSubmit);
+        final TextView textDate = dialogView.findViewById(R.id.textViewDate);
+        final EditText editTextSche = dialogView.findViewById(R.id.editTextSchedule);
+        final CheckBox boolean_public = dialogView.findViewById(R.id.boolean_public);
 
         textDate.setText(trimDate); //텍스트 날짜 설정
 
@@ -409,5 +422,9 @@ public class FmSchedule extends Fragment {
                     }
                 });
         builder.show();
+    }
+
+    public void setCalenarTextView(String strSche) {
+        calendarTextView.setText(strSche);
     }
 }

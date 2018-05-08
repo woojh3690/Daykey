@@ -20,7 +20,7 @@ class AlarmBroadcast {
         this.mainContext = context;
     }
 
-    void Alarm(int check) {
+    void Alarm() {
         try {
             AlarmManager am = (AlarmManager) mainContext.getSystemService(Context.ALARM_SERVICE);//알람서비스를 가져오기
             Intent intent = new Intent(mainContext, AlarmBroadcastReceive.class);//i알람이 발생했을 경우, AlarmBroadcastReceive에게 방송
@@ -28,10 +28,8 @@ class AlarmBroadcast {
 
             Calendar calendar = Calendar.getInstance();
 
-            if (check == 1) {
-                setNextDay();
-                calendar.add(Calendar.DATE, nextDay);
-            }
+            setNextDay();
+            calendar.add(Calendar.DATE, nextDay);
 
             SettingPreferences set = new SettingPreferences(mainContext);
 

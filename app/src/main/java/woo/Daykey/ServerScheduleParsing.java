@@ -2,7 +2,6 @@ package woo.Daykey;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteAbortException;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Message;
 
@@ -10,12 +9,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static woo.Daykey.MainActivity.db;
+
 /**
  * 서버에 있는 스케줄 json으로 파싱하고 데이터 베이스에 넣기
  */
 
 class ServerScheduleParsing extends Thread{
-    private SQLiteDatabase db = MainActivity.db;
     private Handler handler = MainActivity.mhandler;
     private boolean send;
 

@@ -23,7 +23,7 @@ class SettingPreferences{
         Boolean defaultSetting = false;
         switch (key) {
             case "alarm":
-                defaultSetting = true;
+                defaultSetting = false;
                 break;
             case "calendar":
                 defaultSetting = true;

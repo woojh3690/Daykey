@@ -10,20 +10,20 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
+import static woo.Daykey.MainActivity.sqlHelper;
+
 class MonthAdapter extends BaseAdapter {
     private Context mainContext;
-    private SQLiteDatabase db;
     private Calendar mCalendar;
 
     private MonthItem[] items;
     private int firstDay; //1일의 요일
     private int lastDay; //마직막 일
-    private int setYear = 1; //보이는 달력 위치에 년도
-    private int setMonth = 2; //보이는 달력 위치에 달
+    private int setYear; //보이는 달력 위치에 년도
+    private int setMonth; //보이는 달력 위치에 달
 
     MonthAdapter(Context context, int year, int month) {
         this.mainContext = context;
-        this.db = MainActivity.db;
         this.setYear = year;
         this.setMonth = month;
         this.items = new MonthItem[7 * 6];
@@ -43,7 +43,7 @@ class MonthAdapter extends BaseAdapter {
                 dayNumber = 0;
             }
 
-            items[i] = new MonthItem(dayNumber, setYear + "/" + fromChange(setMonth + 1) + "/" + fromChange(dayNumber), db);
+            items[i] = new MonthItem(dayNumber, setYear + "/" + fromChange(setMonth + 1) + "/" + fromChange(dayNumber));
         }
     }
 

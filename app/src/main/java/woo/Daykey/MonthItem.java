@@ -1,15 +1,14 @@
 package woo.Daykey;
 
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 import java.util.HashMap;
 
 import static woo.Daykey.MainActivity.set;
+import static woo.Daykey.MainActivity.db;
 
 class MonthItem {
     String dayText = "";//요일 + 일정 텍스트 변수
-    private SQLiteDatabase db;
     private int day;
     private String trimDay;
     private String schoolSche;
@@ -19,11 +18,9 @@ class MonthItem {
     private String sche;
     private String scheAndName;
 
-    MonthItem(int day, String trimDay, SQLiteDatabase db) {
+    MonthItem(int day, String trimDay) {
         this.day = day;
         this.trimDay = trimDay;
-        this.db = db;
-
         init();
     }
 

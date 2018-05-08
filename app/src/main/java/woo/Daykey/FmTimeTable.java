@@ -2,6 +2,7 @@ package woo.Daykey;
 
 import android.app.Fragment;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -29,7 +30,7 @@ public class FmTimeTable extends Fragment {
         for(int i = 0; i < 35; i++) {
             String resName = "timetable_tv_" + (i + 1);
             int id = getResources().getIdentifier(resName, "id", packageName);
-            textViews[i] = (TextView)view.findViewById(id);
+            textViews[i] = view.findViewById(id);
         }
         setProfile();
 
@@ -42,19 +43,23 @@ public class FmTimeTable extends Fragment {
     }
 
     void setTextViews() { //textview 설정
-        String[] columns = {"first", "second", "third", "fourth", "fifth", "sixth", "seventh"};
-        String where = "grade = ? and class = ?";
-        String[] select = {String.valueOf(grade), String.valueOf(aClass)};
-        Cursor cursor = db.query("timetable", columns, where, select, null, null, null);
+        try {
+            String[] columns = {"first", "second", "third", "fourth", "fifth", "sixth", "seventh"};
+            String where = "grade = ? and class = ?";
+            String[] select = {String.valueOf(grade), String.valueOf(aClass)};
+            Cursor cursor = db.query("timetable", columns, where, select, null, null, null);
 
-        int temp = 0;
-        while(cursor.moveToNext()) {
-            for (int i = 0; i < 7; i++) {
-                textViews[temp].setText(cursor.getString(i));
-                temp++;
+            int temp = 0;
+            while(cursor.moveToNext()) {
+                for (int i = 0; i < 7; i++) {
+                    textViews[temp].setText(cursor.getString(i));
+                    temp++;
+                }
             }
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        cursor.close();
     }
 
     void setProfile() {

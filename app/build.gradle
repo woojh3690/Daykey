@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "woo.daykey"
         minSdkVersion 19
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 29
         versionName "1.7.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -31,16 +31,17 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    compile 'com.android.support:appcompat-v7:25.4.0'
-    compile 'com.android.support:design:25.4.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:support-v4:25.4.0'
-    compile 'com.android.support:support-v13:25.4.0'
-    compile 'gun0912.ted:tedpermission:1.0.2'
-    compile 'com.google.firebase:firebase-messaging:11.8.0'
-    compile 'org.apache.commons:commons-lang3:3.6'
-    compile 'org.jsoup:jsoup:1.7.3'
-    testCompile 'junit:junit:4.12'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:design:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'com.android.support:support-v4:26.1.0'
+    implementation 'com.android.support:support-v13:26.1.0'
+    implementation 'gun0912.ted:tedpermission:1.0.2'
+    implementation 'com.google.firebase:firebase-messaging:15.0.2'
+    implementation 'org.apache.commons:commons-lang3:3.6'
+    implementation 'org.jsoup:jsoup:1.7.3'
+    implementation 'com.pes.materialcolorpicker:library:1.2.0'
+    testImplementation 'junit:junit:4.12'
 }
 
 apply plugin: 'com.google.gms.google-services'

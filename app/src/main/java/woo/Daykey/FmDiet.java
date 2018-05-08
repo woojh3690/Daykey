@@ -26,14 +26,8 @@ public class FmDiet extends Fragment {
     private int loopTime = 5;
     private int curDay;
     private int firstDayOfWeek = 0;
-    private SQLiteDatabase db;
 
     public FmDiet() {
-        this.mCalendar = Calendar.getInstance();
-    }
-
-    public FmDiet(SQLiteDatabase db) {
-        this.db = db;
         this.mCalendar = Calendar.getInstance();
     }
 
@@ -70,17 +64,36 @@ public class FmDiet extends Fragment {
 
     private void setAdapter() {
         int i;
-        dietAdapter.setFlagList(0, new FmChidedDiet(db, firstDayOfWeek, startDay, startDay + jump));
+        FmChidedDiet fmChidedDiet = new FmChidedDiet();
+        Bundle args = new Bundle();
+        args.putInt("firstWeek", firstDayOfWeek - 2);
+        args.putInt("start", startDay);
+        args.putInt("finish", startDay + jump);
+        fmChidedDiet.setArguments(args);
+        dietAdapter.setFlagList(0, fmChidedDiet);
+
         startDay = startDay + jump + 3;
         jump = 4;
 
         for (i = 1; i < loopTime; i++) {
-            dietAdapter.setFlagList(i, new FmChidedDiet(db, startDay, startDay + jump));
+            fmChidedDiet = new FmChidedDiet();
+            args = new Bundle();
+            args.putInt("firstWeek", 0);
+            args.putInt("start",  startDay);
+            args.putInt("finish", startDay + jump);
+            fmChidedDiet.setArguments(args);
+            dietAdapter.setFlagList(i, fmChidedDiet);
             startDay += 7;
         }
 
         if (loopTime == 4) {
-            dietAdapter.setFlagList(i, new FmChidedDiet(db, startDay, startDay));
+            fmChidedDiet = new FmChidedDiet();
+            args = new Bundle();
+            args.putInt("firstWeek", 0);
+            args.putInt("start",  startDay);
+            args.putInt("finish", startDay);
+            fmChidedDiet.setArguments(args);
+            dietAdapter.setFlagList(i, fmChidedDiet);
         }
     }
 

@@ -1,46 +1,21 @@
 package woo.Daykey;
 
-import android.app.AlertDialog;
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 
 import static woo.Daykey.FmSchedule.addSche;
 import static woo.Daykey.FmSchedule.calendarTextView;
-import static woo.Daykey.MainActivity.db;
-import static woo.Daykey.MainActivity.set;
 
 /**
  * 달력
@@ -53,31 +28,36 @@ public class FmCalendar extends Fragment{
     static HashMap<String, Integer> map;
     static String scheAndName = null;
     static String trimDate = null;
+    FmSchedule fmSchedule;
 
     public FmCalendar() {
-        //init();
     }
 
-    FmCalendar(int year, int month) {
-        this.year = year;
-        this.month = month;
-        //init();
-    }
-
-//    private void init() {
-//        LayoutInflater inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        assert inflater != null;
-//        View view = inflater.inflate(R.layout.flagment_schedule, null);
-//        this.calendarTextView = (TextView)view.findViewById(R.id.calendarTextView);
-//        this.addSche = (Button)view.findViewById(R.id.add_schedule);
-//        this.deleteSche = (Button)view.findViewById(R.id.delete_schedule);
+//    @Override
+//    public void onAttach(Context context) {
+//
+//        super.onAttach(context);
+//        MainActivity mainActivity;
+//
+//        if (context instanceof Activity) {
+//            Log.i("액티비티 확인 : ", " ㅇㅇ");
+//            mainActivity = (MainActivity) context;
+//            fmSchedule = (FmSchedule)mainActivity.getFragmentManager().findFragmentById(R.id.schedule);
+//        }
 //    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        year = getArguments().getInt("year");
+        month = getArguments().getInt("month");
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.flagment_calendar, container, false);
-        GridView monthView = (GridView) view.findViewById(R.id.monthView);
+        GridView monthView = view.findViewById(R.id.monthView);
         monthAdapter = new MonthAdapter(view.getContext(), year, month);
 
         monthView.setAdapter(monthAdapter);

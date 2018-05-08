@@ -1,5 +1,6 @@
 package woo.Daykey;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -15,10 +16,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import static woo.Daykey.MainActivity.sqlHelper;
 import static woo.Daykey.MainActivity.db;
 
 public class FmScience extends Fragment {
@@ -26,23 +27,17 @@ public class FmScience extends Fragment {
     private Context newsContext;
     private ListView listView;
 
-    private String title;
-    private String teacherName;
-    private String visitors;
-    private String date;
-
     public FmScience() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.flagment_science, container, false);
-        swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh_wrapper_sci);
-        listView = (ListView)view.findViewById(R.id.sci_ListView);
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_wrapper_sci);
+        listView = view.findViewById(R.id.sci_ListView);
         newsContext = view.getContext();
 
         new setAdaptor().execute(Boolean.FALSE); //리스트뷰에 아이템 넣기
-
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -61,10 +56,12 @@ public class FmScience extends Fragment {
                 String[] columns = {"url"};
                 String where = " _id = ?";
                 String[] at = { String.valueOf(position + 1) };
-                try (Cursor cursor = db.query("sciTable", columns, where, at, null, null, null)) {
+                try {
+                    Cursor cursor = db.query("sciTable", columns, where, at, null, null, null);
                     while (cursor.moveToNext()) {
                         url = cursor.getString(0);
                     }
+                    cursor.close();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -77,19 +74,15 @@ public class FmScience extends Fragment {
         return view;
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class setAdaptor extends AsyncTask<Boolean, Void, NewsAdapter> {
-        boolean toast = false;
+        boolean toast = true;
 
         @Override
         protected NewsAdapter doInBackground(Boolean... params) {
-            if (params[0]) {
-                newsSave();
-            }
-
             NewsAdapter newsAdapter = new NewsAdapter();
-            for (int i = 1; i < 11; i++) {
-                getNews(i);
-                newsAdapter.addItem(new NewsItem(title, teacherName, visitors, date));
+            if (params[0]) {
+                toast = sqlHelper.boardParsing(2);
             }
             return newsAdapter;
         }
@@ -97,52 +90,13 @@ public class FmScience extends Fragment {
         @Override
         protected void onPostExecute(NewsAdapter newsAdapter) {
             if (toast) {
-                Toast.makeText(newsContext, "네트워크에 연결해 주세요.", Toast.LENGTH_SHORT).show();
-            } else {
+                String[][] data = sqlHelper.getBoardData(2);
+                for (int i = 0; i < 10; i++) {
+                    newsAdapter.addItem(new NewsItem(data[i][0], data[i][1], data[i][2], data[i][3]));
+                }
                 listView.setAdapter(newsAdapter);
             }
             swipeRefreshLayout.setRefreshing(false);
-        }
-
-        void newsSave() {
-            if (GetWhatKindOfNetwork.check(getActivity())) {
-                final String sql = "drop table if exists " + "sciTable";
-                final String create3 = "create table " + "sciTable " + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title text, teacherName text, visitors text, date text, url text);";
-
-                try {
-                    db.execSQL(sql);
-                    db.execSQL(create3);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                Thread thread = new BoardParsing(db, "http://www.daykey.hs.kr/daykey/19516/board/20170", 3);
-                thread.start();
-
-                try {
-                    thread.join();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            } else {
-                toast = true;
-            }
-        }
-
-        private void getNews(int position) {
-            String[] columns = {"title", "teacherName", "visitors", "date"};
-            String where = " _id = ?";
-            String[] at = { String.valueOf(position) };
-            try (Cursor cursor = db.query("sciTable", columns, where, at, null, null, null)) {
-                while (cursor.moveToNext()) {
-                    title = cursor.getString(0);
-                    teacherName = cursor.getString(1);
-                    visitors = cursor.getString(2);
-                    date = cursor.getString(3);
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
         }
     }
 

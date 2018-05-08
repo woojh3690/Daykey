@@ -13,8 +13,9 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.Map;
 
+import static woo.Daykey.MainActivity.db;
+
 public class FmChidedDiet extends Fragment{
-    private SQLiteDatabase db;
     private int[] idArray = {R.id.dietText1, R.id.dietText2, R.id.dietText3, R.id.dietText4, R.id.dietText5, R.id.dietText6, R.id.dietText7, R.id.dietText8, R.id.dietText9, R.id.dietText10};
     private TextView[] tvArray = new TextView[10];
     private int start;
@@ -27,17 +28,23 @@ public class FmChidedDiet extends Fragment{
     public FmChidedDiet() {
     }
 
-    public FmChidedDiet(SQLiteDatabase db, int start, int finish) {
-        this.db = db;
-        this.start = start;
-        this.finish = finish;
-    }
+//    public FmChidedDiet(int start, int finish) {
+//        this.start = start;
+//        this.finish = finish;
+//    }
+//
+//    public FmChidedDiet(int firstWeek, int start, int finish) {
+//        this.firstWeek = firstWeek - 2;
+//        this.start = start;
+//        this.finish = finish;
+//    }
 
-    public FmChidedDiet(SQLiteDatabase db, int firstWeek, int start, int finish) {
-        this.db = db;
-        this.start = start;
-        this.finish = finish;
-        this.firstWeek = firstWeek - 2;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.firstWeek = getArguments().getInt("firstWeek");
+        this.start = getArguments().getInt("start");
+        this.finish = getArguments().getInt("finish");
     }
 
     @Nullable
@@ -73,7 +80,7 @@ public class FmChidedDiet extends Fragment{
 
     private void reset(View view) {
         for (int i = 0; i < tvArray.length; i++) {
-            tvArray[i] = (TextView)view.findViewById(idArray[i]);//tvArray[]초기화
+            tvArray[i] = view.findViewById(idArray[i]);//tvArray[]초기화
         }
         int i = 0;
 

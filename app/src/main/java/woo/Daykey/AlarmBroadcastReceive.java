@@ -44,7 +44,7 @@ public class AlarmBroadcastReceive extends BroadcastReceiver {
             pushNotification.send(TAG, "오늘의 메뉴!", message.split("\\r?\\n")[0], Notification.PRIORITY_DEFAULT, "main", style);
 
             AlarmBroadcast alarmBroadcast = new AlarmBroadcast(context);
-            alarmBroadcast.Alarm(1);
+            alarmBroadcast.Alarm();
         } catch (Exception e) {
             e.printStackTrace();
         }
