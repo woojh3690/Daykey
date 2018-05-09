@@ -1,25 +1,24 @@
 package woo.Daykey;
 
-import android.content.ContentUris;
-import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
+import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
+
 import static java.lang.Integer.parseInt;
 import static woo.Daykey.MainActivity.set;
 
-public class FmSetting extends PreferenceFragment{
+public class FmSetting extends PreferenceFragment implements ColorPickerCallback {
     String strVersion;
     View view;
 
@@ -59,19 +58,13 @@ public class FmSetting extends PreferenceFragment{
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 AlarmBroadcast alarmBroadcast = new AlarmBroadcast(getActivity());
                 boolean switched = (boolean)newValue;
-
                 if (switched) {
                     alarmBroadcast.Alarm();
                     set.saveBoolean("alarm", true);
-                    setTime.setEnabled(true);
-                    setTime.setShouldDisableView(true);
                 } else {
                     alarmBroadcast.cancelAlarm();
                     set.saveBoolean("alarm", false);
-                    setTime.setEnabled(false);
-                    setTime.setShouldDisableView(false);
                 }
-
                 return true;
             }
         });
@@ -89,7 +82,6 @@ public class FmSetting extends PreferenceFragment{
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 boolean switched = (boolean)newValue;
-
                 if (switched) {
                     set.saveBoolean("timer", true);
                 } else {
@@ -104,6 +96,14 @@ public class FmSetting extends PreferenceFragment{
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 boolean switched = (boolean)newValue;
 
+                final ColorPicker colorPicker = new ColorPicker(
+                        getActivity(), // Context
+                        255, // Default Alpha value
+                        127, // Default Red value
+                        123, // Default Green value
+                        67 // Default Blue value
+                );
+                //colorPicker.enableAutoClose();
 
                 if (switched) {
                     new Thread(new Runnable() {
@@ -112,13 +112,11 @@ public class FmSetting extends PreferenceFragment{
                             new CalendarManager(getActivity()).addSchedule();
                         }
                     }).start();
-
                     set.saveBoolean("calendar", true);
                 } else {
                     Toast.makeText(getActivity(), "일정이 지워졌습니다.", Toast.LENGTH_SHORT).show();
                     set.saveBoolean("calendar", false);
                 }
-
                 return true;
             }
         });
@@ -134,7 +132,6 @@ public class FmSetting extends PreferenceFragment{
                 } else {
                     Toast.makeText(getActivity(), "이름을 입력해 주세요", Toast.LENGTH_SHORT).show();
                 }
-
                 return true;
             }
         });
@@ -143,7 +140,6 @@ public class FmSetting extends PreferenceFragment{
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 String temp = (String)newValue;
-
                 try {
                     int intGrade = parseInt(temp);
                     set.saveInt("grade", intGrade);
@@ -151,7 +147,6 @@ public class FmSetting extends PreferenceFragment{
                 } catch (Exception e) {
                     grade.setSummary(" ");
                 }
-
                 return true;
             }
         });
@@ -160,7 +155,6 @@ public class FmSetting extends PreferenceFragment{
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 String temp = (String)newValue;
-
                 try {
                     int intClass = Integer.parseInt(temp);
                     set.saveInt("class", intClass);
@@ -168,7 +162,6 @@ public class FmSetting extends PreferenceFragment{
                 } catch (Exception e) {
                     aClass.setSummary(" ");
                 }
-
                 return true;
             }
         });
@@ -187,21 +180,17 @@ public class FmSetting extends PreferenceFragment{
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 try {
-
                     String password = (String)newValue;
                     if(!password.equals("")) {
-
                         if(password.length() < 4) {
                             Toast.makeText(getActivity(), "비밀번호는 4자리 이상 입력해야 합니다.", Toast.LENGTH_SHORT).show();
                             return false;
                         } else {
                             set.saveInt("password", parseInt(password.trim()));
                         }
-
                     } else {
                         Toast.makeText(getActivity(), "값을 입력해 주세요", Toast.LENGTH_SHORT).show();
                     }
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -233,7 +222,11 @@ public class FmSetting extends PreferenceFragment{
         if (!(intClass == -1)) {
             aClass.setSummary(intClass + "반");
         }
-
         version.setSummary(strVersion);
+    }
+
+    @Override
+    public void onColorChosen(int color) {
+
     }
 }

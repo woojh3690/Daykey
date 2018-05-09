@@ -35,8 +35,7 @@ class PostDeleteId extends Thread {
         Log.i("Delete Post Result", "기본 "+result);
 
         try {
-            String delete = "DELETE FROM userTable WHERE num=" + num + ";";
-            db.execSQL(delete);
+            db.execSQL("DELETE FROM userTable WHERE num=" + num + ";");
         } catch (Exception e) {
             e.printStackTrace();
         }

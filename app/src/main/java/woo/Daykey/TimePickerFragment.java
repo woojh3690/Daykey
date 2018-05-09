@@ -14,16 +14,14 @@ import android.widget.TimePicker;
 
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
     SettingPreferences set;
-    Context mainContext;
 
     public TimePickerFragment() {
-        this.mainContext = getActivity();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.set = new SettingPreferences(mainContext);
+        this.set = new SettingPreferences(getActivity());
     }
 
     @Override
@@ -31,7 +29,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         set.saveInt("hour", hourOfDay);
         set.saveInt("min", minute);
 
-        AlarmBroadcast alarm = new AlarmBroadcast(mainContext);
+        AlarmBroadcast alarm = new AlarmBroadcast(getActivity());
         alarm.Alarm();
     }
 

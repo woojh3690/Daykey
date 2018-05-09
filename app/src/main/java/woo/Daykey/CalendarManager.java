@@ -60,7 +60,9 @@ public class CalendarManager {
     }
 
     public boolean deleteAccount() {
-        context.getContentResolver().delete (ContentUris.withAppendedId (CalendarContract.Calendars.CONTENT_URI, set.getInt("id")), null, null);
+        if (checkAccount()) {
+            context.getContentResolver().delete (ContentUris.withAppendedId (CalendarContract.Calendars.CONTENT_URI, set.getInt("id")), null, null);
+        }
         return true;
     }
 
