@@ -104,6 +104,9 @@ class SettingPreferences{
             case "email":
                 defaultSetting = " ";
                 break;
+            case "color":
+                defaultSetting = "#60caff";
+                break;
             default:
                 Log.w("Setting getString", "값 불러오기 오류"  + "key : " + key);
                 break;

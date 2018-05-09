@@ -7,8 +7,8 @@ android {
         applicationId "woo.daykey"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 29
-        versionName "1.7.4"
+        versionCode 30
+        versionName "1.8.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -40,7 +40,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:15.0.2'
     implementation 'org.apache.commons:commons-lang3:3.6'
     implementation 'org.jsoup:jsoup:1.7.3'
-    implementation 'com.pes.materialcolorpicker:library:1.2.0'
+    implementation 'com.pes.materialcolorpicker:library:1.2.4'
     testImplementation 'junit:junit:4.12'
 }
 

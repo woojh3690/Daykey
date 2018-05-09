@@ -2,11 +2,14 @@ package woo.Daykey;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +21,7 @@ import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
 import static java.lang.Integer.parseInt;
 import static woo.Daykey.MainActivity.set;
 
-public class FmSetting extends PreferenceFragment implements ColorPickerCallback {
+public class FmSetting extends PreferenceFragment {
     String strVersion;
     View view;
 
@@ -61,9 +64,11 @@ public class FmSetting extends PreferenceFragment implements ColorPickerCallback
                 if (switched) {
                     alarmBroadcast.Alarm();
                     set.saveBoolean("alarm", true);
+                    setTime.setEnabled(true);
                 } else {
                     alarmBroadcast.cancelAlarm();
                     set.saveBoolean("alarm", false);
+                    setTime.setEnabled(false);
                 }
                 return true;
             }
@@ -96,26 +101,39 @@ public class FmSetting extends PreferenceFragment implements ColorPickerCallback
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 boolean switched = (boolean)newValue;
 
-                final ColorPicker colorPicker = new ColorPicker(
-                        getActivity(), // Context
-                        255, // Default Alpha value
-                        127, // Default Red value
-                        123, // Default Green value
-                        67 // Default Blue value
-                );
-                //colorPicker.enableAutoClose();
-
                 if (switched) {
-                    new Thread(new Runnable() {
+                    final ColorPicker colorPicker = new ColorPicker(
+                            getActivity(), // Context
+                            255, // Default Alpha value
+                            96, // Default Red value
+                            172, // Default Green value
+                            255 // Default Blue value
+                    );
+                    colorPicker.enableAutoClose();
+                    colorPicker.setCallback(new ColorPickerCallback() {
                         @Override
-                        public void run() {
-                            new CalendarManager(getActivity()).addSchedule();
+                        public void onColorChosen(@ColorInt int color) {
+                            set.saveString("color", String.format("#%08X", (color)));
+                            final CalendarManager calendarManager = new CalendarManager(getActivity());
+                            if (calendarManager.deleteAccount()) {
+                                if (calendarManager.addAccount()) {
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            calendarManager.addSchedule();
+                                        }
+                                    }).start();
+                                }
+                            }
+                            set.saveBoolean("calendar", true);
                         }
-                    }).start();
-                    set.saveBoolean("calendar", true);
+                    });
+                    colorPicker.show();
+                    Toast.makeText(getActivity(), "달력에 표시될 색을 선택해 주세요.", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getActivity(), "일정이 지워졌습니다.", Toast.LENGTH_SHORT).show();
+                    new CalendarManager(getActivity()).deleteAccount();
                     set.saveBoolean("calendar", false);
+                    Toast.makeText(getActivity(), "일정이 지워졌습니다.", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             }
@@ -223,10 +241,5 @@ public class FmSetting extends PreferenceFragment implements ColorPickerCallback
             aClass.setSummary(intClass + "반");
         }
         version.setSummary(strVersion);
-    }
-
-    @Override
-    public void onColorChosen(int color) {
-
     }
 }

@@ -36,7 +36,7 @@ public class CalendarManager {
             cv.put(CalendarContract.Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL);
             cv.put(CalendarContract.Calendars.NAME, "대기고등학교");
             cv.put(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, "학사일정");
-            cv.put(CalendarContract.Calendars.CALENDAR_COLOR, Color.parseColor("#ff44ff"));
+            cv.put(CalendarContract.Calendars.CALENDAR_COLOR, Color.parseColor(set.getString("color")));
             cv.put(CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_OWNER);
             cv.put(CalendarContract.Calendars.OWNER_ACCOUNT, true);
             cv.put(CalendarContract.Calendars.VISIBLE, 1);
