@@ -12,6 +12,7 @@ import java.util.Locale;
 
 import static java.lang.Integer.parseInt;
 import static woo.Daykey.MainActivity.db;
+import static woo.Daykey.MainActivity.set;
 
 class CalendarDataParsing extends Thread{
     private String htmlString;
@@ -37,10 +38,12 @@ class CalendarDataParsing extends Thread{
         getUrlToHTML("http://www.daykey.hs.kr/daykey/0204/schedule?section=1&schdYear=" + year);
         getUrlToHTML("http://www.daykey.hs.kr/daykey/0204/schedule?section=2&schdYear=" + year);
 
-        CalendarManager calendarManager = new CalendarManager(context);
-        if (calendarManager.deleteAccount()) {
-            if (calendarManager.addAccount()) {
-                calendarManager.addSchedule();
+        if (set.getBoolean("calendar")) {
+            CalendarManager calendarManager = new CalendarManager(context);
+            if (calendarManager.deleteAccount()) {
+                if (calendarManager.addAccount()) {
+                    calendarManager.addSchedule();
+                }
             }
         }
     }

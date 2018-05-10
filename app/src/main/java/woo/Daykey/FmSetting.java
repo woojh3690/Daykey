@@ -55,6 +55,7 @@ public class FmSetting extends PreferenceFragment {
         }
 
         setSummary();
+        setTime.setEnabled(set.getBoolean("alarm"));
 
         switchAlarm.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -102,12 +103,13 @@ public class FmSetting extends PreferenceFragment {
                 boolean switched = (boolean)newValue;
 
                 if (switched) {
+                    String strColor = set.getString("color");
                     final ColorPicker colorPicker = new ColorPicker(
                             getActivity(), // Context
-                            255, // Default Alpha value
-                            96, // Default Red value
-                            172, // Default Green value
-                            255 // Default Blue value
+                            Integer.parseInt(strColor.substring(1, 3), 16), // Default Alpha value
+                            Integer.parseInt(strColor.substring(3, 5), 16), // Default Red value
+                            Integer.parseInt(strColor.substring(5, 7), 16), // Default Green value
+                            Integer.parseInt(strColor.substring(7, 9), 16) // Default Blue value
                     );
                     colorPicker.enableAutoClose();
                     colorPicker.setCallback(new ColorPickerCallback() {

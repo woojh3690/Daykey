@@ -11,7 +11,7 @@ import android.widget.Toast;
  * 리셋할것인지 안 할 것인지 물어보는 플레그먼트
  */
 
-class ResetFragment extends DialogFragment {
+public class ResetFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

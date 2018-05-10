@@ -31,6 +31,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
+import java.security.Permission;
 import java.sql.SQLInput;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             network();//공지사항 가져오기
             //defaultAlarm();//처음 앱을 시작했다면 알람 설정
             try {
-                Thread.sleep(1500);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -281,9 +282,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
 
-        new TedPermission(mainContext)
+        new TedPermission().with(mainContext)
                 .setPermissionListener(permissionListener)
                 .setPermissions(Manifest.permission.WRITE_CALENDAR)
+                .setPermissions(Manifest.permission.READ_CALENDAR)
                 .check();
     }
 
