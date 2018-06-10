@@ -141,6 +141,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    boolean doubleBackToExitPressedOnce = false;
+
     //back 버튼이 눌렸을때 목록창 닫기
     @Override
     public void onBackPressed() {
@@ -148,7 +150,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (doubleBackToExitPressedOnce) {
+                super.onBackPressed();
+                return;
+            }
+
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "'뒤로' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce=false;
+                }
+            }, 2000);
         }
     }
 
