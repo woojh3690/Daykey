@@ -15,6 +15,8 @@ import android.view.View;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static woo.Daykey.MainActivity.set;
+
 /**
  * intent를 받아서 알람 보여주는 class
  */
@@ -43,8 +45,8 @@ public class AlarmBroadcastReceive extends BroadcastReceiver {
             PushNotification pushNotification = new PushNotification(context);
             pushNotification.send(TAG, "오늘의 메뉴!", message.split("\\r?\\n")[0], Notification.PRIORITY_DEFAULT, "main", style);
 
-            AlarmBroadcast alarmBroadcast = new AlarmBroadcast(context);
-            alarmBroadcast.Alarm();
+//            AlarmBroadcast alarmBroadcast = new AlarmBroadcast(context);
+//            alarmBroadcast.Alarm();
         } catch (Exception e) {
             e.printStackTrace();
         }

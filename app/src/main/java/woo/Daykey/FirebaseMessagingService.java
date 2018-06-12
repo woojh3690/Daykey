@@ -12,14 +12,10 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     public void onMessageReceived(RemoteMessage remoteMessage) {
         String title = remoteMessage.getData().get("title");
 
-        if (title.equals("등록")) {
-            FirebaseMessaging.getInstance().subscribeToTopic("ALL");
-        } else {
-            String message = remoteMessage.getData().get("message");
-            String type = remoteMessage.getData().get("type");
-            PushNotification pushNotification = new PushNotification(getApplicationContext());
-            pushNotification.send(TAG, title, message, Notification.PRIORITY_HIGH, type, null);
-        }
+        String message = remoteMessage.getData().get("message");
+        String type = remoteMessage.getData().get("type");
+        PushNotification pushNotification = new PushNotification(getApplicationContext());
+        pushNotification.send(TAG, title, message, Notification.PRIORITY_HIGH, type, null);
     }
 }
 

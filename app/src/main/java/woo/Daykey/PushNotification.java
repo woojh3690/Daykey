@@ -7,7 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.PowerManager;
+
+import static woo.Daykey.MainActivity.set;
 
 /**
  * 알림을 보냅니다.
@@ -28,7 +31,13 @@ class PushNotification {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        Notification.Builder notificationBuilder = new Notification.Builder(context)
+        Notification.Builder notificationBuilder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationBuilder = new Notification.Builder(context, set.getString("channel"));
+        } else {
+            notificationBuilder = new Notification.Builder(context);
+        }
+        notificationBuilder
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(title)

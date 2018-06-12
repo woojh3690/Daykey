@@ -4,10 +4,14 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,6 +22,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +32,7 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
@@ -123,6 +129,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (curMonth != set.getInt("db_version")) {
             if (GetWhatKindOfNetwork.check(mainContext)) {
                 FirebaseMessaging.getInstance().subscribeToTopic("ALL");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    android.app.NotificationManager notificationManager = (android.app.NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    NotificationChannel channelMessage = new NotificationChannel("channel_id", "channel_name", android.app.NotificationManager.IMPORTANCE_DEFAULT);
+                    channelMessage.setDescription("channel description");
+                    channelMessage.enableLights(true);
+                    channelMessage.setLightColor(Color.GREEN);
+                    channelMessage.enableVibration(true);
+                    channelMessage.setVibrationPattern(new long[]{100, 200, 100, 200});
+                    channelMessage.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+                    notificationManager.createNotificationChannel(channelMessage);
+                    set.saveString("channel", channelMessage.getId());
+                }
+
                 dietSave();
                 new CalendarDataParsing(mainContext).start(); //학사일정 가져오기
                 set.saveBoolean("firstStart", false);
@@ -300,8 +319,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         new TedPermission().with(mainContext)
                 .setPermissionListener(permissionListener)
-                .setPermissions(Manifest.permission.WRITE_CALENDAR)
-                .setPermissions(Manifest.permission.READ_CALENDAR)
+                .setPermissions(Manifest.permission.WRITE_CALENDAR, Manifest.permission.READ_CALENDAR)
                 .check();
     }
 

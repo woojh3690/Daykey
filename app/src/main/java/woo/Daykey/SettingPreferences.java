@@ -107,6 +107,9 @@ class SettingPreferences{
             case "color":
                 defaultSetting = "#ff60caff";
                 break;
+            case "channel":
+                defaultSetting = " ";
+                break;
             default:
                 Log.w("Setting getString", "값 불러오기 오류"  + "key : " + key);
                 break;

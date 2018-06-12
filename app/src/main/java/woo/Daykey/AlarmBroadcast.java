@@ -26,9 +26,9 @@ class AlarmBroadcast {
             Intent intent = new Intent(mainContext, AlarmBroadcastReceive.class);//i알람이 발생했을 경우, AlarmBroadcastReceive에게 방송
             PendingIntent sender = PendingIntent.getBroadcast(mainContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            Calendar calendar = Calendar.getInstance();
+            //setNextDay();
 
-            setNextDay();
+            Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DATE, nextDay);
 
             SettingPreferences set = new SettingPreferences(mainContext);
