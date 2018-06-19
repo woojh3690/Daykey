@@ -1,16 +1,16 @@
 package woo.Daykey;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.PowerManager;
-
-import static woo.Daykey.MainActivity.set;
 
 /**
  * 알림을 보냅니다.
@@ -31,9 +31,25 @@ class PushNotification {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
+        SettingPreferences set = new SettingPreferences(context);
         Notification.Builder notificationBuilder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationBuilder = new Notification.Builder(context, set.getString("channel"));
+            try {
+                notificationBuilder = new Notification.Builder(context, set.getString("channel"));
+            } catch (NullPointerException e) {
+                NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationChannel channelMessage = new NotificationChannel("channel_id", "channel_name", NotificationManager.IMPORTANCE_DEFAULT);
+                channelMessage.setDescription("channel description");
+                channelMessage.enableLights(true);
+                channelMessage.setLightColor(Color.GREEN);
+                channelMessage.enableVibration(true);
+                channelMessage.setVibrationPattern(new long[]{100, 200, 100, 200});
+                channelMessage.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+                notificationManager.createNotificationChannel(channelMessage);
+                String id = channelMessage.getId();
+                set.saveString("channel", id);
+                notificationBuilder = new Notification.Builder(context, id);
+            }
         } else {
             notificationBuilder = new Notification.Builder(context);
         }

@@ -83,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar = findViewById(R.id.toolbar);
 
         fuc();//건들지 말것
-
         if (savedInstanceState != null) {
             // 화면전환 전에 넣어주었던 pointList 를 꺼내서 세팅
             Bundle bundle = savedInstanceState.getBundle("save_data");
@@ -129,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (curMonth != set.getInt("db_version")) {
             if (GetWhatKindOfNetwork.check(mainContext)) {
                 FirebaseMessaging.getInstance().subscribeToTopic("ALL");
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     android.app.NotificationManager notificationManager = (android.app.NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                     NotificationChannel channelMessage = new NotificationChannel("channel_id", "channel_name", android.app.NotificationManager.IMPORTANCE_DEFAULT);
@@ -308,6 +308,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onPermissionGranted() {
                 DataCheck();
+                String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+                Log.i("파이어 : ", refreshedToken);
             }
 
             @Override
