@@ -308,8 +308,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onPermissionGranted() {
                 DataCheck();
-                String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-                Log.i("파이어 : ", refreshedToken);
             }
 
             @Override
