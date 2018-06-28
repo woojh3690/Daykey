@@ -26,7 +26,7 @@ class AlarmBroadcast {
             Intent intent = new Intent(mainContext, AlarmBroadcastReceive.class);//i알람이 발생했을 경우, AlarmBroadcastReceive에게 방송
             PendingIntent sender = PendingIntent.getBroadcast(mainContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            //setNextDay();
+            setNextDay();
 
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DATE, nextDay);
@@ -41,11 +41,11 @@ class AlarmBroadcast {
                     set.getInt("min"));
 
             am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);//알람 예약
-            /*Toast.makeText(mainContext, "알림이 저장되었습니다. " + calendar.get(Calendar.YEAR) + "년 " +
-                    (calendar.get(Calendar.MONTH) + 1) + "월 " +
-                    calendar.get(Calendar.DAY_OF_MONTH) + "일 " +
-                    set.getInt("hour") + "시 " +
-                    set.getInt("min") + "분", Toast.LENGTH_LONG).show();*/
+//            Toast.makeText(mainContext, "알림이 저장되었습니다. " + calendar.get(Calendar.YEAR) + "년 " +
+//                    (calendar.get(Calendar.MONTH) + 1) + "월 " +
+//                    calendar.get(Calendar.DAY_OF_MONTH) + "일 " +
+//                    set.getInt("hour") + "시 " +
+//                    set.getInt("min") + "분", Toast.LENGTH_LONG).show();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

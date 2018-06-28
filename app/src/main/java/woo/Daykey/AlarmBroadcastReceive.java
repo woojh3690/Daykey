@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.nfc.Tag;
+import android.util.Log;
 import android.view.View;
 
 import java.text.SimpleDateFormat;
@@ -45,8 +46,7 @@ public class AlarmBroadcastReceive extends BroadcastReceiver {
             PushNotification pushNotification = new PushNotification(context);
             pushNotification.send(TAG, "오늘의 메뉴!", message.split("\\r?\\n")[0], Notification.PRIORITY_DEFAULT, "main", style);
 
-//            AlarmBroadcast alarmBroadcast = new AlarmBroadcast(context);
-//            alarmBroadcast.Alarm();
+            new AlarmBroadcast(context).Alarm();
         } catch (Exception e) {
             e.printStackTrace();
         }
