@@ -1,5 +1,6 @@
 package woo.Daykey;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -24,7 +25,7 @@ public class FmMain extends Fragment {
     TextView dietViewMain1;
     TextView dietViewMain2;
     TextView timer;
-    private boolean goTime = true;
+    static boolean goTime = true;
 
     public FmMain() {
     }
@@ -108,6 +109,7 @@ public class FmMain extends Fragment {
         return sdfNow.format(date);
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class AsyncTaskTimer extends AsyncTask<Void, Void, Void> {
         Calendar cal;
         String timeCre;
@@ -115,7 +117,7 @@ public class FmMain extends Fragment {
         @Override
         protected void onPreExecute() {
             cal = new GregorianCalendar();
-            timeCre = String.format("%d:%s", cal.get(Calendar.HOUR), formChange(cal.get(Calendar.MINUTE)));
+            timeCre = String.format("%02d:%02d", cal.get(Calendar.HOUR_OF_DAY), (cal.get(Calendar.MINUTE)));
             //timer.setText(timeCre);
             super.onPreExecute();
         }
@@ -125,18 +127,18 @@ public class FmMain extends Fragment {
 
             while (set.getBoolean("timer") && goTime) {
                 cal = new GregorianCalendar();
-                timeCre = String.format("%d:%s", cal.get(Calendar.HOUR), formChange(cal.get(Calendar.MINUTE)));
+                timeCre = String.format("%d:%02d", cal.get(Calendar.HOUR_OF_DAY), (cal.get(Calendar.MINUTE)));
                 publishProgress();
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(990);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
-                timeCre = String.format("%d %s", cal.get(Calendar.HOUR), formChange(cal.get(Calendar.MINUTE)));
+                timeCre = String.format("%d %02d", cal.get(Calendar.HOUR_OF_DAY), (cal.get(Calendar.MINUTE)));
                 publishProgress();
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(990);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -147,7 +149,6 @@ public class FmMain extends Fragment {
 
         @Override
         protected void onProgressUpdate(Void... values) {
-            //Log.i("test", timeCre);
             timer.setText(timeCre);
             super.onProgressUpdate(values);
         }
@@ -169,18 +170,18 @@ public class FmMain extends Fragment {
     }
 
     //int 1이면 string 01로변경
-    private String formChange(int num) {
-        String result;
-        String date1 = String.valueOf(num);
-
-        if (date1.length() == 1) {
-            result = "0" + date1;
-        } else if (date1.length() == 2) {
-            result = date1;
-        } else {
-            result = null;
-        }
-
-        return result;
-    }
+//    private String formChange(int num) {
+//        String result;
+//        String date1 = String.valueOf(num);
+//
+//        if (date1.length() == 1) {
+//            result = "0" + date1;
+//        } else if (date1.length() == 2) {
+//            result = date1;
+//        } else {
+//            result = null;
+//        }
+//
+//        return result;
+//    }
 }
