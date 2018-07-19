@@ -13,9 +13,10 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         String title = remoteMessage.getData().get("title");
 
         String message = remoteMessage.getData().get("message");
+        RemoteMessage.Notification noti =  remoteMessage.getNotification();
         String type = remoteMessage.getData().get("type");
         PushNotification pushNotification = new PushNotification(getApplicationContext());
-        pushNotification.send(TAG, title, message, Notification.PRIORITY_HIGH, type, null);
+        pushNotification.send(TAG, noti.getTitle(), noti.getBody(), Notification.PRIORITY_HIGH, type, null);
     }
 }
 

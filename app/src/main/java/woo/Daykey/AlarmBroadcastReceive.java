@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.nfc.Tag;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 
@@ -37,7 +38,7 @@ public class AlarmBroadcastReceive extends BroadcastReceiver {
             todayMenuSave();
 
             //노티바 스타일
-            Notification.BigTextStyle style = new Notification.BigTextStyle();
+            NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
             style.setSummaryText("급식보기 +");
             style.setBigContentTitle("오늘의 메뉴!");
             String message = "점심 : " + launch + "\n" + "저녁 : " + dinner;

@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.Notification;
 import android.app.NotificationChannel;
+import android.app.NotificationChannelGroup;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.SQLException;
@@ -37,8 +38,6 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
-import java.security.Permission;
-import java.sql.SQLInput;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -128,21 +127,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (curMonth != set.getInt("db_version")) {
             if (GetWhatKindOfNetwork.check(mainContext)) {
                 FirebaseMessaging.getInstance().subscribeToTopic("ALL");
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    android.app.NotificationManager notificationManager = (android.app.NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    NotificationChannel channelMessage = new NotificationChannel("channel_id", "channel_name", android.app.NotificationManager.IMPORTANCE_DEFAULT);
-                    channelMessage.setDescription("channel description");
-                    channelMessage.enableLights(true);
-                    channelMessage.setLightColor(Color.GREEN);
-                    channelMessage.enableVibration(true);
-                    channelMessage.setVibrationPattern(new long[]{100, 200, 100, 200});
-                    channelMessage.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-                    notificationManager.createNotificationChannel(channelMessage);
-                    set.saveString("channel", channelMessage.getId());
-                }
-
-                dietSave();
+//                String id = FirebaseInstanceId.getInstance().getToken();
+//                Log.i("파이어베이스 토큰 : ", id);
+                makeNotificationChannel();
+                getDietData();
                 new CalendarDataParsing(mainContext).start(); //학사일정 가져오기
                 set.saveBoolean("firstStart", false);
             } else {
@@ -250,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //식단 저장
     @SuppressLint("SetJavaScriptEnabled")
-    private void dietSave() {
+    private void getDietData() {
         showProgressDialog();
         try {
             db.execSQL("drop table if exists " + "dietTable");
@@ -419,5 +407,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
         toolbar.setTitle("학사일정");
+    }
+
+    private void makeNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            android.app.NotificationManager notificationManager = (android.app.NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationChannel channelMessage = new NotificationChannel("channel_id", "공지", android.app.NotificationManager.IMPORTANCE_DEFAULT);
+            channelMessage.setDescription("channel description");
+            channelMessage.enableLights(true);
+            channelMessage.setLightColor(Color.BLUE);
+            channelMessage.enableVibration(true);
+            channelMessage.setVibrationPattern(new long[]{100, 200, 100, 200});
+            channelMessage.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            assert notificationManager != null;
+            notificationManager.createNotificationChannel(channelMessage);
+            //notificationManager.createNotificationChannelGroup(new NotificationChannelGroup("공지", "woo.Daykey.Notice"));
+            set.saveString("channel", channelMessage.getId());
+        }
     }
 }
