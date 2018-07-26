@@ -44,8 +44,9 @@ public class AlarmBroadcastReceive extends BroadcastReceiver {
             String message = "점심 : " + launch + "\n" + "저녁 : " + dinner;
             style.bigText(message);
 
-            PushNotification pushNotification = new PushNotification(context);
-            pushNotification.send(TAG, "오늘의 메뉴!", message.split("\\r?\\n")[0], Notification.PRIORITY_DEFAULT, "main", style);
+            PushNotification pushNotification = new PushNotification(context, TAG, "오늘의 메뉴!",
+                    message.split("\\r?\\n")[0], Notification.PRIORITY_DEFAULT, null, "main", style);
+            pushNotification.send();
 
             new AlarmBroadcast(context).Alarm();
         } catch (Exception e) {
