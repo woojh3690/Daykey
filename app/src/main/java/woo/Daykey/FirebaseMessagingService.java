@@ -23,12 +23,10 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     public void onMessageReceived(RemoteMessage remoteMessage) {
         RemoteMessage.Notification noti =  remoteMessage.getNotification();
         assert noti != null;
-        String title = noti.getTitle();
-        String message = noti.getBody();
 
         String type = remoteMessage.getData().get("type");
-        title = dictionary.get(type);
-        message = remoteMessage.getData().get("message");
+        String title = dictionary.get(type);
+        String message = remoteMessage.getData().get("message");
         String urlID = remoteMessage.getData().get("urlID");
 
         PushNotification pushNotification = new PushNotification(getApplicationContext(), TAG, title,
