@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +68,7 @@ public class FmChidedDiet extends Fragment{
                     if (checkNum == 0) {
                         lunManu.put(i, menu);
                         checkNum = 1;
-                    } else  {
+                    } else {
                         dinManu.put(i, menu);
                     }
                 }
@@ -85,7 +86,9 @@ public class FmChidedDiet extends Fragment{
         int i = 0;
 
         for (int v = start - firstWeek; v <= finish; v++) {
-            tvArray[i].setText(lunManu.get(v));//점심 텍스트 설정
+            String temp = lunManu.get(v);
+            //Log.i("확인 : ", v +" / " + finish);
+            tvArray[i].setText(temp);//점심 텍스트 설정
             tvArray[i + 1].setText(dinManu.get(v));//저녁 텍스트 설정
             i += 2;
         }

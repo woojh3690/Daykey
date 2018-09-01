@@ -305,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
 
-        new TedPermission().with(mainContext)
+        TedPermission.with(mainContext)
                 .setPermissionListener(permissionListener)
                 .setPermissions(Manifest.permission.WRITE_CALENDAR, Manifest.permission.READ_CALENDAR)
                 .check();

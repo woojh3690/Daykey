@@ -36,14 +36,16 @@ public class FmDiet extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.flagment_diet, container, false);
         viewPager = (ViewPager)view.findViewById(R.id.dietViewPager);
-        dietAdapter = new DietAdapter(getChildFragmentManager());
+
         for(int i = 0; i < 5; i++) {
             weekTvList[i] = (TextView)view.findViewById(weekList[i]);
         }
 
         recalculate(); //시작하는 요일, 마지막 일 저장
+        dietAdapter = new DietAdapter(getChildFragmentManager(), loopTime);
         setAdapter();
         setWeekText(curDay);
+
         viewPager.setAdapter(dietAdapter);
         viewPager.setCurrentItem(curDay, false);
         //Log.i("curDay : ", ""+curDay);
@@ -53,6 +55,7 @@ public class FmDiet extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
+                Log.i("포지션 : ", String.valueOf(position));
                 setWeekText(position);
             }
 
@@ -85,16 +88,6 @@ public class FmDiet extends Fragment {
             dietAdapter.setFlagList(i, fmChidedDiet);
             startDay += 7;
         }
-
-        if (loopTime == 4) {
-            fmChidedDiet = new FmChidedDiet();
-            args = new Bundle();
-            args.putInt("firstWeek", 0);
-            args.putInt("start",  startDay);
-            args.putInt("finish", startDay);
-            fmChidedDiet.setArguments(args);
-            dietAdapter.setFlagList(i, fmChidedDiet);
-        }
     }
 
     private void recalculate() {
@@ -111,6 +104,7 @@ public class FmDiet extends Fragment {
             firstDayOfWeek = 2;
         } else if (firstDayOfWeek == Calendar.SATURDAY) {//토요일이면
             startDay += 2;
+            firstDayOfWeek = 2;
             loopTime = 4;
         } else {
             jump -= (firstDayOfWeek - 2);
@@ -120,10 +114,11 @@ public class FmDiet extends Fragment {
     }
 
     private class DietAdapter extends FragmentPagerAdapter{
-        private FmChidedDiet[] flagList = new FmChidedDiet[5];
+        private FmChidedDiet[] flagList;
 
-        DietAdapter(FragmentManager fm) {
+        DietAdapter(FragmentManager fm, int pageSize) {
             super(fm);
+            flagList = new FmChidedDiet[pageSize];
         }
 
         @Override
