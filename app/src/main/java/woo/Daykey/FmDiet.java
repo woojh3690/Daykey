@@ -142,7 +142,6 @@ public class FmDiet extends Fragment {
 
         int[] getStartFinish(int position) {
             int[] array = new int[2];
-            int temp = flagList.length;
             array[0] = flagList[position].getStart();
             array[1] = flagList[position].getFinish();
             return array;

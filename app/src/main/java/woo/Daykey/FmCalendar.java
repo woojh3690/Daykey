@@ -70,7 +70,11 @@ public class FmCalendar extends Fragment{
                 trimDate = item.getTrimDay();
                 scheAndName = item.getScheAndName().replace(", ", "\n");
                 calendarTextView.setText(scheAndName);
-                addSche.setText(listDayText[0] + "일\n일정 추가");
+                if (listDayText[0].equals("0")) {
+                    addSche.setText("일정 추가");
+                } else {
+                    addSche.setText(listDayText[0] + "일\n일정 추가");
+                }
                 map = item.getMap();
             }
         });
