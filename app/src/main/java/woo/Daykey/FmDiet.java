@@ -35,16 +35,17 @@ public class FmDiet extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.flagment_diet, container, false);
-        viewPager = (ViewPager)view.findViewById(R.id.dietViewPager);
-
-        for(int i = 0; i < 5; i++) {
-            weekTvList[i] = (TextView)view.findViewById(weekList[i]);
-        }
+        viewPager = view.findViewById(R.id.dietViewPager);
 
         recalculate(); //시작하는 요일, 마지막 일 저장
+
+        for(int i = 0; i < 5; i++) {
+            weekTvList[i] = view.findViewById(weekList[i]);
+        }
+
         dietAdapter = new DietAdapter(getChildFragmentManager(), loopTime);
         setAdapter();
-        setWeekText(curDay);
+        setWeekText(curDay - 1);
 
         viewPager.setAdapter(dietAdapter);
         viewPager.setCurrentItem(curDay, false);
@@ -66,7 +67,6 @@ public class FmDiet extends Fragment {
     }
 
     private void setAdapter() {
-        int i;
         FmChidedDiet fmChidedDiet = new FmChidedDiet();
         Bundle args = new Bundle();
         args.putInt("firstWeek", firstDayOfWeek - 2);
@@ -78,7 +78,7 @@ public class FmDiet extends Fragment {
         startDay = startDay + jump + 3;
         jump = 4;
 
-        for (i = 1; i < loopTime; i++) {
+        for (int i = 1; i < loopTime; i++) {
             fmChidedDiet = new FmChidedDiet();
             args = new Bundle();
             args.putInt("firstWeek", 0);
@@ -106,6 +106,7 @@ public class FmDiet extends Fragment {
             startDay += 2;
             firstDayOfWeek = 2;
             loopTime = 4;
+            sumDay = 0;
         } else {
             jump -= (firstDayOfWeek - 2);
         }
@@ -137,6 +138,7 @@ public class FmDiet extends Fragment {
 
         int[] getStartFinish(int position) {
             int[] array = new int[2];
+            int temp = flagList.length;
             array[0] = flagList[position].getStart();
             array[1] = flagList[position].getFinish();
             return array;
