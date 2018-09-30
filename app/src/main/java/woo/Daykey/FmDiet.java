@@ -45,7 +45,7 @@ public class FmDiet extends Fragment {
 
         dietAdapter = new DietAdapter(getChildFragmentManager(), loopTime);
         setAdapter();
-        setWeekText(curDay - 1);
+        setWeekText(curDay);
 
         viewPager.setAdapter(dietAdapter);
         viewPager.setCurrentItem(curDay, false);
@@ -106,12 +106,16 @@ public class FmDiet extends Fragment {
             startDay += 2;
             firstDayOfWeek = 2;
             loopTime = 4;
-            sumDay = 0;
+            sumDay = -1;
         } else {
             jump -= (firstDayOfWeek - 2);
         }
 
         curDay = (curDay + sumDay) / 7;
+
+        if (curDay >= loopTime) {
+            curDay = loopTime - 1;
+        }
     }
 
     private class DietAdapter extends FragmentPagerAdapter{
