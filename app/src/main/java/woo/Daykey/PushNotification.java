@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.WindowManager;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 알림을 보냅니다.
@@ -30,6 +32,7 @@ class PushNotification {
     private String type;
     private NotificationCompat.Style style;
     private SettingPreferences set;
+    private Map<String, String> urlDic = new HashMap<>();
 
     PushNotification(Context context, String tag, String title, String message, int priority,
                      String urlID, String type, NotificationCompat.Style style) {
@@ -42,6 +45,9 @@ class PushNotification {
         this.type = type;
         this.style = style;
 
+        urlDic.put("news", "http://www.daykey.hs.kr/daykey/0701/board/14117/");
+        urlDic.put("home", "http://www.daykey.hs.kr/daykey/0601/board/14114/");
+        urlDic.put("sci", "http://www.daykey.hs.kr/daykey/19516/board/20170/");
         set = new SettingPreferences(context);
     }
 
@@ -53,7 +59,7 @@ class PushNotification {
             intent.putExtra("type", type);
             sendDiet(intent);
         } else {
-            Uri uri = Uri.parse("http://www.daykey.hs.kr/daykey/0701/board/14117/" + urlID);
+            Uri uri = Uri.parse(urlDic.get(type) + urlID);
             intent = new Intent(Intent.ACTION_VIEW, uri);
             sendNews(intent);
         }
