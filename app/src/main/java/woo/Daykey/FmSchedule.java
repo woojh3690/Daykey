@@ -33,6 +33,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -221,7 +222,6 @@ public class FmSchedule extends Fragment {
                             String[] list = {"http://wooserver.iptime.org/daykey/schedule/save", strSche, set.getString("email"), String.valueOf(check_public)};
                             FmSchedule.HttpAsyncTask httpAsyncTask = new FmSchedule.HttpAsyncTask();
                             httpAsyncTask.execute(list);
-                            Toast.makeText(getActivity(), "[" + strSche + "]" + " 일정이 추가되었습니다.", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                         } else {
                             Toast.makeText(getActivity(), "네트워크에 연결해 주세요", Toast.LENGTH_SHORT).show();
@@ -263,6 +263,7 @@ public class FmSchedule extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            Toast.makeText(activity, result, Toast.LENGTH_LONG).show();
             new ServerScheduleParsing(true).start();
         }
     }
@@ -305,16 +306,18 @@ public class FmSchedule extends Fragment {
             httpCon.setDoInput(true);
 
             OutputStream os = httpCon.getOutputStream();
-            os.write(json.getBytes("utf-8"));
+            os.write(json.getBytes(StandardCharsets.UTF_8));
             os.flush();
             // receive response as inputStream
             try {
                 is = httpCon.getInputStream();
                 // convert inputstream to string
-                if(is != null)
+                if(is != null) {
                     result = convertInputStreamToString(is);
-                else
+                    result = "일정이 추가되었습니다.";
+                } else {
                     result = "Did not work!";
+                }
             }
             catch (IOException e) {
                 e.printStackTrace();
@@ -324,7 +327,7 @@ public class FmSchedule extends Fragment {
             }
         }
         catch (IOException e) {
-            Toast.makeText(activity, "서버가 응답하지 않습니다. 나중에 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
+            result = "서버가 응답하지 않습니다. 나중에 다시 시도해 주세요.";
         }
         catch (Exception e) {
             Log.d("InputStream", e.getLocalizedMessage());
