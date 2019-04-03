@@ -153,7 +153,7 @@ public class FmSchedule extends Fragment {
                     }
 
                     if (check) {
-                        Toast.makeText(getActivity(), "설정에서 프로필을 변경할 수 있습니다.\n프로필은 일정을 삭제할 때 사용됩니다", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "설정에서 프로필을 변경할 수 있습니다. 프로필은 일정을 삭제할 때 사용됩니다", Toast.LENGTH_LONG).show();
                     }
 
                 }
