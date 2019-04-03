@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -116,10 +117,10 @@ public class FmMain extends Fragment {
 
         @Override
         protected void onPreExecute() {
+            super.onPreExecute();
             cal = new GregorianCalendar();
             timeCre = String.format("%02d:%02d", cal.get(Calendar.HOUR_OF_DAY), (cal.get(Calendar.MINUTE)));
             //timer.setText(timeCre);
-            super.onPreExecute();
         }
 
         @Override
@@ -130,7 +131,7 @@ public class FmMain extends Fragment {
                 timeCre = String.format("%d:%02d", cal.get(Calendar.HOUR_OF_DAY), (cal.get(Calendar.MINUTE)));
                 publishProgress();
                 try {
-                    Thread.sleep(990);
+                    Thread.sleep(998);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -138,7 +139,7 @@ public class FmMain extends Fragment {
                 timeCre = String.format("%d %02d", cal.get(Calendar.HOUR_OF_DAY), (cal.get(Calendar.MINUTE)));
                 publishProgress();
                 try {
-                    Thread.sleep(990);
+                    Thread.sleep(998);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -149,24 +150,26 @@ public class FmMain extends Fragment {
 
         @Override
         protected void onProgressUpdate(Void... values) {
-            timer.setText(timeCre);
             super.onProgressUpdate(values);
+            timer.setText(timeCre);
         }
     }
 
     @Override
     public void onPause() {
+        super.onPause();
         goTime = false;
         timer.setText(" ");
-        super.onPause();
+        Log.i("시계 pause 확인", goTime + "");
     }
 
     @Override
     public void onResume() {
+        super.onResume();
         goTime = true;
         AsyncTaskTimer asyncTaskTimer = new AsyncTaskTimer();
         asyncTaskTimer.execute();
-        super.onResume();
+        Log.i("시계 resume 확인", goTime + "");
     }
 
     //int 1이면 string 01로변경
