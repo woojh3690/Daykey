@@ -160,7 +160,6 @@ public class FmMain extends Fragment {
         super.onPause();
         goTime = false;
         timer.setText(" ");
-        Log.i("시계 pause 확인", goTime + "");
     }
 
     @Override
@@ -169,7 +168,6 @@ public class FmMain extends Fragment {
         goTime = true;
         AsyncTaskTimer asyncTaskTimer = new AsyncTaskTimer();
         asyncTaskTimer.execute();
-        Log.i("시계 resume 확인", goTime + "");
     }
 
     //int 1이면 string 01로변경

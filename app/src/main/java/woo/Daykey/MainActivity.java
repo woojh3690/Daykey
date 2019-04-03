@@ -189,12 +189,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     //화면 전환기능
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        id = item.getItemId();
-        changeView();
-
+        boolean aReturn = true;
+        if (id != item.getItemId()) {
+            id = item.getItemId();
+            changeView();
+        } else {
+            aReturn = false;
+        }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
+        return aReturn;
     }
 
     //프로그레스 다이얼 로그

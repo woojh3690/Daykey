@@ -227,7 +227,7 @@ public class FmSchedule extends Fragment {
                             Toast.makeText(getActivity(), "네트워크에 연결해 주세요", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(getActivity(), "일정은 2자 이상이여햐 합니다", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "일정은 2자 이상이여야 합니다", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(getActivity(), "일정을 입력해 주세요.", Toast.LENGTH_SHORT).show();
@@ -267,7 +267,7 @@ public class FmSchedule extends Fragment {
         }
     }
 
-    private static String post(String url, ScheduleModel scheduleModel){
+    private String post(String url, ScheduleModel scheduleModel){
         InputStream is;
         String result = "";
         try {
@@ -324,7 +324,7 @@ public class FmSchedule extends Fragment {
             }
         }
         catch (IOException e) {
-            e.printStackTrace();
+            Toast.makeText(activity, "서버가 응답하지 않습니다. 나중에 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
         }
         catch (Exception e) {
             Log.d("InputStream", e.getLocalizedMessage());
@@ -422,9 +422,5 @@ public class FmSchedule extends Fragment {
                     }
                 });
         builder.show();
-    }
-
-    public void setCalenarTextView(String strSche) {
-        calendarTextView.setText(strSche);
     }
 }
