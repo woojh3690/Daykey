@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -37,11 +36,11 @@ public class FmNews extends Fragment {
         listView = view.findViewById(R.id.newsListView);
         newsContext = view.getContext();
 
-        new setAdaptor().execute(Boolean.FALSE); //리스트뷰에 아이템 넣기
+        new SetAdaptor().execute(Boolean.FALSE); //리스트뷰에 아이템 넣기
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new setAdaptor().execute(Boolean.TRUE);
+                new SetAdaptor().execute(Boolean.TRUE);
             }
         });
         swipeRefreshLayout.setColorSchemeColors(
@@ -73,7 +72,7 @@ public class FmNews extends Fragment {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class setAdaptor extends AsyncTask<Boolean, Void, NewsAdapter> {
+    private class SetAdaptor extends AsyncTask<Boolean, Void, NewsAdapter> {
         boolean toast = true;
 
         @Override

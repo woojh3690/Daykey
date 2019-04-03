@@ -25,10 +25,10 @@ class ListItemView extends LinearLayout {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.list_item, this, true);
 
-        titleView = (TextView)findViewById(R.id.titleView);
-        dateView = (TextView)findViewById(R.id.dateView);
-        writer = (TextView)findViewById(R.id.writerView);
-        visitors = (TextView) findViewById(R.id.visitorView);
+        titleView = findViewById(R.id.titleView);
+        dateView = findViewById(R.id.dateView);
+        writer = findViewById(R.id.writerView);
+        visitors = findViewById(R.id.visitorView);
     }
 
     public void setTitleView(String title) {

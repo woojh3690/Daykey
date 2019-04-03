@@ -2,6 +2,7 @@ package woo.Daykey;
 
 import android.app.Notification;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
@@ -25,6 +26,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         assert noti != null;
 
         String type = remoteMessage.getData().get("type");
+        Log.i("Firebase 확인 :", type);
         String title = dictionary.get(type);
         String message = remoteMessage.getData().get("message");
         String urlID = remoteMessage.getData().get("urlID");

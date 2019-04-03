@@ -33,7 +33,10 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
@@ -66,12 +69,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(savedInstanceState == null) {
             setHandler();
             network();//공지사항 가져오기
-            //defaultAlarm();//처음 앱을 시작했다면 알람 설정
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
 
         setTheme(R.style.AppTheme);
@@ -127,8 +124,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (curMonth != set.getInt("db_version")) {
             if (GetWhatKindOfNetwork.check(mainContext)) {
                 FirebaseMessaging.getInstance().subscribeToTopic("ALL");
-//                String id = FirebaseInstanceId.getInstance().getToken();
-//                Log.i("파이어베이스 토큰 : ", id);
+                /*FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this,  new OnSuccessListener<InstanceIdResult>() {
+                    @Override
+                    public void onSuccess(InstanceIdResult instanceIdResult) {
+                        String mToken = instanceIdResult.getToken();
+                        Log.e("파이어베이스 토큰",mToken);
+                    }
+                });*/
                 makeNotificationChannel();
                 getDietData();
                 new CalendarDataParsing(mainContext).start(); //학사일정 가져오기
