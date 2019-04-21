@@ -41,6 +41,8 @@ class MonthItem {
         dayText = day + "\n" + sche;
     }
 
+    //이렇게 날짜마다 비효율적으로 쿼리를 날리는게 아니라 한번에 데이터를 가져온 다음
+    //초기화 하는 방법을 생각해봐야 겠음
     private void userSchedule() {
         String schedule;
 
