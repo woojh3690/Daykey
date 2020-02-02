@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     static SettingPreferences set;
     private Context mainContext;
     TextView name, grade;
-    WebView mWebView;
+
     WebSettings mWebSettings;
     ProgressDialog dialog;
     Toolbar toolbar;
@@ -66,6 +66,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         set = new SettingPreferences(mainContext);
         setid();
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            WebView.setDataDirectorySuffix("test");
+        }
+
         if(savedInstanceState == null) {
             setHandler();
             network();//공지사항 가져오기
@@ -75,7 +79,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mWebView = findViewById(R.id.webview);
+
+
+
         toolbar = findViewById(R.id.toolbar);
 
         fuc();//건들지 말것
@@ -134,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 makeNotificationChannel();
                 getDietData();
                 new CalendarDataParsing(mainContext).start(); //학사일정 가져오기
+
                 set.saveBoolean("firstStart", false);
             } else {
                 if(set.getBoolean("firstStart")) {
@@ -255,6 +262,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         set.saveBoolean("diet", false);
 
         try {
+            final WebView mWebView;
+            mWebView = findViewById(R.id.webview);
             mWebView.setWebViewClient(new WebViewClient() {
                 @Override//페이지 로딩이 끝나면 불린다.
                 public void onPageFinished(WebView view, String url) {
