@@ -1,23 +1,16 @@
 package woo.Daykey;
 
 import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.nfc.Tag;
-import android.support.v4.app.NotificationCompat;
-import android.util.Log;
-import android.view.View;
+
+import androidx.core.app.NotificationCompat;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import static woo.Daykey.MainActivity.set;
 
 /**
  * intent를 받아서 알람 보여주는 class

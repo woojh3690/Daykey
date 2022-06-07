@@ -6,7 +6,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.Notification;
 import android.app.NotificationChannel;
-import android.app.NotificationChannelGroup;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.SQLException;
@@ -15,15 +14,8 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,10 +25,14 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
@@ -57,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     WebSettings mWebSettings;
     ProgressDialog dialog;
     Toolbar toolbar;
+
+    public static final String baseUrl = "https://daykey.jje.hs.kr";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -279,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mWebSettings = mWebView.getSettings();
             mWebSettings.setJavaScriptEnabled(true);
             mWebView.addJavascriptInterface(new DietParsing(set), "HtmlViewer");
-            mWebView.loadUrl("http://www.daykey.hs.kr/daykey/19152/food");//중식 로딩
+            mWebView.loadUrl(MainActivity.baseUrl + "/daykey/19152/food");//중식 로딩
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -289,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @SuppressLint("HandlerLeak")
     private void setHandler() {
-        mhandler = new Handler() {
+        mhandler = new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);

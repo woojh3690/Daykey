@@ -3,7 +3,7 @@ package woo.Daykey;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.support.v13.app.FragmentPagerAdapter;
+import androidx.legacy.app.FragmentPagerAdapter;
 
 class CalendarAdapter extends FragmentPagerAdapter {
     private FmCalendar[] fragList;

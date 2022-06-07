@@ -1,18 +1,14 @@
 package woo.Daykey;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.PowerManager;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
-import android.util.Log;
-import android.view.WindowManager;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -45,9 +41,9 @@ class PushNotification {
         this.type = type;
         this.style = style;
 
-        urlDic.put("news", "http://www.daykey.hs.kr/daykey/0701/board/14117/");
-        urlDic.put("home", "http://www.daykey.hs.kr/daykey/0601/board/14114/");
-        urlDic.put("sci", "http://www.daykey.hs.kr/daykey/19516/board/20170/");
+        urlDic.put("news", MainActivity.baseUrl + "/daykey/0701/board/14117/");
+        urlDic.put("home", MainActivity.baseUrl + "/daykey/0601/board/14114/");
+        urlDic.put("sci", MainActivity.baseUrl + "/daykey/19516/board/20170/");
         set = new SettingPreferences(context);
     }
 

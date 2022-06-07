@@ -123,11 +123,11 @@
                 android:text="일" />
         </LinearLayout>
 
-        <android.support.v4.view.ViewPager
+        <androidx.viewpager.widget.ViewPager
             android:id="@+id/dietViewPager"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="9"></android.support.v4.view.ViewPager>
+            android:layout_weight="9"></androidx.viewpager.widget.ViewPager>
 
     </LinearLayout>
 

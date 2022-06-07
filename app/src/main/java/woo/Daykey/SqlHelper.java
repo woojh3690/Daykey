@@ -56,8 +56,11 @@ class SqlHelper extends SQLiteOpenHelper {
     }
 
     public boolean boardParsing(int num) {
-        final String[] matchUrl= {"http://www.daykey.hs.kr/daykey/0701/board/14117",
-                "http://www.daykey.hs.kr/daykey/0601/board/14114", "http://www.daykey.hs.kr/daykey/19516/board/20170"};
+        final String[] matchUrl= {
+                MainActivity.baseUrl + "/daykey/0701/board/14117",
+                MainActivity.baseUrl + "/daykey/0601/board/14114",
+                MainActivity.baseUrl + "/daykey/19516/board/20170"
+        };
         if (GetWhatKindOfNetwork.check(context)) {
             try {
                 SQLiteDatabase db = super.getWritableDatabase();

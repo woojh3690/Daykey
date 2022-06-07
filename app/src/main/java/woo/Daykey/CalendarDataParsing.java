@@ -35,8 +35,8 @@ class CalendarDataParsing extends Thread{
         }
 
         dropCalendarTable();
-        getUrlToHTML("http://www.daykey.hs.kr/daykey/0204/schedule?section=1&schdYear=" + year);
-        getUrlToHTML("http://www.daykey.hs.kr/daykey/0204/schedule?section=2&schdYear=" + year);
+        getUrlToHTML(MainActivity.baseUrl + "/daykey/0204/schedule?section=1&schdYear=" + year);
+        getUrlToHTML(MainActivity.baseUrl + "/daykey/0204/schedule?section=2&schdYear=" + year);
 
         if (set.getBoolean("calendar")) {
             CalendarManager calendarManager = new CalendarManager(context);

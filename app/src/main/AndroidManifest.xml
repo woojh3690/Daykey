@@ -21,7 +21,8 @@
             android:name=".MainActivity"
             android:label="대기고등학교"
             android:screenOrientation="portrait"
-            android:theme="@style/splash">
+            android:theme="@style/splash"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -29,7 +30,8 @@
         </activity>
         <receiver android:name=".AlarmBroadcastReceive" />
         <service
-            android:name=".FirebaseMessagingService">
+            android:name=".FirebaseMessagingService"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

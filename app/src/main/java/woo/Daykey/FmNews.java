@@ -8,7 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +63,7 @@ public class FmNews extends Fragment {
                     ex.printStackTrace();
                 }
 
-                Uri uri = Uri.parse("http://www.daykey.hs.kr/daykey/0701/board/14117/" + url);
+                Uri uri = Uri.parse(MainActivity.baseUrl + "/daykey/0701/board/14117/" + url);
                 startActivity(new Intent(Intent.ACTION_VIEW, uri));
             }
         });

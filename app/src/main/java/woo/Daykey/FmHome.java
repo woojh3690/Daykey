@@ -5,18 +5,16 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -69,7 +67,7 @@ public class FmHome extends Fragment {
                     ex.printStackTrace();
                 }
 
-                Uri uri = Uri.parse("http://www.daykey.hs.kr/daykey/0601/board/14114/" + url);
+                Uri uri = Uri.parse(MainActivity.baseUrl + "/daykey/0601/board/14114/" + url);
                 startActivity(new Intent(Intent.ACTION_VIEW, uri));
             }
         });

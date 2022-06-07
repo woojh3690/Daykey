@@ -39,17 +39,12 @@ class DietParsing{
         htmlSr = html;
         htmlInt = htmlSr.length();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                find();
-                if (dismiss) {
-                    mhandler.sendEmptyMessage(1); //작업 종료 메시지
-                } else {
-                    dismiss = true;
-                }
-
+        new Thread(() -> {
+            find();
+            if (dismiss) {
+                mhandler.sendEmptyMessage(1); //작업 종료 메시지
+            } else {
+                dismiss = true;
             }
         }).start();
     }
