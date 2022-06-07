@@ -19,7 +19,6 @@ import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Context mainContext;
     TextView name, grade;
 
-    WebSettings mWebSettings;
     ProgressDialog dialog;
     Toolbar toolbar;
 
@@ -66,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             WebView.setDataDirectorySuffix("test");
         }
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             setHandler();
             network();//공지사항 가져오기
         }
@@ -76,11 +74,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
 
-
-
         toolbar = findViewById(R.id.toolbar);
 
-        fuc();//건들지 말것
+        fuc(); //건들지 말것
         if (savedInstanceState != null) {
             // 화면전환 전에 넣어주었던 pointList 를 꺼내서 세팅
             Bundle bundle = savedInstanceState.getBundle("save_data");
@@ -139,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 set.saveBoolean("firstStart", false);
             } else {
-                if(set.getBoolean("firstStart")) {
+                if (set.getBoolean("firstStart")) {
                     Toast.makeText(mainContext, "인터넷을 연결해 주세요\n" +
                             "처음 앱을 실행했을 때에는 데이터를 가져오는 과정이 필요합니다.", Toast.LENGTH_LONG).show();
                     finish();
@@ -170,13 +166,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             this.doubleBackToExitPressedOnce = true;
             Toast.makeText(this, "'뒤로' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
 
-            new Handler().postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    doubleBackToExitPressedOnce=false;
-                }
-            }, 2000);
+            new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
         }
     }
 
@@ -229,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         View header = navigationView.getHeaderView(0);
 
-        if ( (set.getInt("grade") != -1) && (set.getInt("class") != -1)) { //메뉴머리 텍스트 설정
+        if ((set.getInt("grade") != -1) && (set.getInt("class") != -1)) { //메뉴머리 텍스트 설정
             name = header.findViewById(R.id.tv_name);
             grade = header.findViewById(R.id.tv_grade);
             name.setText(set.getString("name"));
@@ -406,7 +396,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
         toolbar.setTitle("식단");
-        if(!set.getBoolean("diet")) {
+        if (!set.getBoolean("diet")) {
             Toast.makeText(mainContext, "식단이 올라오지 않았습니다.\n대기고등학교 홈페이에 문의 바랍니다.",
                     Toast.LENGTH_LONG).show();
         }
