@@ -21,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,7 +41,6 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private int id;
-    static boolean dismiss = false;
     static Handler mhandler;
     static SqlHelper sqlHelper;
     static SQLiteDatabase db;
@@ -190,7 +188,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     //화면 전환기능
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -248,41 +245,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //식단 저장
-    @SuppressLint("SetJavaScriptEnabled")
     private void getDietData() {
         showProgressDialog();
+
+        Thread thread = new Thread(() -> {
+            try {
+                db.execSQL("drop table if exists " + "dietTable");
+                db.execSQL("create table " + "dietTable " + "(date INTEGER, menu text);");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            set.saveBoolean("diet", false);
+
+            DietParsing parser = new DietParsing(set);
+            getDietData(parser, true);
+            getDietData(parser, false);
+        });
+
+        thread.start();
         try {
-            db.execSQL("drop table if exists " + "dietTable");
-            db.execSQL("create table " + "dietTable " + "(date INTEGER, menu text);");
-        } catch (SQLException e) {
+            thread.join();
+        } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-        set.saveBoolean("diet", false);
-
-        try {
-            final WebView mWebView;
-            mWebView = findViewById(R.id.webview);
-            mWebView.setWebViewClient(new WebViewClient() {
-                @Override//페이지 로딩이 끝나면 불린다.
-                public void onPageFinished(WebView view, String url) {
-                    super.onPageFinished(view, url);
-
-                    mWebView.loadUrl("javascript:window.HtmlViewer.showHTML('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>');");
-
-                    if (!dismiss) {
-                        mWebView.loadUrl("javascript:chgTab('D')");//석식 로딩
-                    }
-                }
-            });
-            mWebSettings = mWebView.getSettings();
-            mWebSettings.setJavaScriptEnabled(true);
-            mWebView.addJavascriptInterface(new DietParsing(set), "HtmlViewer");
-            mWebView.loadUrl(MainActivity.baseUrl + "/daykey/19152/food");//중식 로딩
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
 
         set.saveBoolean("diet", true);
+        mhandler.sendEmptyMessage(1); //작업 종료 메시지
+    }
+
+    private void getDietData(DietParsing parser, boolean type) {
+        String strType = (type) ? "M" : "D";
+        String url = MainActivity.baseUrl + "/daykey/19152/food?foodType=" + strType;
+
+        try {
+            GetHtmlText getHtmlText = new GetHtmlText(url);
+            parser.parse(getHtmlText.getHtmlString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @SuppressLint("HandlerLeak")

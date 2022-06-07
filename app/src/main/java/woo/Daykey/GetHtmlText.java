@@ -21,7 +21,7 @@ class GetHtmlText {
             conn = (HttpURLConnection)url.openConnection();//접속
 
             if (conn != null) {
-                conn.setConnectTimeout(2000);
+                conn.setConnectTimeout(5000);
                 conn.setUseCaches(false);
 
                 if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {

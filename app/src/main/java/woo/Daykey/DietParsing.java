@@ -1,18 +1,14 @@
 package woo.Daykey;
 
+import static woo.Daykey.MainActivity.db;
+
 import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
 import android.text.Html;
 import android.util.Log;
-import android.webkit.JavascriptInterface;
 
 import java.util.Calendar;
 
-import static woo.Daykey.MainActivity.dismiss;
-import static woo.Daykey.MainActivity.mhandler;
-import static woo.Daykey.MainActivity.db;
-
-class DietParsing{
+class DietParsing {
     private static final String TAG = "DietParsing";
     private static final int FINISH = 0;
 
@@ -32,21 +28,10 @@ class DietParsing{
         this.set = set;
     }
 
-    @JavascriptInterface//NOTE: If your target API > 16 you must have @JavascriptInterface
-    @SuppressWarnings("UnusedDeclaration")
-    public void showHTML(String html) {
-        //Log.i("showHTML", "실행됨");
+    public void parse(String html) {
         htmlSr = html;
         htmlInt = htmlSr.length();
-
-        new Thread(() -> {
-            find();
-            if (dismiss) {
-                mhandler.sendEmptyMessage(1); //작업 종료 메시지
-            } else {
-                dismiss = true;
-            }
-        }).start();
+        find();
     }
 
     //새창열림\> 위치 찾기
