@@ -6,13 +6,13 @@ android {
         applicationId "woo.daykey"
         minSdkVersion 25
         targetSdkVersion 32
-        versionCode 47
+        versionCode 49
         versionName "1.9.9"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
