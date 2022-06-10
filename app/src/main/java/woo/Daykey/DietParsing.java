@@ -36,7 +36,6 @@ class DietParsing {
 
     //새창열림\> 위치 찾기
     private void find() {
-        //Log.i("find", "실행됨");
         for (int i = 0; i < htmlInt; i++) {
             if (string1.equals(changeType(i))) {
                 if (string2.equals(changeType(i + 1))) {
@@ -60,11 +59,9 @@ class DietParsing {
         check = 1;
 
         //소괄호 사이에 거리를 distance 에 저장하기
-        if (check != FINISH) {
-            while (check != FINISH) {
-                checkParentheses(num + distance);
-                distance += 1;
-            }
+        while (check != FINISH) {
+            checkParentheses(num + distance);
+            distance += 1;
         }
 
         tempBody = htmlSr.substring(num, num + distance);
@@ -121,19 +118,15 @@ class DietParsing {
         }
 
         //특수문자 해석
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N) {
-            tempMenu = String.valueOf(Html.fromHtml(tempMenu));
-        } else {
-            tempMenu = String.valueOf(Html.fromHtml(tempMenu, Html.FROM_HTML_MODE_LEGACY));
-        }
-
+        tempMenu = String.valueOf(Html.fromHtml(tempMenu, Html.FROM_HTML_MODE_LEGACY));
         tempMenu = tempMenu.replace(".", "").replaceAll("\\d", "");
 
         if (tempMenu.startsWith(aString4)) {
             tempMenu = tempMenu.substring(1);
         }
 
-        insertDietData(Integer.parseInt(date),  tempMenu); //<br>을 enter 로 치환한다음 insertCalendarData 함수 호출
+        //<br>을 enter 로 치환한다음 insertCalendarData 함수 호출
+        insertDietData(Integer.parseInt(date),  tempMenu);
     }
 
 
