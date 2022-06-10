@@ -6,7 +6,7 @@ android {
         applicationId "woo.daykey"
         minSdkVersion 25
         targetSdkVersion 32
-        versionCode 46
+        versionCode 47
         versionName "1.9.9"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
