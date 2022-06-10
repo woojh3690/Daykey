@@ -43,7 +43,7 @@ class DietParsing {
                         if (string4.equals(changeType(i + 3))) {
                             if (string5.equals(changeType(i + 4))) {
                                 if (string6.equals(changeType(i + 5))) {
-                                    getDate(i+6);
+                                    getDate(i + 6);
                                 }
                             }
                         }
@@ -109,10 +109,10 @@ class DietParsing {
         String tempMenu = "?";
 
         //String 식단을 메뉴만 잘라내기
-        for (int i = 76; i < string.length(); i++) {
+        for (int i = 78; i < string.length(); i++) {
             if (aString4.equals(String.valueOf(string.charAt(i)))) {
                 if (aString1.equals(String.valueOf(string.charAt(i + 1)))) {
-                    tempMenu = string.substring(76, i + 1);
+                    tempMenu = string.substring(78, i + 1);
                 }
             }
         }
@@ -120,13 +120,14 @@ class DietParsing {
         //특수문자 해석
         tempMenu = String.valueOf(Html.fromHtml(tempMenu, Html.FROM_HTML_MODE_LEGACY));
         tempMenu = tempMenu.replace(".", "").replaceAll("\\d", "");
+        tempMenu = tempMenu.replace("()", "");
 
         if (tempMenu.startsWith(aString4)) {
             tempMenu = tempMenu.substring(1);
         }
 
         //<br>을 enter 로 치환한다음 insertCalendarData 함수 호출
-        insertDietData(Integer.parseInt(date),  tempMenu);
+        insertDietData(Integer.parseInt(date), tempMenu);
     }
 
 
@@ -143,11 +144,12 @@ class DietParsing {
             values.put("menu", menu);
             db.insert("dietTable", null, values);
 
-            if(!insertCheck) {
+            if (!insertCheck) {
                 //급식 DB 버전 저장
                 Calendar calendar = Calendar.getInstance();
                 int today = calendar.get(Calendar.MONTH);
                 set.saveInt("db_version", today);
+                this.insertCheck = true;
             }
         } catch (Exception ex) {
             ex.printStackTrace();

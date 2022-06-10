@@ -4,9 +4,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 class GetHtmlText {
-    private String urlAddress;
+    private final String urlAddress;
     private String htmlString = "noData";
 
     GetHtmlText(String urlAddress) {
@@ -26,7 +27,9 @@ class GetHtmlText {
 
                 if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     //데이터 읽기
-                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+                    BufferedReader br = new BufferedReader(
+                            new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8)
+                    );
 
                     while(true) {
                         String line = br.readLine();
