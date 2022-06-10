@@ -41,7 +41,7 @@ public class AlarmBroadcastReceive extends BroadcastReceiver {
                     message.split("\\r?\\n")[0], Notification.PRIORITY_DEFAULT, null, "main", style);
             pushNotification.send();
 
-            new AlarmBroadcast(context).Alarm();
+            new AlarmBroadcast(context).AlarmWithNoToast();
         } catch (Exception e) {
             e.printStackTrace();
         }

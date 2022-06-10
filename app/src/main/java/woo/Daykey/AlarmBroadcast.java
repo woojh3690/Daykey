@@ -13,7 +13,7 @@ import java.util.Calendar;
  */
 
 class AlarmBroadcast {
-    private Context mainContext;
+    private final Context mainContext;
     private int nextDay = 1;
 
     AlarmBroadcast(Context context) {
@@ -21,14 +21,26 @@ class AlarmBroadcast {
     }
 
     void Alarm() {
+        Calendar cal = AlarmWithNoToast();
+        SettingPreferences set = new SettingPreferences(mainContext);
+        Toast.makeText(mainContext, "알림이 설정되었습니다. " + cal.get(Calendar.YEAR) + "년 " +
+                (cal.get(Calendar.MONTH) + 1) + "월 " +
+                cal.get(Calendar.DAY_OF_MONTH) + "일 " +
+                set.getInt("hour") + "시 " +
+                set.getInt("min") + "분", Toast.LENGTH_LONG).show();
+    }
+
+    Calendar AlarmWithNoToast() {
+        Calendar calendar = null;
+
         try {
             AlarmManager am = (AlarmManager) mainContext.getSystemService(Context.ALARM_SERVICE);//알람서비스를 가져오기
-            Intent intent = new Intent(mainContext, AlarmBroadcastReceive.class);//i알람이 발생했을 경우, AlarmBroadcastReceive에게 방송
-            PendingIntent sender = PendingIntent.getBroadcast(mainContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            Intent intent = new Intent(mainContext, AlarmBroadcastReceive.class);// 알람이 발생했을 경우, AlarmBroadcastReceive에게 방송
+            PendingIntent sender = PendingIntent.getBroadcast(mainContext, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
             setNextDay();
 
-            Calendar calendar = Calendar.getInstance();
+            calendar = Calendar.getInstance();
             calendar.add(Calendar.DATE, nextDay);
 
             SettingPreferences set = new SettingPreferences(mainContext);
@@ -41,23 +53,19 @@ class AlarmBroadcast {
                     set.getInt("min"));
 
             am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);//알람 예약
-//            Toast.makeText(mainContext, "알림이 저장되었습니다. " + calendar.get(Calendar.YEAR) + "년 " +
-//                    (calendar.get(Calendar.MONTH) + 1) + "월 " +
-//                    calendar.get(Calendar.DAY_OF_MONTH) + "일 " +
-//                    set.getInt("hour") + "시 " +
-//                    set.getInt("min") + "분", Toast.LENGTH_LONG).show();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
+        return calendar;
     }
 
     //알람 취소
     void cancelAlarm() {
         AlarmManager am = (AlarmManager) mainContext.getSystemService(Context.ALARM_SERVICE);//알람서비스를 가져오기
-        Intent intent = new Intent(mainContext, AlarmBroadcastReceive.class);//i알람이 발생했을 경우, AlarmBroadcastReceive에게 방송
+        Intent intent = new Intent(mainContext, AlarmBroadcastReceive.class);
 
-        PendingIntent sender = PendingIntent.getBroadcast(mainContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent sender = PendingIntent.getBroadcast(mainContext, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
         if (sender != null) {
             am.cancel(sender);//알람 취소

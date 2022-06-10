@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.PowerManager;
+import android.view.WindowManager;
+
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -62,7 +64,7 @@ class PushNotification {
     }
 
     private void sendNews(Intent intent) {
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         String GROUP_KEY = "woo.Daykey.Notice";
@@ -94,7 +96,7 @@ class PushNotification {
     }
 
     private void sendDiet(Intent intent) {
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         NotificationCompat.Builder notificationBuilder =
@@ -117,8 +119,10 @@ class PushNotification {
     private void wakeup() {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         assert pm != null;
-        PowerManager.WakeLock wakelock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK
-                | PowerManager.ACQUIRE_CAUSES_WAKEUP, tag);
+        PowerManager.WakeLock wakelock = pm.newWakeLock(
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
+                PowerManager.ACQUIRE_CAUSES_WAKEUP, tag
+        );
         wakelock.acquire(5000);
     }
 }
