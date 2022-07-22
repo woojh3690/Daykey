@@ -6,8 +6,8 @@ android {
         applicationId "woo.daykey"
         minSdkVersion 25
         targetSdkVersion 32
-        versionCode 49
-        versionName "1.9.9"
+        versionCode 50
+        versionName "1.9.10"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
@@ -25,7 +25,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    testImplementation('androidx.test.espresso:espresso-core:3.1.0', {
+    testImplementation('androidx.test.espresso:espresso-core:3.4.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
@@ -35,7 +35,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
     implementation 'gun0912.ted:tedpermission:2.2.0'
-    implementation 'com.google.firebase:firebase-messaging:23.0.5'
+    implementation 'com.google.firebase:firebase-messaging:23.0.6'
     implementation 'org.apache.commons:commons-lang3:3.9'
     implementation 'org.jsoup:jsoup:1.13.1'
     implementation 'com.pes.materialcolorpicker:library:1.2.4'

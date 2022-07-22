@@ -19,7 +19,6 @@ import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,10 +58,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         db = sqlHelper.getReadableDatabase();
         set = new SettingPreferences(mainContext);
         setid();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            WebView.setDataDirectorySuffix("test");
-        }
 
         if (savedInstanceState == null) {
             setHandler();
