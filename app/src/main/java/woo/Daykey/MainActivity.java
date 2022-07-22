@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         Bundle bundle = new Bundle();
         bundle.putInt("restart", id);
@@ -214,11 +214,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         View header = navigationView.getHeaderView(0);
 
-        if ((set.getInt("grade") != -1) && (set.getInt("class") != -1)) { //메뉴머리 텍스트 설정
+        // 메뉴머리 텍스트 설정
+        if ((set.getInt("grade") != -1) && (set.getInt("class") != -1)) {
             name = header.findViewById(R.id.tv_name);
             grade = header.findViewById(R.id.tv_grade);
             name.setText(set.getString("name"));
-            grade.setText(set.getInt("grade") + "학년 " + set.getInt("class") + "반");
+            grade.setText(
+                    String.format("%s학년 %s반", set.getInt("grade"), set.getInt("class"))
+            );
         }
     }
 
@@ -274,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setHandler() {
         mhandler = new Handler(Looper.getMainLooper()) {
             @Override
-            public void handleMessage(Message msg) {
+            public void handleMessage(@NonNull Message msg) {
                 super.handleMessage(msg);
                 switch (msg.what) {
                     case 1:
